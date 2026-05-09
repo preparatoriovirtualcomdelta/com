@@ -2,219 +2,295 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PREPARATÓRIO VIRTUAL COM DELT∆</title>
-
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+:root{
+--bg:#060d1a;
+--surface:#0d1f35;
+--accent:#00ff88;
+--accent2:#3b82f6;
+--text:#e2e8f0;
+--muted:#64748b;
+}
+
 body{
-margin:0;
-font-family:Arial, sans-serif;
-background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);
-color:white;
-text-align:center;
+font-family:'Inter',sans-serif;
+background:var(--bg);
+color:var(--text);
 overflow-x:hidden;
+}
+
+/* BACKGROUND */
+body::before{
+content:'';
+position:fixed;
+inset:0;
+background:
+  radial-gradient(ellipse 80% 50% at 20% 20%, rgba(0,255,136,0.06) 0%, transparent 60%),
+  radial-gradient(ellipse 60% 40% at 80% 80%, rgba(59,130,246,0.06) 0%, transparent 60%);
+pointer-events:none;
+z-index:0;
 }
 
 /* MENU */
 .menu{
 display:flex;
 justify-content:space-between;
-padding:18px 25px;
-background:rgba(0,0,0,0.6);
-backdrop-filter:blur(10px);
+align-items:center;
+padding:20px 40px;
+background:rgba(6,13,26,0.9);
+backdrop-filter:blur(20px);
 position:sticky;
 top:0;
+z-index:100;
+border-bottom:1px solid rgba(0,255,136,0.1);
 }
 
-.menu div{
-font-weight:bold;
-letter-spacing:1px;
+.logo{
+font-family:'Rajdhani',sans-serif;
+font-weight:700;
+font-size:20px;
+letter-spacing:2px;
+color:var(--accent);
+}
+
+.menu a{
+font-family:'Rajdhani',sans-serif;
+font-weight:600;
+font-size:14px;
+letter-spacing:2px;
+color:var(--muted);
+text-decoration:none;
+padding:8px 16px;
+border:1px solid rgba(100,116,139,0.3);
+border-radius:6px;
+transition:0.3s;
+}
+
+.menu a:hover{
+color:var(--accent);
+border-color:var(--accent);
 }
 
 /* HEADER */
 .header{
-padding:40px 20px;
-animation:fadeIn 1s ease;
+position:relative;
+z-index:1;
+text-align:center;
+padding:80px 20px 50px;
 }
 
-h1{
-font-size:40px;
-margin-bottom:10px;
+.header h1{
+font-family:'Rajdhani',sans-serif;
+font-size:clamp(32px,6vw,64px);
+font-weight:700;
+letter-spacing:4px;
+line-height:1.1;
+margin-bottom:12px;
+}
+
+.header h1 span{
+color:var(--accent);
 }
 
 .subtitle{
-font-size:20px;
-opacity:0.85;
+font-size:16px;
+color:var(--muted);
+letter-spacing:2px;
+text-transform:uppercase;
+margin-bottom:40px;
+}
+
+/* PAYMENT BOX */
+.payment{
+display:inline-flex;
+flex-direction:column;
+align-items:center;
+gap:12px;
+background:rgba(13,31,53,0.8);
+border:1px solid rgba(0,255,136,0.2);
+border-radius:16px;
+padding:24px 40px;
+margin-bottom:40px;
 }
 
 .price{
-margin-top:10px;
-font-size:26px;
-font-weight:bold;
-color:#00ff88;
+font-family:'Rajdhani',sans-serif;
+font-size:36px;
+font-weight:700;
+color:var(--accent);
+letter-spacing:2px;
 }
 
-.info{
-margin-top:10px;
-font-size:16px;
-opacity:0.9;
+.iban{
+font-size:13px;
+color:var(--muted);
+letter-spacing:1px;
 }
 
-/* CONTACT */
-.contact{
-margin-top:20px;
+.iban span{
+color:var(--text);
+font-weight:500;
 }
 
-button{
-padding:12px 22px;
-margin:5px;
-cursor:pointer;
+.btns{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.btn{
+padding:10px 22px;
 border:none;
-border-radius:10px;
-font-size:14px;
+border-radius:8px;
+font-size:13px;
+font-weight:500;
+cursor:pointer;
+letter-spacing:1px;
 transition:0.3s;
+text-decoration:none;
+display:inline-block;
 }
 
-button:hover{
-transform:scale(1.05);
-}
+.btn:hover{transform:translateY(-2px);}
 
-.whatsapp{
-background:#25D366;
-color:white;
-}
+.whatsapp{background:#25D366;color:white;}
+.email-btn{background:var(--accent2);color:white;}
 
-.email{
-background:#3b82f6;
-color:white;
+/* SECTION TITLE */
+.section-title{
+font-family:'Rajdhani',sans-serif;
+font-size:13px;
+letter-spacing:4px;
+color:var(--muted);
+text-transform:uppercase;
+text-align:center;
+margin-bottom:30px;
 }
 
 /* CARDS */
 .cards{
+position:relative;
+z-index:1;
 display:flex;
 flex-wrap:wrap;
 justify-content:center;
-margin-top:50px;
-gap:20px;
-padding:20px;
+gap:16px;
+padding:0 20px 80px;
+max-width:1000px;
+margin:0 auto;
 }
 
 .card{
-background:rgba(255,255,255,0.95);
-color:black;
-padding:45px 30px;
-width:220px;
-border-radius:18px;
-font-size:18px;
-font-weight:bold;
+background:var(--surface);
+border:1px solid rgba(255,255,255,0.06);
+color:var(--text);
+padding:32px 24px;
+width:200px;
+border-radius:14px;
+font-family:'Rajdhani',sans-serif;
+font-size:17px;
+font-weight:600;
+letter-spacing:1px;
 cursor:pointer;
-transition:0.4s;
-box-shadow:0 10px 30px rgba(0,0,0,0.3);
-animation:slideUp 0.6s ease;
+transition:0.35s;
+text-align:center;
+text-decoration:none;
+display:block;
+position:relative;
+overflow:hidden;
+}
+
+.card::before{
+content:'';
+position:absolute;
+inset:0;
+background:linear-gradient(135deg,rgba(0,255,136,0.08),transparent);
+opacity:0;
+transition:0.35s;
 }
 
 .card:hover{
-transform:translateY(-10px) scale(1.05);
-background:#00ff88;
-color:black;
+transform:translateY(-6px);
+border-color:rgba(0,255,136,0.4);
+color:var(--accent);
+box-shadow:0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(0,255,136,0.1);
 }
 
-/* ANIMAÇÕES */
-@keyframes fadeIn{
-from{opacity:0}
-to{opacity:1}
+.card:hover::before{opacity:1;}
+
+.card-icon{
+font-size:28px;
+margin-bottom:10px;
+display:block;
 }
 
-@keyframes slideUp{
-from{
-opacity:0;
-transform:translateY(40px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
-}
-
-/* RESPONSIVO */
 @media(max-width:768px){
-h1{font-size:30px;}
-.card{width:80%;}
+.menu{padding:16px 20px;}
+.header{padding:60px 20px 40px;}
+.card{width:calc(50% - 8px);}
+.payment{padding:20px 24px;}
 }
 </style>
 </head>
-
 <body>
 
 <div class="menu">
-<div>PREPARATÓRIO VIRTUAL COM DELT∆</div>
-<a href="admin.html" style="color:white;text-decoration:none;font-weight:bold;">ADMIN</a>
+  <div class="logo">DELT∆</div>
+  <a href="admin.html">ADMIN</a>
 </div>
 
 <div class="header">
+  <h1>PREPARATÓRIO VIRTUAL<br><span>COM DELT∆</span></h1>
+  <div class="subtitle">Medicina &amp; Ciências da Saúde</div>
 
-<h1>ÁREAS DE FORMAÇÃO</h1>
+  <div class="payment">
+    <div class="price">5.000 KZ</div>
+    <div class="iban">IBAN: <span>AO06 0040 0000 5071 2010 1017 8</span></div>
+    <div class="iban">Proprietário: <span>MPEKO CRUZ</span></div>
+    <div class="btns">
+      <a href="https://wa.me/244950509560?text=Olá%2C%20quero%20enviar%20o%20meu%20comprovativo%20de%20pagamento%20do%20Preparatório%20Virtual." target="_blank">
+        <button class="btn whatsapp">📱 WhatsApp</button>
+      </a>
+      <a href="mailto:deltaigualb.bmenos4.a.c@gmail.com?subject=Comprovativo%20de%20Pagamento&body=Olá,%0D%0A%0D%0AEstou a enviar o meu comprovativo de pagamento.%0D%0A%0D%0ANome:%0D%0AÁrea escolhida:%0D%0A%0D%0AObrigado.">
+        <button class="btn email-btn">✉️ Email</button>
+      </a>
+    </div>
+  </div>
 
-<div class="subtitle">
-Medicina e Ciências da Saúde
-</div>
-
-<div class="price">
-Preço: 5.000 KZ
-</div>
-
-<div class="info">
-IBAN: AO06 0040 0000 5071 2010 1017 8<br>
-Proprietário: MPEKO CRUZ
-</div>
-
-<div class="contact">
-
-<a href="https://wa.me/244950509560?text=Olá%2C%20quero%20enviar%20o%20meu%20comprovativo%20de%20pagamento%20do%20Preparatório%20Virtual." target="_blank">
-<button class="whatsapp">WhatsApp</button>
-</a>
-
-<a href="mailto:deltaigualb.bmenos4.a.c@gmail.com?subject=Comprovativo%20de%20Pagamento%20-%20Preparatório%20Virtual&body=Olá,%0D%0A%0D%0AEstou a enviar o meu comprovativo de pagamento.%0D%0A%0D%0ANome:%0D%0AÁrea escolhida:%0D%0A%0D%0AObrigado.">
-<button class="email">Email</button>
-</a>
-
-</div>
-
+  <div class="section-title">Escolha a sua área</div>
 </div>
 
 <div class="cards">
-
-<a href="login.html?area=medicina geral">
-<div class="card">Medicina Geral</div>
-</a>
-
-<a href="login.html?area=enfermagem">
-<div class="card">Enfermagem</div>
-</a>
-
-<a href="login.html?area=farmacia">
-<div class="card">Farmácia</div>
-</a>
-
-<a href="login.html?area=fisioterapia">
-<div class="card">Fisioterapia</div>
-</a>
-
-<a href="login.html?area=analises clinicas">
-<div class="card">Análises Clínicas</div>
-</a>
-
-<a href="login.html?area=nutrição e dietética">
-<div class="card">Nutrição e Dietética</div>
-</a>
-
-<a href="login.html?area=cardiopneumologia">
-<div class="card">Cardiopneumologia</div>
-</a>
-
-<a href="login.html?area=medicina dentária">
-<div class="card">Medicina Dentária</div>
-</a>
-
+  <a href="login.html?area=medicina geral" class="card">
+    <span class="card-icon">🩺</span>Medicina Geral
+  </a>
+  <a href="login.html?area=enfermagem" class="card">
+    <span class="card-icon">💉</span>Enfermagem
+  </a>
+  <a href="login.html?area=farmacia" class="card">
+    <span class="card-icon">💊</span>Farmácia
+  </a>
+  <a href="login.html?area=fisioterapia" class="card">
+    <span class="card-icon">🦴</span>Fisioterapia
+  </a>
+  <a href="login.html?area=analises clinicas" class="card">
+    <span class="card-icon">🔬</span>Análises Clínicas
+  </a>
+  <a href="login.html?area=nutrição e dietética" class="card">
+    <span class="card-icon">🥗</span>Nutrição e Dietética
+  </a>
+  <a href="login.html?area=cardiopneumologia" class="card">
+    <span class="card-icon">🫀</span>Cardiopneumologia
+  </a>
+  <a href="login.html?area=medicina dentária" class="card">
+    <span class="card-icon">🦷</span>Medicina Dentária
+  </a>
 </div>
 
 </body>
