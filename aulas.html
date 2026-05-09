@@ -2,53 +2,237 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>AULAS</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AULAS - DELT∆</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+:root{
+--bg:#060d1a;
+--surface:#0d1f35;
+--accent:#00ff88;
+--accent2:#3b82f6;
+--text:#e2e8f0;
+--muted:#64748b;
+}
+
 body{
-margin:0;
-font-family:Arial;
-background:#0f172a;
-color:white;
+font-family:'Inter',sans-serif;
+background:var(--bg);
+color:var(--text);
+min-height:100vh;
 }
 
+/* MENU */
+.menu{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:16px 24px;
+background:rgba(6,13,26,0.95);
+backdrop-filter:blur(20px);
+position:sticky;
+top:0;
+z-index:100;
+border-bottom:1px solid rgba(0,255,136,0.1);
+}
+
+.logo{
+font-family:'Rajdhani',sans-serif;
+font-weight:700;
+font-size:18px;
+letter-spacing:2px;
+color:var(--accent);
+}
+
+.user-info{
+font-size:12px;
+color:var(--muted);
+text-align:right;
+}
+
+.user-info span{
+display:block;
+color:var(--text);
+font-weight:500;
+}
+
+.logout{
+background:transparent;
+border:1px solid rgba(100,116,139,0.3);
+color:var(--muted);
+padding:7px 14px;
+border-radius:7px;
+cursor:pointer;
+font-size:12px;
+letter-spacing:1px;
+transition:0.3s;
+margin-left:16px;
+}
+
+.logout:hover{border-color:var(--accent);color:var(--accent);}
+
+.menu-right{
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+/* CONTAINER */
 .container{
-padding:20px;
+max-width:900px;
+margin:0 auto;
+padding:30px 20px;
 }
 
+.page-title{
+font-family:'Rajdhani',sans-serif;
+font-size:28px;
+font-weight:700;
+letter-spacing:2px;
+margin-bottom:6px;
+}
+
+.area-tag{
+display:inline-block;
+background:rgba(0,255,136,0.1);
+border:1px solid rgba(0,255,136,0.25);
+color:var(--accent);
+font-size:11px;
+letter-spacing:2px;
+padding:4px 12px;
+border-radius:20px;
+text-transform:uppercase;
+margin-bottom:28px;
+}
+
+/* CARDS */
 .card{
-background:#1e293b;
-padding:15px;
-margin:15px 0;
-border-radius:10px;
+background:var(--surface);
+border:1px solid rgba(255,255,255,0.06);
+border-radius:16px;
+padding:20px;
+margin-bottom:16px;
+transition:0.3s;
 }
 
-a{
-color:#22c55e;
+.card:hover{
+border-color:rgba(0,255,136,0.2);
 }
+
+.card-header{
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:14px;
+}
+
+.card-icon{
+font-size:22px;
+}
+
+.card-titulo{
+font-family:'Rajdhani',sans-serif;
+font-size:18px;
+font-weight:600;
+letter-spacing:1px;
+}
+
+/* VIDEO */
+.video-wrap{
+position:relative;
+width:100%;
+padding-top:56.25%;
+border-radius:10px;
+overflow:hidden;
+background:#000;
+}
+
+.video-wrap iframe{
+position:absolute;
+top:0;left:0;
+width:100%;height:100%;
+border:none;
+}
+
+/* PDF */
+.pdf-wrap{
+width:100%;
+height:500px;
+border-radius:10px;
+overflow:hidden;
+border:1px solid rgba(255,255,255,0.06);
+}
+
+.pdf-wrap iframe{
+width:100%;
+height:100%;
+border:none;
+}
+
+/* IMAGEM */
+.img-wrap img{
+width:100%;
+border-radius:10px;
+display:block;
+}
+
+/* LOADING / EMPTY */
+.empty{
+text-align:center;
+padding:60px 20px;
+color:var(--muted);
+}
+
+.empty p{font-size:15px;}
+
+/* SPINNER */
+.spinner-wrap{text-align:center;padding:60px;}
+.spinner{
+width:32px;height:32px;
+border:3px solid rgba(0,255,136,0.2);
+border-top:3px solid var(--accent);
+border-radius:50%;
+animation:spin 0.8s linear infinite;
+margin:auto;
+}
+@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
 </style>
 </head>
-
 <body oncontextmenu="return false;">
 
+<div class="menu">
+  <div class="logo">DELT∆</div>
+  <div class="menu-right">
+    <div class="user-info">
+      <span id="userEmail"></span>
+      <span id="userArea" style="color:var(--accent);font-size:11px;"></span>
+    </div>
+    <button class="logout" onclick="sair()">SAIR</button>
+  </div>
+</div>
+
 <div class="container">
-<h2 id="area"></h2>
-<div id="lista"></div>
+  <div class="page-title">AULAS</div>
+  <div class="area-tag" id="areaTitulo"></div>
+  <div id="lista">
+    <div class="spinner-wrap"><div class="spinner"></div></div>
+  </div>
 </div>
 
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDoF_h5rVPvVFsHJNcXdWO1gkzwdm65pZQ",
-  authDomain: "preparatoriovirtualcomde-71e23.firebaseapp.com",
-  projectId: "preparatoriovirtualcomde-71e23",
-  storageBucket: "preparatoriovirtualcomde-71e23.firebasestorage.app",
-  messagingSenderId: "738659946479",
-  appId: "1:738659946479:web:882735f1e23b5d0764b01a"
+  apiKey: "AIzaSyBBADytEHr9NzwFdGmd-zq26t88Vnl65js",
+  authDomain: "preparatoriovirtualcomde-38c0a.firebaseapp.com",
+  projectId: "preparatoriovirtualcomde-38c0a",
+  storageBucket: "preparatoriovirtualcomde-38c0a.firebasestorage.app",
+  messagingSenderId: "211289899773",
+  appId: "1:211289899773:web:dfc22d377c7172f936b494"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -56,68 +240,101 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const lista = document.getElementById("lista");
-const areaUser = localStorage.getItem("area");
 
-document.getElementById("area").innerText = "Área: " + areaUser;
+// PROTEÇÃO: verificar login + aprovação
+onAuthStateChanged(auth, async (user) => {
+  if(!user){
+    window.location.href = "login.html";
+    return;
+  }
 
-// 🔐 PROTEÇÃO
-onAuthStateChanged(auth, (user)=>{
-if(!user){
-window.location.href = "login.html";
-return;
-}
-carregar();
+  // Verificar aprovação no Firestore
+  const snap = await getDoc(doc(db, "users", user.uid));
+
+  if(!snap.exists() || snap.data().approved !== true){
+    await signOut(auth);
+    window.location.href = "login.html";
+    return;
+  }
+
+  const data = snap.data();
+  const area = data.area;
+
+  document.getElementById("userEmail").innerText = data.email;
+  document.getElementById("userArea").innerText = area.toUpperCase();
+  document.getElementById("areaTitulo").innerText = area;
+  localStorage.setItem("area", area);
+
+  carregarAulas(area);
 });
 
-// 🚀 CARREGAR AULAS
-async function carregar(){
+async function carregarAulas(area){
+  const snap = await getDocs(collection(db, "aulas"));
 
-const snap = await getDocs(collection(db,"aulas"));
+  const aulas = [];
+  snap.forEach(d => {
+    const data = d.data();
+    if(data.area === area) aulas.push(data);
+  });
 
-snap.forEach(docu=>{
-const data = docu.data();
+  if(aulas.length === 0){
+    lista.innerHTML = `
+      <div class="empty">
+        <p>Ainda não há aulas disponíveis para a tua área.</p>
+        <p style="margin-top:8px;font-size:13px;">Volta mais tarde.</p>
+      </div>
+    `;
+    return;
+  }
 
-if(data.area !== areaUser) return;
+  lista.innerHTML = "";
 
-const div = document.createElement("div");
-div.className = "card";
+  aulas.forEach(data => {
+    const card = document.createElement("div");
+    card.className = "card";
 
-let html = `<h3>${data.titulo}</h3>`;
+    let conteudo = "";
 
-// 🎥 VIDEO (SEM DOWNLOAD)
-if(data.tipo === "video"){
-html += `
-<iframe 
-src="${data.url}" 
-width="100%" 
-height="250"
-allow="autoplay"
-oncontextmenu="return false;">
-</iframe>
-`;
+    if(data.tipo === "video"){
+      conteudo = `
+        <div class="video-wrap">
+          <iframe src="${data.url}" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+        </div>
+      `;
+    } else if(data.tipo === "pdf"){
+      conteudo = `
+        <div class="pdf-wrap">
+          <iframe src="${data.url}"></iframe>
+        </div>
+      `;
+    } else if(data.tipo === "imagem"){
+      conteudo = `
+        <div class="img-wrap">
+          <img src="${data.url}" alt="${data.titulo}">
+        </div>
+      `;
+    }
+
+    const icones = {video:"🎥", pdf:"📄", imagem:"🖼"};
+
+    card.innerHTML = `
+      <div class="card-header">
+        <span class="card-icon">${icones[data.tipo] || "📁"}</span>
+        <span class="card-titulo">${data.titulo}</span>
+      </div>
+      ${conteudo}
+    `;
+
+    lista.appendChild(card);
+  });
 }
 
-// 📄 PDF
-if(data.tipo === "pdf"){
-html += `<a href="${data.url}" target="_blank">📄 Baixar PDF</a>`;
+// LOGOUT
+window.sair = async function(){
+  await signOut(auth);
+  localStorage.clear();
+  window.location.href = "login.html";
 }
-
-// 🖼 IMAGEM
-if(data.tipo === "imagem"){
-html += `
-<img src="${data.url}" width="100%">
-<br>
-<a href="${data.url}" download>📥 Baixar imagem</a>
-`;
-}
-
-div.innerHTML = html;
-lista.appendChild(div);
-
-});
-
-}
-
 </script>
 
 </body>
