@@ -59,6 +59,10 @@ button:hover{transform:translateY(-1px);}
 .help-text{font-size:12px;color:var(--muted);margin-bottom:12px;margin-top:-6px;line-height:1.5;}
 .error-login{color:#f87171;font-size:13px;margin-top:8px;}
 
+/* BUNNY INFO BOX */
+.bunny-info{background:rgba(0,255,136,0.05);border:1px solid rgba(0,255,136,0.2);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:12px;color:var(--muted);line-height:1.6;display:none;}
+.bunny-info b{color:var(--accent);}
+
 /* TABS */
 .tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
 .tab{padding:8px 16px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:var(--muted);font-size:13px;cursor:pointer;transition:0.3s;}
@@ -109,11 +113,21 @@ button:hover{transform:translateY(-1px);}
 
     <div class="grid2">
       <input id="titulo" placeholder="Título do conteúdo">
-      <select id="tipo">
+      <select id="tipo" onchange="atualizarTipo()">
+        <option value="bunny">🐰 Vídeo (Bunny Stream) — Protegido</option>
         <option value="video">🎥 Vídeo (YouTube)</option>
         <option value="pdf">📄 PDF (Google Drive)</option>
         <option value="imagem">🖼 Imagem (link direto)</option>
       </select>
+    </div>
+
+    <!-- Info Bunny -->
+    <div class="bunny-info" id="bunnyInfo">
+      <b>🐰 Como obter o link do Bunny Stream:</b><br>
+      1. Acede ao teu painel em <b>bunny.net → Stream</b><br>
+      2. Abre o vídeo que fizeste upload<br>
+      3. Clica em <b>"Embed"</b> e copia o link do <b>src</b> do iframe<br>
+      Exemplo: <b>https://iframe.mediadelivery.net/embed/XXXXX/VIDEO-ID</b>
     </div>
 
     <input id="url" placeholder="Cole o link aqui">
@@ -185,6 +199,8 @@ window.entrar = function(){
   document.getElementById("painel").style.display = "block";
   carregarAulas();
   carregarUsers();
+  // Mostrar info Bunny por padrão
+  document.getElementById("bunnyInfo").style.display = "block";
 }
 
 window.sair = function(){
@@ -199,6 +215,32 @@ window.mostrarTab = function(tab){
   event.target.classList.add("active");
   document.getElementById("tabAulas").style.display = tab === "aulas" ? "block" : "none";
   document.getElementById("tabUsers").style.display  = tab === "users" ? "block" : "none";
+}
+
+// ATUALIZAR TIPO — mostrar/esconder info Bunny
+window.atualizarTipo = function(){
+  const tipo = document.getElementById("tipo").value;
+  const bunnyInfo = document.getElementById("bunnyInfo");
+  const urlHelp = document.getElementById("urlHelp");
+  const urlInput = document.getElementById("url");
+
+  if(tipo === "bunny"){
+    bunnyInfo.style.display = "block";
+    urlHelp.innerText = "🐰 Cola aqui o link embed do Bunny Stream (https://iframe.mediadelivery.net/embed/...)";
+    urlInput.placeholder = "https://iframe.mediadelivery.net/embed/XXXXX/VIDEO-ID";
+  } else if(tipo === "video"){
+    bunnyInfo.style.display = "none";
+    urlHelp.innerText = "💡 YouTube: copia o link do vídeo (https://youtu.be/...) ou da playlist";
+    urlInput.placeholder = "https://youtu.be/...";
+  } else if(tipo === "pdf"){
+    bunnyInfo.style.display = "none";
+    urlHelp.innerText = "💡 Google Drive: faz upload → Partilhar → Qualquer pessoa com o link → troca /view por /preview";
+    urlInput.placeholder = "https://drive.google.com/file/d/.../preview";
+  } else {
+    bunnyInfo.style.display = "none";
+    urlHelp.innerText = "";
+    urlInput.placeholder = "Cole o link aqui";
+  }
 }
 
 // ATUALIZAR SUB
@@ -221,17 +263,20 @@ window.atualizarSub = function(){
     lista.forEach(s => sub.innerHTML += `<option value="${s}">${s}</option>`);
   }
 
-  // Dica de link
+  // Definir tipo padrão por secção
   if(seccao === "video_aulas" || seccao === "resolucao"){
-    tipo.value = "video";
-    help.innerText = "💡 YouTube: copia o link do vídeo (https://youtu.be/...) ou da playlist";
+    tipo.value = "bunny"; // Padrão: Bunny para vídeos
+    atualizarTipo();
   } else if(seccao === "cronograma" || seccao === "provas" || seccao === "materiais"){
+    tipo.value = "pdf";
+    atualizarTipo();
     help.innerText = "💡 Google Drive: faz upload → Partilhar → Qualquer pessoa com o link → troca /view por /preview";
   }
 }
 
 // FORMATAR LINK YOUTUBE
 function formatarURL(url, tipo){
+  if(tipo === "bunny") return url; // Bunny: usa o link tal como está
   if(tipo !== "video") return url;
   // playlist
   if(url.includes("list=") && !url.includes("embed")){
@@ -258,6 +303,13 @@ window.adicionarAula = async function(){
     msg.className = "msg error"; msg.innerText = "Preenche todos os campos obrigatórios."; return;
   }
 
+  // Validar link Bunny
+  if(tipo === "bunny" && !urlRaw.includes("mediadelivery.net")){
+    msg.className = "msg error";
+    msg.innerText = "⚠️ Link inválido para Bunny Stream. Deve conter 'mediadelivery.net'.";
+    return;
+  }
+
   const url = formatarURL(urlRaw, tipo);
 
   try {
@@ -278,16 +330,17 @@ async function carregarAulas(){
   const snap = await getDocs(collection(db,"aulas"));
   if(snap.empty){ div.innerHTML = "<p style='color:var(--muted);font-size:13px;'>Nenhum conteúdo publicado ainda.</p>"; return; }
   div.innerHTML = "";
-  const icones = {video:"🎥",pdf:"📄",imagem:"🖼"};
+  const icones = {video:"🎥", bunny:"🐰", pdf:"📄", imagem:"🖼"};
   snap.forEach(d => {
     const data = d.data();
     const sec = NOMES_SECCAO[data.seccao] || data.seccao || "—";
     const sub = data.sub || "—";
+    const tipoLabel = data.tipo === "bunny" ? "Bunny Stream 🔒" : data.tipo;
     div.innerHTML += `
       <div class="aula-card">
         <div class="aula-info">
           <p class="titulo">${icones[data.tipo]||"📁"} ${data.titulo}</p>
-          <p class="meta">${sec} › ${sub} · ${data.tipo}</p>
+          <p class="meta">${sec} › ${sub} · ${tipoLabel}</p>
         </div>
         <button class="btn-delete" onclick="eliminarAula('${d.id}')">Eliminar</button>
       </div>
@@ -330,3 +383,4 @@ window.revogar = async function(id){ if(!confirm("Revogar acesso?")) return; awa
 </script>
 </body>
 </html>
+
