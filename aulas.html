@@ -79,9 +79,32 @@ border-radius:12px;padding:20px;cursor:pointer;transition:0.3s;text-align:center
 .c-icon{font-size:20px;}
 .c-title{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:600;letter-spacing:1px;}
 
-/* VIDEO */
-.video-wrap{position:relative;width:100%;padding-top:56.25%;border-radius:10px;overflow:hidden;background:#000;}
-.video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
+/* VIDEO — YouTube e Bunny Stream */
+.video-wrap{
+  position:relative;width:100%;padding-top:56.25%;
+  border-radius:10px;overflow:hidden;background:#000;
+}
+.video-wrap iframe{
+  position:absolute;top:0;left:0;width:100%;height:100%;border:none;
+}
+
+/* Bunny: bloquear interação fora do player */
+.bunny-wrap{
+  position:relative;width:100%;padding-top:56.25%;
+  border-radius:10px;overflow:hidden;background:#000;
+}
+.bunny-wrap iframe{
+  position:absolute;top:0;left:0;width:100%;height:100%;border:none;
+  pointer-events:auto;
+}
+/* Overlay transparente nos cantos para bloquear clique no logo */
+.bunny-overlay{
+  position:absolute;
+  top:0;left:0;right:0;
+  height:60px;
+  z-index:2;
+  pointer-events:none;
+}
 
 /* PDF */
 .pdf-wrap{width:100%;height:500px;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);}
@@ -200,7 +223,7 @@ function abrirSeccao(s){
   else if(s.id === "resolucao") mostrarSubLista(s, UNIVERSIDADES, "✅");
 }
 
-// SUB LISTA (disciplinas ou universidades)
+// SUB LISTA
 function mostrarSubLista(s, lista, icon){
   atualizarBreadcrumb();
   document.getElementById("pageTitle").innerText = s.title;
@@ -239,20 +262,42 @@ async function mostrarConteudo(s, sub){
 
   div.innerHTML = `<div class="content-list"></div>`;
   const lista = div.querySelector(".content-list");
-  const icones = {video:"🎥",pdf:"📄",imagem:"🖼"};
+  const icones = {video:"🎥", bunny:"🎥", pdf:"📄", imagem:"🖼"};
 
   items.forEach(data => {
     const card = document.createElement("div");
     card.className = "content-card";
     let conteudo = "";
-    if(data.tipo === "video"){
+
+    if(data.tipo === "bunny"){
+      // Bunny Stream — player protegido, sem link visível
+      conteudo = `
+        <div class="bunny-wrap">
+          <iframe
+            src="${data.url}"
+            allowfullscreen
+            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+            style="border:none;"
+          ></iframe>
+          <div class="bunny-overlay"></div>
+        </div>
+      `;
+    } else if(data.tipo === "video"){
+      // YouTube (nocookie)
       conteudo = `<div class="video-wrap"><iframe src="${data.url}" allowfullscreen allow="autoplay; encrypted-media"></iframe></div>`;
     } else if(data.tipo === "pdf"){
       conteudo = `<div class="pdf-wrap"><iframe src="${data.url}"></iframe></div>`;
     } else if(data.tipo === "imagem"){
       conteudo = `<div class="img-wrap"><img src="${data.url}" alt="${data.titulo}"></div>`;
     }
-    card.innerHTML = `<div class="c-header"><span class="c-icon">${icones[data.tipo]||"📁"}</span><span class="c-title">${data.titulo}</span></div>${conteudo}`;
+
+    card.innerHTML = `
+      <div class="c-header">
+        <span class="c-icon">${icones[data.tipo]||"📁"}</span>
+        <span class="c-title">${data.titulo}</span>
+      </div>
+      ${conteudo}
+    `;
     lista.appendChild(card);
   });
 }
@@ -290,3 +335,4 @@ window.sair = async function(){
 </script>
 </body>
 </html>
+
