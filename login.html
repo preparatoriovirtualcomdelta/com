@@ -166,6 +166,20 @@ border:1px solid var(--accent2);
 background:rgba(59,130,246,0.1);
 }
 
+.forgotBtn{
+background:transparent;
+color:var(--muted);
+border:none;
+font-size:13px;
+letter-spacing:1px;
+padding:8px;
+}
+
+.forgotBtn:hover:not(:disabled){
+color:var(--text);
+transform:none;
+}
+
 .msg{
 margin-top:16px;
 padding:12px 16px;
@@ -259,6 +273,7 @@ margin:auto;
   <div class="btns">
     <button class="loginBtn" id="btnLogin" onclick="login()">ENTRAR</button>
     <button class="registerBtn" id="btnRegister" onclick="register()">CRIAR CONTA</button>
+    <button class="forgotBtn" id="btnForgot" onclick="recuperar()">Esqueci a senha</button>
   </div>
 
   <div class="spinner-wrap" id="loading">
@@ -270,7 +285,7 @@ margin:auto;
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -290,6 +305,7 @@ const msgEl = document.getElementById("msg");
 const loading = document.getElementById("loading");
 const btnLogin = document.getElementById("btnLogin");
 const btnRegister = document.getElementById("btnRegister");
+const btnForgot = document.getElementById("btnForgot");
 
 // Pegar área da URL
 const params = new URLSearchParams(window.location.search);
@@ -310,12 +326,14 @@ function showLoading(){
   loading.style.display = "block";
   btnLogin.disabled = true;
   btnRegister.disabled = true;
+  btnForgot.disabled = true;
 }
 
 function hideLoading(){
   loading.style.display = "none";
   btnLogin.disabled = false;
   btnRegister.disabled = false;
+  btnForgot.disabled = false;
 }
 
 function validar(email, senha, area){
@@ -361,7 +379,6 @@ window.login = async function(){
       return;
     }
 
-    // Guardar sessão
     localStorage.setItem("user", email);
     localStorage.setItem("uid", cred.user.uid);
     localStorage.setItem("area", data.area);
@@ -410,6 +427,28 @@ window.register = async function(){
   }
 }
 
+// RECUPERAR SENHA
+window.recuperar = async function(){
+  const email = document.getElementById("email").value.trim();
+  msgEl.className = "msg";
+
+  if(!email){
+    showMsg("Escreve o teu email primeiro.", "error");
+    return;
+  }
+
+  showLoading();
+
+  try {
+    await sendPasswordResetEmail(auth, email);
+    showMsg("✅ Email de recuperação enviado! Verifica a tua caixa de entrada.", "success");
+  } catch(e){
+    showMsg("Email não encontrado. Verifica se está correcto.", "error");
+  } finally {
+    hideLoading();
+  }
+}
+
 // Toggle senha
 window.toggleSenha = function(){
   const s = document.getElementById("senha");
@@ -419,4 +458,3 @@ window.toggleSenha = function(){
 
 </body>
 </html>
-
