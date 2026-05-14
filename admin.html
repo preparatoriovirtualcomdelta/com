@@ -59,11 +59,9 @@ button:hover{transform:translateY(-1px);}
 .help-text{font-size:12px;color:var(--muted);margin-bottom:12px;margin-top:-6px;line-height:1.5;}
 .error-login{color:#f87171;font-size:13px;margin-top:8px;}
 
-/* BUNNY INFO BOX */
 .bunny-info{background:rgba(0,255,136,0.05);border:1px solid rgba(0,255,136,0.2);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:12px;color:var(--muted);line-height:1.6;display:none;}
 .bunny-info b{color:var(--accent);}
 
-/* TABS */
 .tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
 .tab{padding:8px 16px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:var(--muted);font-size:13px;cursor:pointer;transition:0.3s;}
 .tab.active{background:rgba(0,255,136,0.15);border-color:rgba(0,255,136,0.3);color:var(--accent);}
@@ -89,7 +87,7 @@ button:hover{transform:translateY(-1px);}
     <button class="logout-btn" onclick="sair()">SAIR</button>
   </div>
 
-  <!-- ADICIONAR AULA -->
+  <!-- ADICIONAR CONTEÚDO -->
   <div class="section">
     <h3>Adicionar Conteúdo</h3>
 
@@ -121,7 +119,6 @@ button:hover{transform:translateY(-1px);}
       </select>
     </div>
 
-    <!-- Info Bunny -->
     <div class="bunny-info" id="bunnyInfo">
       <b>🐰 Como obter o link do Bunny Stream:</b><br>
       1. Acede ao teu painel em <b>bunny.net → Stream</b><br>
@@ -137,7 +134,7 @@ button:hover{transform:translateY(-1px);}
     <div class="msg" id="msgAula"></div>
   </div>
 
-  <!-- TABS CONTEÚDO / USERS -->
+  <!-- TABS -->
   <div class="tabs">
     <button class="tab active" onclick="mostrarTab('aulas')">📁 Conteúdos Publicados</button>
     <button class="tab" onclick="mostrarTab('users')">👥 Utilizadores</button>
@@ -180,13 +177,27 @@ const SUBS = {
   video_aulas: ["Biologia","Química","Física","Língua Portuguesa","Matemática"],
   materiais:   ["Biologia","Química","Física","Matemática","Língua Portuguesa","Cultura Geral"],
   cronograma:  [],
-  provas:      ["ISTM","UAN","UMN","UJES","UNIPIAGET","UPRA","URNM","UKB","UON"],
-  resolucao:   ["ISTM","UAN","UMN","UJES","UNIPIAGET","UPRA","URNM","UKB","UON"]
+  provas:      ["UAN","UMN","UON","UKB","URNM","UJES","ISTM","UPRA","UNIPIAGET","UNIKIV","UCC"],
+  resolucao:   ["UAN","UMN","UON","UKB","URNM","UJES","ISTM","UPRA","UNIPIAGET","UNIKIV","UCC"]
 };
 
 const NOMES_SECCAO = {
   video_aulas:"Vídeo Aulas", materiais:"Materiais de Apoio",
   cronograma:"Cronograma", provas:"Provas Passadas", resolucao:"Resolução de Provas"
+};
+
+const NOMES_UNI = {
+  UAN:       "Universidade Agostinho Neto",
+  UMN:       "Universidade Mandume Ya Ndemufayo",
+  UON:       "Universidade 11 de Novembro",
+  UKB:       "Universidade Katyavala Buila",
+  URNM:      "Universidade Rainha Njinga Mbande",
+  UJES:      "Universidade José Eduardo Dos Santos",
+  ISTM:      "Instituto Superior Técnico Militar",
+  UPRA:      "Universidade Privada de Angola",
+  UNIPIAGET: "Universidade Jean Piaget",
+  UNIKIV:    "Universidade Kimpa Vita",
+  UCC:       "Universidade Cuito Cuanavale"
 };
 
 // LOGIN
@@ -199,7 +210,6 @@ window.entrar = function(){
   document.getElementById("painel").style.display = "block";
   carregarAulas();
   carregarUsers();
-  // Mostrar info Bunny por padrão
   document.getElementById("bunnyInfo").style.display = "block";
 }
 
@@ -217,7 +227,7 @@ window.mostrarTab = function(tab){
   document.getElementById("tabUsers").style.display  = tab === "users" ? "block" : "none";
 }
 
-// ATUALIZAR TIPO — mostrar/esconder info Bunny
+// ATUALIZAR TIPO
 window.atualizarTipo = function(){
   const tipo = document.getElementById("tipo").value;
   const bunnyInfo = document.getElementById("bunnyInfo");
@@ -260,12 +270,14 @@ window.atualizarSub = function(){
     sub.innerHTML = `<option value="">— Sem subcategoria —</option>`;
   } else {
     sub.innerHTML = `<option value="">Seleciona</option>`;
-    lista.forEach(s => sub.innerHTML += `<option value="${s}">${s}</option>`);
+    lista.forEach(s => {
+      const label = NOMES_UNI[s] ? `${s} — ${NOMES_UNI[s]}` : s;
+      sub.innerHTML += `<option value="${s}">${label}</option>`;
+    });
   }
 
-  // Definir tipo padrão por secção
   if(seccao === "video_aulas" || seccao === "resolucao"){
-    tipo.value = "bunny"; // Padrão: Bunny para vídeos
+    tipo.value = "bunny";
     atualizarTipo();
   } else if(seccao === "cronograma" || seccao === "provas" || seccao === "materiais"){
     tipo.value = "pdf";
@@ -274,16 +286,14 @@ window.atualizarSub = function(){
   }
 }
 
-// FORMATAR LINK YOUTUBE
+// FORMATAR URL YOUTUBE
 function formatarURL(url, tipo){
-  if(tipo === "bunny") return url; // Bunny: usa o link tal como está
+  if(tipo === "bunny") return url;
   if(tipo !== "video") return url;
-  // playlist
   if(url.includes("list=") && !url.includes("embed")){
     const match = url.match(/list=([^&]+)/);
     if(match) return `https://www.youtube-nocookie.com/embed/videoseries?list=${match[1]}`;
   }
-  // vídeo normal
   const match = url.match(/(?:youtu\.be\/|v=|embed\/)([a-zA-Z0-9_-]{11})/);
   if(match) return `https://www.youtube-nocookie.com/embed/${match[1]}`;
   return url;
@@ -303,7 +313,6 @@ window.adicionarAula = async function(){
     msg.className = "msg error"; msg.innerText = "Preenche todos os campos obrigatórios."; return;
   }
 
-  // Validar link Bunny
   if(tipo === "bunny" && !urlRaw.includes("mediadelivery.net")){
     msg.className = "msg error";
     msg.innerText = "⚠️ Link inválido para Bunny Stream. Deve conter 'mediadelivery.net'.";
@@ -334,7 +343,7 @@ async function carregarAulas(){
   snap.forEach(d => {
     const data = d.data();
     const sec = NOMES_SECCAO[data.seccao] || data.seccao || "—";
-    const sub = data.sub || "—";
+    const sub = data.sub ? (NOMES_UNI[data.sub] ? `${data.sub} — ${NOMES_UNI[data.sub]}` : data.sub) : "—";
     const tipoLabel = data.tipo === "bunny" ? "Bunny Stream 🔒" : data.tipo;
     div.innerHTML += `
       <div class="aula-card">
@@ -362,11 +371,12 @@ async function carregarUsers(){
   div.innerHTML = "";
   snap.forEach(u => {
     const d = u.data();
+    const uniLabel = d.uni ? `${d.uni}${NOMES_UNI[d.uni] ? ' — '+NOMES_UNI[d.uni] : ''}` : "—";
     div.innerHTML += `
       <div class="user-card">
         <div class="user-info">
           <p class="email">${d.email}</p>
-          <p class="area">${d.area||"—"}</p>
+          <p class="area">${d.curso||d.area||"—"} · ${uniLabel}</p>
           <span class="badge ${d.approved?'approved':'pending'}">${d.approved?"APROVADO":"PENDENTE"}</span>
         </div>
         <div class="user-actions">
@@ -383,4 +393,3 @@ window.revogar = async function(id){ if(!confirm("Revogar acesso?")) return; awa
 </script>
 </body>
 </html>
-
