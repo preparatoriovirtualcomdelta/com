@@ -27,7 +27,27 @@ border-bottom:1px solid rgba(0,255,136,0.1);
 .logo{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:18px;letter-spacing:2px;color:var(--accent);}
 .menu-right{display:flex;align-items:center;gap:12px;}
 .user-info{font-size:12px;color:var(--muted);text-align:right;}
-.user-info span{display:block;color:var(--text);font-weight:500;}
+.user-info .email{display:block;color:var(--text);font-weight:500;}
+.user-info .meta{display:flex;gap:6px;justify-content:flex-end;margin-top:2px;flex-wrap:wrap;}
+.user-badge{
+display:inline-block;
+font-size:10px;
+letter-spacing:1px;
+padding:2px 8px;
+border-radius:10px;
+font-family:'Rajdhani',sans-serif;
+font-weight:600;
+}
+.user-badge.uni{
+background:rgba(0,255,136,0.1);
+border:1px solid rgba(0,255,136,0.25);
+color:var(--accent);
+}
+.user-badge.curso{
+background:rgba(59,130,246,0.1);
+border:1px solid rgba(59,130,246,0.25);
+color:var(--accent2);
+}
 .logout{background:transparent;border:1px solid rgba(100,116,139,0.3);color:var(--muted);padding:7px 14px;border-radius:7px;cursor:pointer;font-size:12px;letter-spacing:1px;transition:0.3s;}
 .logout:hover{border-color:var(--accent);color:var(--accent);}
 
@@ -79,32 +99,14 @@ border-radius:12px;padding:20px;cursor:pointer;transition:0.3s;text-align:center
 .c-icon{font-size:20px;}
 .c-title{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:600;letter-spacing:1px;}
 
-/* VIDEO — YouTube e Bunny Stream */
-.video-wrap{
-  position:relative;width:100%;padding-top:56.25%;
-  border-radius:10px;overflow:hidden;background:#000;
-}
-.video-wrap iframe{
-  position:absolute;top:0;left:0;width:100%;height:100%;border:none;
-}
+/* VIDEO */
+.video-wrap{position:relative;width:100%;padding-top:56.25%;border-radius:10px;overflow:hidden;background:#000;}
+.video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
 
-/* Bunny: bloquear interação fora do player */
-.bunny-wrap{
-  position:relative;width:100%;padding-top:56.25%;
-  border-radius:10px;overflow:hidden;background:#000;
-}
-.bunny-wrap iframe{
-  position:absolute;top:0;left:0;width:100%;height:100%;border:none;
-  pointer-events:auto;
-}
-/* Overlay transparente nos cantos para bloquear clique no logo */
-.bunny-overlay{
-  position:absolute;
-  top:0;left:0;right:0;
-  height:60px;
-  z-index:2;
-  pointer-events:none;
-}
+/* BUNNY */
+.bunny-wrap{position:relative;width:100%;padding-top:56.25%;border-radius:10px;overflow:hidden;background:#000;}
+.bunny-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;pointer-events:auto;}
+.bunny-overlay{position:absolute;top:0;left:0;right:0;height:60px;z-index:2;pointer-events:none;}
 
 /* PDF */
 .pdf-wrap{width:100%;height:500px;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);}
@@ -112,6 +114,21 @@ border-radius:12px;padding:20px;cursor:pointer;transition:0.3s;text-align:center
 
 /* IMAGEM */
 .img-wrap img{width:100%;border-radius:10px;display:block;}
+
+/* UNI FILTER NOTICE */
+.uni-notice{
+background:rgba(0,255,136,0.05);
+border:1px solid rgba(0,255,136,0.15);
+border-radius:10px;
+padding:10px 16px;
+font-size:12px;
+color:var(--muted);
+margin-bottom:20px;
+display:flex;
+align-items:center;
+gap:8px;
+}
+.uni-notice b{color:var(--accent);}
 
 /* EMPTY / SPINNER */
 .empty{text-align:center;padding:60px 20px;color:var(--muted);}
@@ -133,8 +150,11 @@ border-radius:12px;padding:20px;cursor:pointer;transition:0.3s;text-align:center
   <div class="logo">DELT∆</div>
   <div class="menu-right">
     <div class="user-info">
-      <span id="userEmail"></span>
-      <span id="userArea" style="color:var(--accent);font-size:11px;"></span>
+      <span class="email" id="userEmail"></span>
+      <div class="meta">
+        <span class="user-badge uni" id="userUni" style="display:none"></span>
+        <span class="user-badge curso" id="userCurso" style="display:none"></span>
+      </div>
     </div>
     <button class="logout" onclick="sair()">SAIR</button>
   </div>
@@ -162,36 +182,74 @@ const firebaseConfig = {
   appId: "1:211289899773:web:dfc22d377c7172f936b494"
 };
 
-const app = initializeApp(firebaseConfig);
+const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
+const db   = getFirestore(app);
+
+// Disciplinas por universidade
+const DISCIPLINAS_UNI = {
+  UAN:    ["Biologia","Química","Língua Portuguesa","Matemática"],
+  UMN:    ["Biologia","Química","Língua Portuguesa","Matemática"],
+  UON:    ["Biologia","Química","Língua Portuguesa","Física"],
+  UKB:    ["Biologia","Química","Língua Portuguesa","Física"],
+  URNM:   ["Biologia","Química","Língua Portuguesa","Matemática","Física"],
+  UJES:   ["Biologia","Química","Língua Portuguesa","Física"],
+  ISTM:   ["Biologia","Química","Matemática","Física"],
+  UPRA:   ["Biologia","Química","Língua Portuguesa"],
+  PIAGET: ["Biologia","Química","Língua Portuguesa","Matemática","Física"],
+  UNIKIV: ["Biologia","Química","Matemática","Língua Portuguesa"],
+  UCC:    ["Biologia","Química","Língua Portuguesa","Matemática"],
+  OUTRA:  ["Biologia","Química","Matemática","Língua Portuguesa","Física"]
+};
+
+const DISCIPLINAS_MATERIAL = ["Biologia","Química","Física","Matemática","Língua Portuguesa","Cultura Geral"];
 
 const SECCOES = [
-  { id:"video_aulas",  icon:"🎥", title:"VÍDEO AULAS",           desc:"Aulas em vídeo por disciplina" },
-  { id:"materiais",    icon:"📚", title:"MATERIAIS DE APOIO",     desc:"PDFs e imagens por disciplina" },
-  { id:"cronograma",   icon:"📅", title:"CRONOGRAMA DE ESTUDO",   desc:"Planificação das tuas aulas" },
-  { id:"provas",       icon:"📝", title:"PROVAS PASSADAS",        desc:"Provas anteriores por universidade" },
-  { id:"resolucao",    icon:"✅", title:"RESOLUÇÃO DE PROVAS",    desc:"Vídeos de resolução por universidade" }
+  { id:"video_aulas",  icon:"🎥", title:"VÍDEO AULAS",         desc:"Aulas em vídeo por disciplina" },
+  { id:"materiais",    icon:"📚", title:"MATERIAIS DE APOIO",   desc:"PDFs e imagens por disciplina" },
+  { id:"cronograma",   icon:"📅", title:"CRONOGRAMA DE ESTUDO", desc:"Planificação das tuas aulas" },
+  { id:"provas",       icon:"📝", title:"PROVAS PASSADAS",      desc:"Provas anteriores da tua universidade" },
+  { id:"resolucao",    icon:"✅", title:"RESOLUÇÃO DE PROVAS",  desc:"Vídeos de resolução da tua universidade" }
 ];
 
-const DISCIPLINAS_VIDEO    = ["Biologia","Química","Física","Língua Portuguesa","Matemática"];
-const DISCIPLINAS_MATERIAL = ["Biologia","Química","Física","Matemática","Língua Portuguesa","Cultura Geral"];
-const UNIVERSIDADES        = ["ISTM","UAN","UMN","UJES","UNIPIAGET","UPRA","URNM","UKB","UON"];
-
-let estado = { seccao: null, sub: null };
+let estado = { seccao:null, sub:null };
+let userUni = "";
+let userCurso = "";
+let userEmail = "";
 
 // PROTEÇÃO
 onAuthStateChanged(auth, async (user) => {
   if(!user){ window.location.href = "login.html"; return; }
+
   const snap = await getDoc(doc(db,"users",user.uid));
   if(!snap.exists() || snap.data().approved !== true){
     await signOut(auth);
     window.location.href = "login.html";
     return;
   }
+
   const data = snap.data();
-  document.getElementById("userEmail").innerText = data.email;
-  document.getElementById("userArea").innerText = (data.area||"").toUpperCase();
+
+  // Dados do utilizador (Firestore tem prioridade, localStorage como fallback)
+  userEmail = data.email || localStorage.getItem("user") || user.email;
+  userUni   = data.uni   || localStorage.getItem("uni")  || "";
+  userCurso = data.curso || localStorage.getItem("curso")|| "";
+
+  // Mostrar no menu
+  document.getElementById("userEmail").innerText = userEmail;
+
+  const uniEl = document.getElementById("userUni");
+  const cursoEl = document.getElementById("userCurso");
+
+  if(userUni){
+    uniEl.innerText = userUni;
+    uniEl.style.display = "inline-block";
+  }
+  if(userCurso){
+    cursoEl.innerText = userCurso;
+    cursoEl.style.display = "inline-block";
+  }
+
   mostrarMenu();
 });
 
@@ -216,19 +274,53 @@ function mostrarMenu(){
 function abrirSeccao(s){
   estado.seccao = s;
   estado.sub = null;
-  if(s.id === "video_aulas")   mostrarSubLista(s, DISCIPLINAS_VIDEO, "🎥");
-  else if(s.id === "materiais") mostrarSubLista(s, DISCIPLINAS_MATERIAL, "📚");
-  else if(s.id === "cronograma") mostrarConteudo(s, null);
-  else if(s.id === "provas")   mostrarSubLista(s, UNIVERSIDADES, "📝");
-  else if(s.id === "resolucao") mostrarSubLista(s, UNIVERSIDADES, "✅");
+
+  if(s.id === "video_aulas"){
+    // Disciplinas filtradas pela universidade do utilizador
+    const disciplinas = (userUni && DISCIPLINAS_UNI[userUni]) ? DISCIPLINAS_UNI[userUni] : ["Biologia","Química","Física","Língua Portuguesa","Matemática"];
+    mostrarSubLista(s, disciplinas, "🎥", userUni ? `Disciplinas da ${userUni}` : null);
+  }
+  else if(s.id === "materiais"){
+    mostrarSubLista(s, DISCIPLINAS_MATERIAL, "📚", null);
+  }
+  else if(s.id === "cronograma"){
+    mostrarConteudo(s, null);
+  }
+  else if(s.id === "provas"){
+    // Para provas e resolução: mostrar apenas a universidade do utilizador
+    if(userUni){
+      // Ir direto para o conteúdo da universidade do utilizador
+      estado.sub = userUni;
+      mostrarConteudo(s, userUni, true);
+    } else {
+      // Sem universidade definida: mostrar todas
+      const TODAS_UNI = ["ISTM","UAN","UMN","UJES","PIAGET","UPRA","URNM","UKB","UON","UON","UCC","UNIKIV"];
+      mostrarSubLista(s, TODAS_UNI, "📝", null);
+    }
+  }
+  else if(s.id === "resolucao"){
+    if(userUni){
+      estado.sub = userUni;
+      mostrarConteudo(s, userUni, true);
+    } else {
+      const TODAS_UNI = ["ISTM","UAN","UMN","UJES","PIAGET","UPRA","URNM","UKB","UON","UCC","UNIKIV"];
+      mostrarSubLista(s, TODAS_UNI, "✅", null);
+    }
+  }
 }
 
 // SUB LISTA
-function mostrarSubLista(s, lista, icon){
+function mostrarSubLista(s, lista, icon, notice){
   atualizarBreadcrumb();
   document.getElementById("pageTitle").innerText = s.title;
   const div = document.getElementById("conteudo");
-  div.innerHTML = `<div class="disc-grid"></div>`;
+
+  let noticeHTML = "";
+  if(notice){
+    noticeHTML = `<div class="uni-notice">🎓 A mostrar conteúdo para: <b>${notice}</b></div>`;
+  }
+
+  div.innerHTML = `${noticeHTML}<div class="disc-grid"></div>`;
   const grid = div.querySelector(".disc-grid");
   lista.forEach(item => {
     const card = document.createElement("div");
@@ -240,7 +332,7 @@ function mostrarSubLista(s, lista, icon){
 }
 
 // MOSTRAR CONTEÚDO
-async function mostrarConteudo(s, sub){
+async function mostrarConteudo(s, sub, fromUni){
   atualizarBreadcrumb();
   document.getElementById("pageTitle").innerText = sub ? sub.toUpperCase() : s.title;
   const div = document.getElementById("conteudo");
@@ -248,6 +340,7 @@ async function mostrarConteudo(s, sub){
 
   const snap = await getDocs(collection(db,"aulas"));
   const items = [];
+
   snap.forEach(d => {
     const data = d.data();
     if(data.seccao !== s.id) return;
@@ -255,19 +348,31 @@ async function mostrarConteudo(s, sub){
     items.push(data);
   });
 
-  items.sort((a, b) => {
-    const numA = parseInt((a.titulo.match(/\d+/) || [0])[0]);
-    const numB = parseInt((b.titulo.match(/\d+/) || [0])[0]);
-    if(numA !== numB) return numA - numB;
+  items.sort((a,b) => {
+    const nA = parseInt((a.titulo.match(/\d+/)||[0])[0]);
+    const nB = parseInt((b.titulo.match(/\d+/)||[0])[0]);
+    if(nA !== nB) return nA - nB;
     return a.titulo.localeCompare(b.titulo);
   });
 
+  // Notice de filtro de universidade
+  let noticeHTML = "";
+  if(fromUni && userUni){
+    noticeHTML = `<div class="uni-notice">🎓 Conteúdo exclusivo da tua universidade: <b>${userUni}</b></div>`;
+  }
+
   if(items.length === 0){
-    div.innerHTML = `<div class="empty"><div class="e-icon">📭</div><p>Ainda não há conteúdo aqui.</p><p style="margin-top:6px;font-size:12px;">Volta mais tarde.</p></div>`;
+    div.innerHTML = `
+      ${noticeHTML}
+      <div class="empty">
+        <div class="e-icon">📭</div>
+        <p>Ainda não há conteúdo aqui.</p>
+        <p style="margin-top:6px;font-size:12px;">Volta mais tarde.</p>
+      </div>`;
     return;
   }
 
-  div.innerHTML = `<div class="content-list"></div>`;
+  div.innerHTML = `${noticeHTML}<div class="content-list"></div>`;
   const lista = div.querySelector(".content-list");
   const icones = {video:"🎥", bunny:"🎥", pdf:"📄", imagem:"🖼"};
 
@@ -277,21 +382,18 @@ async function mostrarConteudo(s, sub){
     let conteudo = "";
 
     if(data.tipo === "bunny"){
-      // Bunny Stream — player protegido, sem link visível
       conteudo = `
         <div class="bunny-wrap">
           <iframe
-          src="${data.url.split('?')[0]}?autoplay=false&preload=false&muted=false"
+            src="${data.url.split('?')[0]}?autoplay=false&preload=false&muted=false"
             loading="lazy"
             allowfullscreen
             allow="accelerometer; gyroscope; encrypted-media; picture-in-picture"
             style="border:0;position:absolute;top:0;height:100%;width:100%;"
           ></iframe>
           <div class="bunny-overlay"></div>
-        </div>
-      `;
+        </div>`;
     } else if(data.tipo === "video"){
-      // YouTube (nocookie)
       conteudo = `<div class="video-wrap"><iframe src="${data.url}" allowfullscreen allow="autoplay; encrypted-media"></iframe></div>`;
     } else if(data.tipo === "pdf"){
       conteudo = `<div class="pdf-wrap"><iframe src="${data.url}"></iframe></div>`;
@@ -304,8 +406,7 @@ async function mostrarConteudo(s, sub){
         <span class="c-icon">${icones[data.tipo]||"📁"}</span>
         <span class="c-title">${data.titulo}</span>
       </div>
-      ${conteudo}
-    `;
+      ${conteudo}`;
     lista.appendChild(card);
   });
 }
