@@ -7,73 +7,33 @@
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-:root{
---bg:#060d1a;
---surface:#0d1f35;
---accent:#00ff88;
---accent2:#3b82f6;
---text:#e2e8f0;
---muted:#64748b;
-}
+:root{--bg:#060d1a;--surface:#0d1f35;--accent:#00ff88;--accent2:#3b82f6;--text:#e2e8f0;--muted:#64748b;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 
-/* MENU */
-.menu{
-display:flex;justify-content:space-between;align-items:center;
-padding:16px 24px;background:rgba(6,13,26,0.95);
-backdrop-filter:blur(20px);position:sticky;top:0;z-index:100;
-border-bottom:1px solid rgba(0,255,136,0.1);
-}
+.menu{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;background:rgba(6,13,26,0.95);backdrop-filter:blur(20px);position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(0,255,136,0.1);}
 .logo{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:18px;letter-spacing:2px;color:var(--accent);}
 .menu-right{display:flex;align-items:center;gap:12px;}
 .user-info{font-size:12px;color:var(--muted);text-align:right;}
 .user-info .email{display:block;color:var(--text);font-weight:500;}
 .user-info .meta{display:flex;gap:6px;justify-content:flex-end;margin-top:2px;flex-wrap:wrap;}
-.user-badge{
-display:inline-block;
-font-size:10px;
-letter-spacing:1px;
-padding:2px 8px;
-border-radius:10px;
-font-family:'Rajdhani',sans-serif;
-font-weight:600;
-}
-.user-badge.uni{
-background:rgba(0,255,136,0.1);
-border:1px solid rgba(0,255,136,0.25);
-color:var(--accent);
-}
-.user-badge.curso{
-background:rgba(59,130,246,0.1);
-border:1px solid rgba(59,130,246,0.25);
-color:var(--accent2);
-}
+.user-badge{display:inline-block;font-size:10px;letter-spacing:1px;padding:2px 8px;border-radius:10px;font-family:'Rajdhani',sans-serif;font-weight:600;}
+.user-badge.uni{background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.25);color:var(--accent);}
+.user-badge.curso{background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.25);color:var(--accent2);}
 .logout{background:transparent;border:1px solid rgba(100,116,139,0.3);color:var(--muted);padding:7px 14px;border-radius:7px;cursor:pointer;font-size:12px;letter-spacing:1px;transition:0.3s;}
 .logout:hover{border-color:var(--accent);color:var(--accent);}
 
-/* MAIN */
 .main{max-width:960px;margin:0 auto;padding:30px 20px;}
 
-/* BREADCRUMB */
-.breadcrumb{
-display:flex;align-items:center;gap:8px;
-font-size:12px;color:var(--muted);margin-bottom:24px;flex-wrap:wrap;
-}
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-bottom:24px;flex-wrap:wrap;}
 .breadcrumb span{cursor:pointer;transition:0.2s;}
 .breadcrumb span:hover{color:var(--accent);}
 .breadcrumb .sep{color:rgba(100,116,139,0.4);cursor:default;}
 .breadcrumb .current{color:var(--text);cursor:default;}
 
-/* PAGE TITLE */
 .page-title{font-family:'Rajdhani',sans-serif;font-size:30px;font-weight:700;letter-spacing:2px;margin-bottom:28px;}
 
-/* SECTION CARDS */
 .section-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
-.section-card{
-background:var(--surface);border:1px solid rgba(255,255,255,0.06);
-border-radius:16px;padding:28px 24px;cursor:pointer;transition:0.35s;
-position:relative;overflow:hidden;
-}
+.section-card{background:var(--surface);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:28px 24px;cursor:pointer;transition:0.35s;position:relative;overflow:hidden;}
 .section-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,255,136,0.07),transparent);opacity:0;transition:0.35s;}
 .section-card:hover{transform:translateY(-4px);border-color:rgba(0,255,136,0.35);box-shadow:0 16px 40px rgba(0,0,0,0.4);}
 .section-card:hover::before{opacity:1;}
@@ -81,17 +41,12 @@ position:relative;overflow:hidden;
 .section-card .title{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;letter-spacing:1px;margin-bottom:6px;}
 .section-card .desc{font-size:12px;color:var(--muted);}
 
-/* DISCIPLINA / UNIVERSIDADE CARDS */
 .disc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;}
-.disc-card{
-background:var(--surface);border:1px solid rgba(255,255,255,0.06);
-border-radius:12px;padding:20px;cursor:pointer;transition:0.3s;text-align:center;
-}
+.disc-card{background:var(--surface);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:20px;cursor:pointer;transition:0.3s;text-align:center;}
 .disc-card:hover{border-color:rgba(0,255,136,0.35);color:var(--accent);transform:translateY(-3px);}
 .disc-card .disc-icon{font-size:26px;margin-bottom:10px;display:block;}
 .disc-card .disc-name{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;letter-spacing:1px;}
 
-/* CONTENT */
 .content-list{display:flex;flex-direction:column;gap:16px;}
 .content-card{background:var(--surface);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:20px;transition:0.3s;}
 .content-card:hover{border-color:rgba(0,255,136,0.2);}
@@ -99,38 +54,18 @@ border-radius:12px;padding:20px;cursor:pointer;transition:0.3s;text-align:center
 .c-icon{font-size:20px;}
 .c-title{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:600;letter-spacing:1px;}
 
-/* VIDEO */
 .video-wrap{position:relative;width:100%;padding-top:56.25%;border-radius:10px;overflow:hidden;background:#000;}
 .video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
-
-/* BUNNY */
 .bunny-wrap{position:relative;width:100%;padding-top:56.25%;border-radius:10px;overflow:hidden;background:#000;}
-.bunny-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;pointer-events:auto;}
+.bunny-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
 .bunny-overlay{position:absolute;top:0;left:0;right:0;height:60px;z-index:2;pointer-events:none;}
-
-/* PDF */
 .pdf-wrap{width:100%;height:500px;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);}
 .pdf-wrap iframe{width:100%;height:100%;border:none;}
-
-/* IMAGEM */
 .img-wrap img{width:100%;border-radius:10px;display:block;}
 
-/* UNI FILTER NOTICE */
-.uni-notice{
-background:rgba(0,255,136,0.05);
-border:1px solid rgba(0,255,136,0.15);
-border-radius:10px;
-padding:10px 16px;
-font-size:12px;
-color:var(--muted);
-margin-bottom:20px;
-display:flex;
-align-items:center;
-gap:8px;
-}
+.uni-notice{background:rgba(0,255,136,0.05);border:1px solid rgba(0,255,136,0.15);border-radius:10px;padding:10px 16px;font-size:12px;color:var(--muted);margin-bottom:20px;}
 .uni-notice b{color:var(--accent);}
 
-/* EMPTY / SPINNER */
 .empty{text-align:center;padding:60px 20px;color:var(--muted);}
 .empty .e-icon{font-size:40px;margin-bottom:12px;}
 .empty p{font-size:14px;}
@@ -138,10 +73,7 @@ gap:8px;
 .spinner{width:32px;height:32px;border:3px solid rgba(0,255,136,0.2);border-top:3px solid var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin:auto;}
 @keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
 
-@media(max-width:600px){
-.section-grid{grid-template-columns:1fr 1fr;}
-.disc-grid{grid-template-columns:1fr 1fr;}
-}
+@media(max-width:600px){.section-grid{grid-template-columns:1fr 1fr;}.disc-grid{grid-template-columns:1fr 1fr;}}
 </style>
 </head>
 <body oncontextmenu="return false;">
@@ -152,7 +84,7 @@ gap:8px;
     <div class="user-info">
       <span class="email" id="userEmail"></span>
       <div class="meta">
-        <span class="user-badge uni" id="userUni" style="display:none"></span>
+        <span class="user-badge uni"   id="userUni"   style="display:none"></span>
         <span class="user-badge curso" id="userCurso" style="display:none"></span>
       </div>
     </div>
@@ -163,9 +95,7 @@ gap:8px;
 <div class="main">
   <div class="breadcrumb" id="breadcrumb"></div>
   <div class="page-title" id="pageTitle">CONTEÚDOS</div>
-  <div id="conteudo">
-    <div class="spinner-wrap"><div class="spinner"></div></div>
-  </div>
+  <div id="conteudo"><div class="spinner-wrap"><div class="spinner"></div></div></div>
 </div>
 
 <script type="module">
@@ -186,74 +116,55 @@ const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
-// Disciplinas por universidade
+// Disciplinas iguais para toda a gente (vídeo aulas e materiais)
+const DISCIPLINAS = ["Biologia","Química","Física","Língua Portuguesa","Matemática"];
+
+// Disciplinas por universidade (só para vídeo aulas — filtradas pelo utilizador)
 const DISCIPLINAS_UNI = {
-  UAN:    ["Biologia","Química","Língua Portuguesa","Matemática"],
-  UMN:    ["Biologia","Química","Língua Portuguesa","Matemática"],
-  UON:    ["Biologia","Química","Língua Portuguesa","Física"],
-  UKB:    ["Biologia","Química","Língua Portuguesa","Física"],
-  URNM:   ["Biologia","Química","Língua Portuguesa","Matemática","Física"],
-  UJES:   ["Biologia","Química","Língua Portuguesa","Física"],
-  ISTM:   ["Biologia","Química","Matemática","Física"],
-  UPRA:   ["Biologia","Química","Língua Portuguesa"],
-  PIAGET: ["Biologia","Química","Língua Portuguesa","Matemática","Física"],
-  UNIKIV: ["Biologia","Química","Matemática","Língua Portuguesa"],
-  UCC:    ["Biologia","Química","Língua Portuguesa","Matemática"],
-  OUTRA:  ["Biologia","Química","Matemática","Língua Portuguesa","Física"]
+  UAN:       ["Biologia","Química","Língua Portuguesa","Matemática"],
+  UMN:       ["Biologia","Química","Língua Portuguesa","Matemática"],
+  UON:       ["Biologia","Química","Língua Portuguesa","Física"],
+  UKB:       ["Biologia","Química","Língua Portuguesa","Física"],
+  URNM:      ["Biologia","Química","Língua Portuguesa","Matemática","Física"],
+  UJES:      ["Biologia","Química","Língua Portuguesa","Física"],
+  ISTM:      ["Biologia","Química","Matemática","Física"],
+  UPRA:      ["Biologia","Química","Língua Portuguesa"],
+  UNIPIAGET: ["Biologia","Química","Língua Portuguesa","Matemática","Física"],
+  UNIKIV:    ["Biologia","Química","Matemática","Língua Portuguesa"],
+  UCC:       ["Biologia","Química","Língua Portuguesa","Matemática"],
+  OUTRA:     ["Biologia","Química","Matemática","Língua Portuguesa","Física"]
 };
 
-const DISCIPLINAS_MATERIAL = ["Biologia","Química","Física","Matemática","Língua Portuguesa","Cultura Geral"];
-
 const SECCOES = [
-  { id:"video_aulas",  icon:"🎥", title:"VÍDEO AULAS",         desc:"Aulas em vídeo por disciplina" },
-  { id:"materiais",    icon:"📚", title:"MATERIAIS DE APOIO",   desc:"PDFs e imagens por disciplina" },
-  { id:"cronograma",   icon:"📅", title:"CRONOGRAMA DE ESTUDO", desc:"Planificação das tuas aulas" },
-  { id:"provas",       icon:"📝", title:"PROVAS PASSADAS",      desc:"Provas anteriores da tua universidade" },
-  { id:"resolucao",    icon:"✅", title:"RESOLUÇÃO DE PROVAS",  desc:"Vídeos de resolução da tua universidade" }
+  { id:"video_aulas", icon:"🎥", title:"VÍDEO AULAS",         desc:"Aulas em vídeo por disciplina" },
+  { id:"materiais",   icon:"📚", title:"MATERIAIS DE APOIO",   desc:"PDFs e materiais por disciplina" },
+  { id:"cronograma",  icon:"📅", title:"CRONOGRAMA DE ESTUDO", desc:"Planificação das tuas aulas" },
+  { id:"provas",      icon:"📝", title:"PROVAS PASSADAS",      desc:"Provas anteriores da tua universidade" },
+  { id:"resolucao",   icon:"✅", title:"RESOLUÇÃO DE PROVAS",  desc:"Vídeos de resolução da tua universidade" }
 ];
 
-let estado = { seccao:null, sub:null };
-let userUni = "";
-let userCurso = "";
-let userEmail = "";
+const ICONES_DISC = { "Biologia":"🧬","Química":"⚗️","Física":"⚡","Língua Portuguesa":"📖","Matemática":"📐" };
 
-// PROTEÇÃO
+let estado = { seccao:null, sub:null };
+let userUni = "", userCurso = "";
+
 onAuthStateChanged(auth, async (user) => {
   if(!user){ window.location.href = "login.html"; return; }
-
   const snap = await getDoc(doc(db,"users",user.uid));
   if(!snap.exists() || snap.data().approved !== true){
-    await signOut(auth);
-    window.location.href = "login.html";
-    return;
+    await signOut(auth); window.location.href = "login.html"; return;
   }
-
   const data = snap.data();
-
-  // Dados do utilizador (Firestore tem prioridade, localStorage como fallback)
-  userEmail = data.email || localStorage.getItem("user") || user.email;
   userUni   = data.uni   || localStorage.getItem("uni")  || "";
   userCurso = data.curso || localStorage.getItem("curso")|| "";
-
-  // Mostrar no menu
-  document.getElementById("userEmail").innerText = userEmail;
-
-  const uniEl = document.getElementById("userUni");
+  document.getElementById("userEmail").innerText = data.email || user.email;
+  const uniEl   = document.getElementById("userUni");
   const cursoEl = document.getElementById("userCurso");
-
-  if(userUni){
-    uniEl.innerText = userUni;
-    uniEl.style.display = "inline-block";
-  }
-  if(userCurso){
-    cursoEl.innerText = userCurso;
-    cursoEl.style.display = "inline-block";
-  }
-
+  if(userUni){   uniEl.innerText   = userUni;   uniEl.style.display   = "inline-block"; }
+  if(userCurso){ cursoEl.innerText = userCurso; cursoEl.style.display = "inline-block"; }
   mostrarMenu();
 });
 
-// MENU PRINCIPAL
 function mostrarMenu(){
   estado = { seccao:null, sub:null };
   atualizarBreadcrumb();
@@ -270,68 +181,48 @@ function mostrarMenu(){
   });
 }
 
-// ABRIR SECÇÃO
 function abrirSeccao(s){
   estado.seccao = s;
-  estado.sub = null;
+  estado.sub    = null;
 
   if(s.id === "video_aulas"){
-    // Disciplinas filtradas pela universidade do utilizador
-    const disciplinas = (userUni && DISCIPLINAS_UNI[userUni]) ? DISCIPLINAS_UNI[userUni] : ["Biologia","Química","Física","Língua Portuguesa","Matemática"];
-    mostrarSubLista(s, disciplinas, "🎥", userUni ? `Disciplinas da ${userUni}` : null);
-  }
-  else if(s.id === "materiais"){
-    mostrarSubLista(s, DISCIPLINAS_MATERIAL, "📚", null);
-  }
-  else if(s.id === "cronograma"){
-    mostrarConteudo(s, null);
-  }
-  else if(s.id === "provas"){
-    // Para provas e resolução: mostrar apenas a universidade do utilizador
-    if(userUni){
-      // Ir direto para o conteúdo da universidade do utilizador
-      estado.sub = userUni;
-      mostrarConteudo(s, userUni, true);
-    } else {
-      // Sem universidade definida: mostrar todas
-      const TODAS_UNI = ["ISTM","UAN","UMN","UJES","PIAGET","UPRA","URNM","UKB","UON","UON","UCC","UNIKIV"];
-      mostrarSubLista(s, TODAS_UNI, "📝", null);
-    }
-  }
-  else if(s.id === "resolucao"){
-    if(userUni){
-      estado.sub = userUni;
-      mostrarConteudo(s, userUni, true);
-    } else {
-      const TODAS_UNI = ["ISTM","UAN","UMN","UJES","PIAGET","UPRA","URNM","UKB","UON","UCC","UNIKIV"];
-      mostrarSubLista(s, TODAS_UNI, "✅", null);
-    }
+    // Filtrado pela universidade do utilizador
+    const discs = (userUni && DISCIPLINAS_UNI[userUni]) ? DISCIPLINAS_UNI[userUni] : DISCIPLINAS;
+    mostrarSubLista(s, discs, "🎥");
+
+  } else if(s.id === "materiais"){
+    // Igual para todos — mesmas disciplinas
+    mostrarSubLista(s, DISCIPLINAS, "📚");
+
+  } else if(s.id === "cronograma"){
+    mostrarConteudo(s, null, false);
+
+  } else if(s.id === "provas"){
+    if(userUni){ estado.sub = userUni; mostrarConteudo(s, userUni, true); }
+    else { mostrarSubLista(s, Object.keys(DISCIPLINAS_UNI), "📝"); }
+
+  } else if(s.id === "resolucao"){
+    if(userUni){ estado.sub = userUni; mostrarConteudo(s, userUni, true); }
+    else { mostrarSubLista(s, Object.keys(DISCIPLINAS_UNI), "✅"); }
   }
 }
 
-// SUB LISTA
-function mostrarSubLista(s, lista, icon, notice){
+function mostrarSubLista(s, lista, icon){
   atualizarBreadcrumb();
   document.getElementById("pageTitle").innerText = s.title;
   const div = document.getElementById("conteudo");
-
-  let noticeHTML = "";
-  if(notice){
-    noticeHTML = `<div class="uni-notice">🎓 A mostrar conteúdo para: <b>${notice}</b></div>`;
-  }
-
-  div.innerHTML = `${noticeHTML}<div class="disc-grid"></div>`;
+  div.innerHTML = `<div class="disc-grid"></div>`;
   const grid = div.querySelector(".disc-grid");
   lista.forEach(item => {
     const card = document.createElement("div");
     card.className = "disc-card";
-    card.innerHTML = `<span class="disc-icon">${icon}</span><div class="disc-name">${item.toUpperCase()}</div>`;
-    card.onclick = () => { estado.sub = item; mostrarConteudo(s, item); };
+    const icone = ICONES_DISC[item] || icon;
+    card.innerHTML = `<span class="disc-icon">${icone}</span><div class="disc-name">${item.toUpperCase()}</div>`;
+    card.onclick = () => { estado.sub = item; mostrarConteudo(s, item, false); };
     grid.appendChild(card);
   });
 }
 
-// MOSTRAR CONTEÚDO
 async function mostrarConteudo(s, sub, fromUni){
   atualizarBreadcrumb();
   document.getElementById("pageTitle").innerText = sub ? sub.toUpperCase() : s.title;
@@ -340,7 +231,6 @@ async function mostrarConteudo(s, sub, fromUni){
 
   const snap = await getDocs(collection(db,"aulas"));
   const items = [];
-
   snap.forEach(d => {
     const data = d.data();
     if(data.seccao !== s.id) return;
@@ -355,20 +245,12 @@ async function mostrarConteudo(s, sub, fromUni){
     return a.titulo.localeCompare(b.titulo);
   });
 
-  // Notice de filtro de universidade
-  let noticeHTML = "";
-  if(fromUni && userUni){
-    noticeHTML = `<div class="uni-notice">🎓 Conteúdo exclusivo da tua universidade: <b>${userUni}</b></div>`;
-  }
+  let noticeHTML = fromUni && userUni
+    ? `<div class="uni-notice">🎓 Conteúdo exclusivo da tua universidade: <b>${userUni}</b></div>`
+    : "";
 
   if(items.length === 0){
-    div.innerHTML = `
-      ${noticeHTML}
-      <div class="empty">
-        <div class="e-icon">📭</div>
-        <p>Ainda não há conteúdo aqui.</p>
-        <p style="margin-top:6px;font-size:12px;">Volta mais tarde.</p>
-      </div>`;
+    div.innerHTML = `${noticeHTML}<div class="empty"><div class="e-icon">📭</div><p>Ainda não há conteúdo aqui.</p><p style="margin-top:6px;font-size:12px;">Volta mais tarde.</p></div>`;
     return;
   }
 
@@ -380,19 +262,14 @@ async function mostrarConteudo(s, sub, fromUni){
     const card = document.createElement("div");
     card.className = "content-card";
     let conteudo = "";
-
     if(data.tipo === "bunny"){
-      conteudo = `
-        <div class="bunny-wrap">
-          <iframe
-            src="${data.url.split('?')[0]}?autoplay=false&preload=false&muted=false"
-            loading="lazy"
-            allowfullscreen
-            allow="accelerometer; gyroscope; encrypted-media; picture-in-picture"
-            style="border:0;position:absolute;top:0;height:100%;width:100%;"
-          ></iframe>
-          <div class="bunny-overlay"></div>
-        </div>`;
+      conteudo = `<div class="bunny-wrap">
+        <iframe src="${data.url.split('?')[0]}?autoplay=false&preload=false&muted=false"
+          loading="lazy" allowfullscreen
+          allow="accelerometer; gyroscope; encrypted-media; picture-in-picture"
+          style="border:0;position:absolute;top:0;height:100%;width:100%;"></iframe>
+        <div class="bunny-overlay"></div>
+      </div>`;
     } else if(data.tipo === "video"){
       conteudo = `<div class="video-wrap"><iframe src="${data.url}" allowfullscreen allow="autoplay; encrypted-media"></iframe></div>`;
     } else if(data.tipo === "pdf"){
@@ -400,24 +277,16 @@ async function mostrarConteudo(s, sub, fromUni){
     } else if(data.tipo === "imagem"){
       conteudo = `<div class="img-wrap"><img src="${data.url}" alt="${data.titulo}"></div>`;
     }
-
-    card.innerHTML = `
-      <div class="c-header">
-        <span class="c-icon">${icones[data.tipo]||"📁"}</span>
-        <span class="c-title">${data.titulo}</span>
-      </div>
-      ${conteudo}`;
+    card.innerHTML = `<div class="c-header"><span class="c-icon">${icones[data.tipo]||"📁"}</span><span class="c-title">${data.titulo}</span></div>${conteudo}`;
     lista.appendChild(card);
   });
 }
 
-// BREADCRUMB
 function atualizarBreadcrumb(){
   const bc = document.getElementById("breadcrumb");
   bc.innerHTML = "";
   const inicio = document.createElement("span");
-  inicio.innerText = "Início";
-  inicio.onclick = mostrarMenu;
+  inicio.innerText = "Início"; inicio.onclick = mostrarMenu;
   bc.appendChild(inicio);
   if(estado.seccao){
     bc.innerHTML += `<span class="sep">›</span>`;
@@ -430,16 +299,13 @@ function atualizarBreadcrumb(){
   if(estado.sub){
     bc.innerHTML += `<span class="sep">›</span>`;
     const sub = document.createElement("span");
-    sub.innerText = estado.sub;
-    sub.className = "current";
+    sub.innerText = estado.sub; sub.className = "current";
     bc.appendChild(sub);
   }
 }
 
 window.sair = async function(){
-  await signOut(auth);
-  localStorage.clear();
-  window.location.href = "login.html";
+  await signOut(auth); localStorage.clear(); window.location.href = "login.html";
 }
 </script>
 </body>
