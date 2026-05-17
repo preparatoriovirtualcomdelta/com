@@ -9,25 +9,20 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{--bg:#060d1a;--surface:#0d1f35;--accent:#00ff88;--accent2:#3b82f6;--danger:#ef4444;--text:#e2e8f0;--muted:#64748b;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
-
 .login-wrap{display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px;}
 .login-box{background:rgba(13,31,53,0.9);border:1px solid rgba(0,255,136,0.15);padding:48px 40px;border-radius:20px;width:100%;max-width:400px;text-align:center;}
 .login-box .logo{font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:4px;color:var(--muted);margin-bottom:6px;}
 .login-box h2{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;letter-spacing:2px;margin-bottom:28px;}
-
 #painel{display:none;padding:30px 20px;max-width:960px;margin:0 auto;}
 .painel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.06);}
 .painel-header h2{font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;letter-spacing:2px;color:var(--accent);}
 .logout-btn{background:transparent;border:1px solid rgba(239,68,68,0.4);color:var(--danger);padding:7px 16px;border-radius:8px;cursor:pointer;font-size:12px;letter-spacing:1px;transition:0.3s;}
 .logout-btn:hover{background:rgba(239,68,68,0.1);}
-
 .section{background:var(--surface);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:24px;margin-bottom:24px;}
 .section h3{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:20px;}
-
 input,select{width:100%;padding:12px 14px;background:rgba(6,13,26,0.8);border:1px solid rgba(255,255,255,0.08);border-radius:10px;color:var(--text);font-size:14px;font-family:'Inter',sans-serif;margin-bottom:12px;transition:0.3s;outline:none;}
 input:focus,select:focus{border-color:rgba(0,255,136,0.4);}
 select option{background:#0d1f35;}
-
 button{padding:11px 20px;border:none;border-radius:9px;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:14px;letter-spacing:1px;cursor:pointer;transition:0.3s;}
 button:hover{transform:translateY(-1px);}
 .btn-green{background:var(--accent);color:#060d1a;width:100%;}
@@ -36,10 +31,8 @@ button:hover{transform:translateY(-1px);}
 .btn-delete{background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3);padding:6px 14px;font-size:12px;}
 .btn-delete:hover{background:rgba(239,68,68,0.25);}
 .btn-login{background:var(--accent);color:#060d1a;width:100%;margin-top:8px;}
-
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 @media(max-width:600px){.grid2{grid-template-columns:1fr;}}
-
 .user-card,.aula-card{background:rgba(6,13,26,0.6);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
 .user-info p,.aula-info p{font-size:13px;margin-bottom:3px;}
 .user-info .email,.aula-info .titulo{color:var(--text);font-weight:500;}
@@ -48,17 +41,13 @@ button:hover{transform:translateY(-1px);}
 .badge.approved{background:rgba(0,255,136,0.15);color:var(--accent);}
 .badge.pending{background:rgba(251,191,36,0.15);color:#fbbf24;}
 .user-actions{display:flex;gap:8px;flex-wrap:wrap;}
-
 .msg{padding:10px 14px;border-radius:8px;font-size:13px;margin-top:10px;display:none;}
 .msg.success{background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);color:var(--accent);display:block;}
 .msg.error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#f87171;display:block;}
-
 .help-text{font-size:12px;color:var(--muted);margin-bottom:12px;margin-top:-6px;line-height:1.5;}
 .error-login{color:#f87171;font-size:13px;margin-top:8px;}
-
 .bunny-info{background:rgba(0,255,136,0.05);border:1px solid rgba(0,255,136,0.2);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:12px;color:var(--muted);line-height:1.6;display:none;}
 .bunny-info b{color:var(--accent);}
-
 .tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
 .tab{padding:8px 16px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:var(--muted);font-size:13px;cursor:pointer;transition:0.3s;}
 .tab.active{background:rgba(0,255,136,0.15);border-color:rgba(0,255,136,0.3);color:var(--accent);}
@@ -84,19 +73,27 @@ button:hover{transform:translateY(-1px);}
 
   <div class="section">
     <h3>Adicionar Conteúdo</h3>
-    <div class="grid2">
-      <select id="seccao" onchange="atualizarSub()">
-        <option value="">Seleciona a secção</option>
-        <option value="video_aulas">🎥 Vídeo Aulas</option>
-        <option value="materiais">📚 Materiais de Apoio</option>
-        <option value="cronograma">📅 Cronograma de Estudo</option>
-        <option value="provas">📝 Provas Passadas</option>
-        <option value="resolucao">✅ Resolução de Provas</option>
-      </select>
-      <select id="sub">
-        <option value="">— Seleciona secção primeiro —</option>
-      </select>
-    </div>
+
+    <!-- Secção -->
+    <select id="seccao" onchange="atualizarCampos()">
+      <option value="">Seleciona a secção</option>
+      <option value="video_aulas">🎥 Vídeo Aulas</option>
+      <option value="materiais">📚 Materiais de Apoio</option>
+      <option value="cronograma">📅 Cronograma de Estudo</option>
+      <option value="provas">📝 Provas Passadas</option>
+      <option value="resolucao">✅ Resolução de Provas</option>
+    </select>
+
+    <!-- Sub 1: disciplina (video_aulas) ou universidade (materiais/provas/resolucao) -->
+    <select id="sub1" onchange="atualizarSub2()">
+      <option value="">— Seleciona secção primeiro —</option>
+    </select>
+
+    <!-- Sub 2: disciplina (só para materiais) -->
+    <select id="sub2" style="display:none;">
+      <option value="">— Seleciona universidade primeiro —</option>
+    </select>
+
     <div class="grid2">
       <input id="titulo" placeholder="Título do conteúdo">
       <select id="tipo" onchange="atualizarTipo()">
@@ -106,6 +103,7 @@ button:hover{transform:translateY(-1px);}
         <option value="imagem">🖼 Imagem (link direto)</option>
       </select>
     </div>
+
     <div class="bunny-info" id="bunnyInfo">
       <b>🐰 Como obter o link do Bunny Stream:</b><br>
       1. Acede ao teu painel em <b>bunny.net → Stream</b><br>
@@ -113,6 +111,7 @@ button:hover{transform:translateY(-1px);}
       3. Clica em <b>"Embed"</b> e copia o link do <b>src</b> do iframe<br>
       Exemplo: <b>https://iframe.mediadelivery.net/embed/XXXXX/VIDEO-ID</b>
     </div>
+
     <input id="url" placeholder="Cole o link aqui">
     <div class="help-text" id="urlHelp"></div>
     <button class="btn-green" onclick="adicionarAula()">ADICIONAR CONTEÚDO</button>
@@ -156,9 +155,24 @@ const app = initializeApp(firebaseConfig);
 const db  = getFirestore(app);
 const SENHA = "DeltaAdmin2025$#";
 
-const DISCIPLINAS = ["Biologia","Química","Física","Língua Portuguesa","Matemática"];
-
 const UNIVERSIDADES = ["UAN","UMN","UON","UKB","URNM","UJES","ISTM","UPRA","UNIPIAGET","UNIKIV","UCC"];
+
+const DISCIPLINAS_VIDEO = ["Biologia","Química","Física","Língua Portuguesa","Matemática"];
+
+const DISCIPLINAS_UNI = {
+  UAN:       ["Biologia","Química","Língua Portuguesa","Matemática"],
+  UMN:       ["Biologia","Química","Língua Portuguesa","Matemática"],
+  UON:       ["Biologia","Química","Língua Portuguesa","Física"],
+  UKB:       ["Biologia","Química","Língua Portuguesa","Física"],
+  URNM:      ["Biologia","Química","Língua Portuguesa","Matemática","Física"],
+  UJES:      ["Biologia","Química","Língua Portuguesa","Física"],
+  ISTM:      ["Biologia","Química","Matemática","Física"],
+  UPRA:      ["Biologia","Química","Língua Portuguesa"],
+  UNIPIAGET: ["Biologia","Química","Língua Portuguesa","Matemática","Física"],
+  UNIKIV:    ["Biologia","Química","Matemática","Língua Portuguesa"],
+  UCC:       ["Biologia","Química","Língua Portuguesa","Matemática"],
+  OUTRA:     ["Biologia","Química","Matemática","Língua Portuguesa","Física"]
+};
 
 const NOMES_SECCAO = {
   video_aulas:"Vídeo Aulas", materiais:"Materiais de Apoio",
@@ -197,36 +211,57 @@ window.mostrarTab = function(tab){
   document.getElementById("tabUsers").style.display  = tab === "users" ? "block" : "none";
 }
 
-window.atualizarSub = function(){
+window.atualizarCampos = function(){
   const seccao = document.getElementById("seccao").value;
-  const sub    = document.getElementById("sub");
+  const sub1   = document.getElementById("sub1");
+  const sub2   = document.getElementById("sub2");
   const tipo   = document.getElementById("tipo");
   const help   = document.getElementById("urlHelp");
 
-  sub.innerHTML = "";
+  sub1.innerHTML = "";
+  sub2.innerHTML = `<option value="">— Seleciona universidade primeiro —</option>`;
+  sub2.style.display = "none";
 
-  if(!seccao){ sub.innerHTML = `<option value="">— Seleciona secção primeiro —</option>`; return; }
+  if(!seccao){
+    sub1.innerHTML = `<option value="">— Seleciona secção primeiro —</option>`; return;
+  }
 
-  if(seccao === "video_aulas" || seccao === "materiais"){
-    // Ambos usam as mesmas disciplinas
-    sub.innerHTML = `<option value="">Seleciona disciplina</option>`;
-    DISCIPLINAS.forEach(d => sub.innerHTML += `<option value="${d}">${d}</option>`);
-    tipo.value = seccao === "video_aulas" ? "bunny" : "pdf";
-    atualizarTipo();
-    if(seccao === "materiais") help.innerText = "💡 Google Drive: faz upload → Partilhar → Qualquer pessoa com o link → troca /view por /preview";
+  if(seccao === "video_aulas"){
+    sub1.innerHTML = `<option value="">Seleciona disciplina</option>`;
+    DISCIPLINAS_VIDEO.forEach(d => sub1.innerHTML += `<option value="${d}">${d}</option>`);
+    tipo.value = "bunny"; atualizarTipo();
+
+  } else if(seccao === "materiais"){
+    // Passo 1: Universidade; Passo 2: Disciplina da universidade
+    sub1.innerHTML = `<option value="">Seleciona universidade</option>`;
+    UNIVERSIDADES.forEach(u => sub1.innerHTML += `<option value="${u}">${u} — ${NOMES_UNI[u]||u}</option>`);
+    sub2.style.display = "block";
+    tipo.value = "pdf"; atualizarTipo();
+    help.innerText = "💡 Google Drive: faz upload → Partilhar → Qualquer pessoa com o link → troca /view por /preview";
 
   } else if(seccao === "provas" || seccao === "resolucao"){
-    sub.innerHTML = `<option value="">Seleciona universidade</option>`;
-    UNIVERSIDADES.forEach(u => sub.innerHTML += `<option value="${u}">${u} — ${NOMES_UNI[u]}</option>`);
+    sub1.innerHTML = `<option value="">Seleciona universidade</option>`;
+    UNIVERSIDADES.forEach(u => sub1.innerHTML += `<option value="${u}">${u} — ${NOMES_UNI[u]||u}</option>`);
     tipo.value = seccao === "resolucao" ? "bunny" : "pdf";
     atualizarTipo();
     if(seccao === "provas") help.innerText = "💡 Google Drive: faz upload → Partilhar → Qualquer pessoa com o link → troca /view por /preview";
 
   } else if(seccao === "cronograma"){
-    sub.innerHTML = `<option value="">— Sem subcategoria —</option>`;
+    sub1.innerHTML = `<option value="">— Sem subcategoria —</option>`;
     tipo.value = "pdf"; atualizarTipo();
     help.innerText = "💡 Google Drive: faz upload → Partilhar → Qualquer pessoa com o link → troca /view por /preview";
   }
+}
+
+window.atualizarSub2 = function(){
+  const seccao = document.getElementById("seccao").value;
+  if(seccao !== "materiais") return;
+  const uni  = document.getElementById("sub1").value;
+  const sub2 = document.getElementById("sub2");
+  sub2.innerHTML = `<option value="">Seleciona disciplina</option>`;
+  if(!uni) return;
+  const disciplinas = DISCIPLINAS_UNI[uni] || DISCIPLINAS_VIDEO;
+  disciplinas.forEach(d => sub2.innerHTML += `<option value="${d}">${d}</option>`);
 }
 
 window.atualizarTipo = function(){
@@ -236,15 +271,15 @@ window.atualizarTipo = function(){
   const urlInput  = document.getElementById("url");
   if(tipo === "bunny"){
     bunnyInfo.style.display = "block";
-    urlHelp.innerText = "🐰 Cola aqui o link embed do Bunny Stream (https://iframe.mediadelivery.net/embed/...)";
+    urlHelp.innerText = "🐰 Cola aqui o link embed do Bunny Stream";
     urlInput.placeholder = "https://iframe.mediadelivery.net/embed/XXXXX/VIDEO-ID";
   } else if(tipo === "video"){
     bunnyInfo.style.display = "none";
-    urlHelp.innerText = "💡 YouTube: copia o link do vídeo (https://youtu.be/...) ou da playlist";
+    urlHelp.innerText = "💡 YouTube: copia o link do vídeo ou da playlist";
     urlInput.placeholder = "https://youtu.be/...";
   } else if(tipo === "pdf"){
     bunnyInfo.style.display = "none";
-    urlHelp.innerText = "💡 Google Drive: faz upload → Partilhar → Qualquer pessoa com o link → troca /view por /preview";
+    urlHelp.innerText = "💡 Google Drive: faz upload → Partilhar → troca /view por /preview";
     urlInput.placeholder = "https://drive.google.com/file/d/.../preview";
   } else {
     bunnyInfo.style.display = "none";
@@ -266,7 +301,8 @@ function formatarURL(url, tipo){
 
 window.adicionarAula = async function(){
   const seccao = document.getElementById("seccao").value;
-  const sub    = document.getElementById("sub").value;
+  const sub1   = document.getElementById("sub1").value;
+  const sub2   = document.getElementById("sub2").value;
   const titulo = document.getElementById("titulo").value.trim();
   const tipo   = document.getElementById("tipo").value;
   const urlRaw = document.getElementById("url").value.trim();
@@ -277,12 +313,22 @@ window.adicionarAula = async function(){
     msg.className = "msg error"; msg.innerText = "Preenche todos os campos obrigatórios."; return;
   }
   if(tipo === "bunny" && !urlRaw.includes("mediadelivery.net")){
-    msg.className = "msg error"; msg.innerText = "⚠️ Link inválido para Bunny Stream. Deve conter 'mediadelivery.net'."; return;
+    msg.className = "msg error"; msg.innerText = "⚠️ Link inválido para Bunny Stream."; return;
+  }
+
+  // materiais: sub = "UAN|Biologia"
+  // outros: sub = valor direto
+  let sub = null;
+  if(seccao === "materiais"){
+    if(!sub1 || !sub2){ msg.className = "msg error"; msg.innerText = "Seleciona a universidade e a disciplina."; return; }
+    sub = `${sub1}|${sub2}`;
+  } else {
+    sub = sub1 || null;
   }
 
   const url = formatarURL(urlRaw, tipo);
   try {
-    await addDoc(collection(db,"aulas"),{ seccao, sub: sub||null, titulo, tipo, url, createdAt: Date.now() });
+    await addDoc(collection(db,"aulas"),{ seccao, sub, titulo, tipo, url, createdAt: Date.now() });
     msg.className = "msg success"; msg.innerText = "✅ Conteúdo adicionado com sucesso!";
     document.getElementById("titulo").value = "";
     document.getElementById("url").value = "";
@@ -301,13 +347,21 @@ async function carregarAulas(){
   snap.forEach(d => {
     const data = d.data();
     const sec  = NOMES_SECCAO[data.seccao] || data.seccao || "—";
-    const sub  = data.sub ? (NOMES_UNI[data.sub] ? `${data.sub} — ${NOMES_UNI[data.sub]}` : data.sub) : "—";
+    let subLabel = "—";
+    if(data.sub){
+      if(data.sub.includes("|")){
+        const [u, disc] = data.sub.split("|");
+        subLabel = `${u} — ${disc}`;
+      } else {
+        subLabel = NOMES_UNI[data.sub] ? `${data.sub} — ${NOMES_UNI[data.sub]}` : data.sub;
+      }
+    }
     const tipoLabel = data.tipo === "bunny" ? "Bunny Stream 🔒" : data.tipo;
     div.innerHTML += `
       <div class="aula-card">
         <div class="aula-info">
           <p class="titulo">${icones[data.tipo]||"📁"} ${data.titulo}</p>
-          <p class="meta">${sec} › ${sub} · ${tipoLabel}</p>
+          <p class="meta">${sec} › ${subLabel} · ${tipoLabel}</p>
         </div>
         <button class="btn-delete" onclick="eliminarAula('${d.id}')">Eliminar</button>
       </div>`;
