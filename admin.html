@@ -192,6 +192,7 @@ window.entrar = function(){
   }
   document.getElementById("loginWrap").style.display = "none";
   document.getElementById("painel").style.display = "block";
+  await verificarExpirados();
   carregarAulas(); carregarUsers();
   document.getElementById("bunnyInfo").style.display = "block";
 }
@@ -367,6 +368,19 @@ window.eliminarAula = async function(id){
   await deleteDoc(doc(db,"aulas",id)); carregarAulas();
 }
 
+// Verificar e remover utilizadores com acesso expirado (365 dias)
+async function verificarExpirados(){
+  const snap = await getDocs(collection(db,"users"));
+  const DIAS_365 = 365 * 24 * 60 * 60 * 1000;
+  const agora = Date.now();
+  for(const u of snap.docs){
+    const d = u.data();
+    if(d.approved && d.approvedAt && (agora - d.approvedAt) >= DIAS_365){
+      await deleteDoc(doc(db,"users",u.id));
+    }
+  }
+}
+
 async function carregarUsers(){
   const div  = document.getElementById("users");
   const snap = await getDocs(collection(db,"users"));
@@ -381,17 +395,20 @@ async function carregarUsers(){
           <p class="email">${d.email}</p>
           <p class="area">${d.curso||d.area||"—"} · ${uniLabel}</p>
           <span class="badge ${d.approved?'approved':'pending'}">${d.approved?"APROVADO":"PENDENTE"}</span>
+          ${d.approved && d.approvedAt ? `<span style="font-size:11px;color:var(--muted);display:block;margin-top:4px;">⏳ Expira em: ${new Date(d.approvedAt + 365*24*60*60*1000).toLocaleDateString('pt-PT')}</span>` : ""}
         </div>
         <div class="user-actions">
           ${!d.approved ? `<button class="btn-approve" onclick="aprovar('${u.id}')">✓ Aprovar</button>` : ""}
           ${d.approved  ? `<button class="btn-delete"  onclick="revogar('${u.id}')">✗ Revogar</button>` : ""}
+          <button class="btn-delete" style="opacity:0.7;" onclick="removerUser('${u.id}')">🗑 Remover</button>
         </div>
       </div>`;
   });
 }
 
-window.aprovar = async function(id){ await updateDoc(doc(db,"users",id),{approved:true}); carregarUsers(); }
+window.aprovar = async function(id){ await updateDoc(doc(db,"users",id),{approved:true, approvedAt: Date.now()}); carregarUsers(); }
 window.revogar = async function(id){ if(!confirm("Revogar acesso?")) return; await updateDoc(doc(db,"users",id),{approved:false}); carregarUsers(); }
+window.removerUser = async function(id){ if(!confirm("Tens a certeza que queres remover este utilizador permanentemente?")) return; await deleteDoc(doc(db,"users",id)); carregarUsers(); }
 </script>
 </body>
 </html>
