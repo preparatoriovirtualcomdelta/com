@@ -150,7 +150,7 @@ text-align:center;
 margin-bottom:30px;
 }
 
-/* STEP INDICATOR */
+/* STEP INDICATOR — agora só 2 passos */
 .step-indicator{
 display:flex;
 justify-content:center;
@@ -317,6 +317,7 @@ font-family:'Rajdhani',sans-serif;
 font-size:16px;
 font-weight:600;
 letter-spacing:1px;
+text-decoration:none;
 }
 
 .course-card:hover{
@@ -327,49 +328,6 @@ box-shadow:0 8px 24px rgba(0,0,0,0.3);
 }
 
 .course-arrow{font-size:18px;color:var(--muted);}
-
-/* AREA CARDS (unchanged from original) */
-.cards{
-position:relative;z-index:1;
-display:flex;flex-wrap:wrap;justify-content:center;
-gap:16px;padding:0 20px 80px;
-max-width:1000px;margin:0 auto;
-}
-
-.card{
-background:var(--surface);
-border:1px solid rgba(255,255,255,0.06);
-color:var(--text);
-padding:32px 24px;
-width:200px;
-border-radius:14px;
-font-family:'Rajdhani',sans-serif;
-font-size:17px;
-font-weight:600;
-letter-spacing:1px;
-cursor:pointer;
-transition:0.35s;
-text-align:center;
-text-decoration:none;
-display:block;
-position:relative;
-overflow:hidden;
-}
-
-.card::before{
-content:'';position:absolute;inset:0;
-background:linear-gradient(135deg,rgba(0,255,136,0.08),transparent);
-opacity:0;transition:0.35s;
-}
-
-.card:hover{
-transform:translateY(-6px);
-border-color:rgba(0,255,136,0.4);
-color:var(--accent);
-box-shadow:0 20px 40px rgba(0,0,0,0.4),0 0 20px rgba(0,255,136,0.1);
-}
-.card:hover::before{opacity:1;}
-.card-icon{font-size:28px;margin-bottom:10px;display:block;}
 
 /* SELECTED BADGE */
 .selected-info{
@@ -393,16 +351,10 @@ background:rgba(0,255,136,0.1);
 border:1px solid rgba(0,255,136,0.3);
 color:var(--accent);
 }
-.sel-badge.course{
-background:rgba(59,130,246,0.1);
-border:1px solid rgba(59,130,246,0.3);
-color:var(--accent2);
-}
 
 @media(max-width:768px){
 .menu{padding:16px 20px;}
 .header{padding:60px 20px 40px;}
-.card{width:calc(50% - 8px);}
 .payment{padding:20px 24px;}
 .step-line{width:32px;}
 }
@@ -434,7 +386,7 @@ color:var(--accent2);
   </div>
 </div>
 
-<!-- STEP INDICATOR -->
+<!-- STEP INDICATOR — 2 passos apenas -->
 <div class="step-indicator" id="stepIndicator">
   <div class="step active" id="step1">
     <div class="step-num">1</div>
@@ -444,11 +396,6 @@ color:var(--accent2);
   <div class="step" id="step2">
     <div class="step-num">2</div>
     <div class="step-label">Curso</div>
-  </div>
-  <div class="step-line" id="line2"></div>
-  <div class="step" id="step3">
-    <div class="step-num">3</div>
-    <div class="step-label">Área</div>
   </div>
 </div>
 
@@ -466,21 +413,8 @@ color:var(--accent2);
   <div class="selected-info">
     <span class="sel-badge uni" id="badgeUni"></span>
   </div>
-  <div class="section-title" id="cursoTitle">Escolha o seu Curso</div>
+  <div class="section-title">Escolha o seu Curso</div>
   <div class="course-list" id="courseList"></div>
-</div>
-
-<!-- VIEW 3: ÁREA -->
-<div class="view" id="viewArea">
-  <div style="max-width:1000px;margin:0 auto;padding:0 20px;">
-    <button class="back-btn" onclick="goToCurso()">← VOLTAR</button>
-  </div>
-  <div class="selected-info">
-    <span class="sel-badge uni" id="badgeUni2"></span>
-    <span class="sel-badge course" id="badgeCurso"></span>
-  </div>
-  <div class="section-title">Escolha a sua Área</div>
-  <div class="cards" id="areaCards"></div>
 </div>
 
 <script>
@@ -500,21 +434,21 @@ const UNIVERSITIES = [
 ];
 
 const COURSES = {
-  UAN:    ["Medicina Geral","Ciências de Enfermagem","Ciências Farmacêuticas","Análises Clínicas e Saúde Pública"],
-  UMN:    ["Medicina Geral","Enfermagem","Análises Clínicas e Laboratório"],
-  UON:    ["Medicina Geral","Enfermagem","Análises Clínicas"],
-  UKB:    ["Medicina Geral"],
-  URNM:   ["Medicina Geral","Ciências Farmacêuticas","Ciências de Enfermagem","Análises Clínicas e Toxicológicas"],
-  UJES:   ["Medicina Geral","Electromedicina","Laboratório Clínico","Enfermagem"],
-  ISTM:   ["Medicina Geral","Enfermagem"],
-  UPRA:   ["Medicina Geral","Enfermagem","Fisioterapia","Odontologia"],
+  UAN:       ["Medicina Geral","Ciências de Enfermagem","Ciências Farmacêuticas","Análises Clínicas e Saúde Pública"],
+  UMN:       ["Medicina Geral","Enfermagem","Análises Clínicas e Laboratório"],
+  UON:       ["Medicina Geral","Enfermagem","Análises Clínicas"],
+  UKB:       ["Medicina Geral"],
+  URNM:      ["Medicina Geral","Ciências Farmacêuticas","Ciências de Enfermagem","Análises Clínicas e Toxicológicas"],
+  UJES:      ["Medicina Geral","Electromedicina","Laboratório Clínico","Enfermagem"],
+  ISTM:      ["Medicina Geral","Enfermagem"],
+  UPRA:      ["Medicina Geral","Enfermagem","Fisioterapia","Odontologia"],
   UNIPIAGET: ["Medicina Geral","Medicina Dentária","Enfermagem","Ciências Farmacêuticas","Fisioterapia","Análises Clínicas e Saúde Pública","Enfermagem e Obstetrícia","Radiologia e Imagiologia"],
-  UNIKIV: ["Enfermagem","Análises Clínicas","Agronomia"],
-  UCC:    ["Enfermagem"],
-  OUTRA:  ["Medicina Geral","Medicina Dentária","Enfermagem","Análises Clínicas","Farmácia","Nutrição","Cardiopneumologia","Fisioterapia"]
+  UNIKIV:    ["Enfermagem","Análises Clínicas","Agronomia"],
+  UCC:       ["Enfermagem"],
+  OUTRA:     ["Medicina Geral","Medicina Dentária","Enfermagem","Análises Clínicas","Farmácia","Nutrição","Cardiopneumologia","Fisioterapia"]
 };
 
-// Map curso → área login (para compatibilidade com o login existente)
+// Map curso → área (mantido para passar ao login via URL)
 const COURSE_TO_AREA = {
   "Medicina Geral":"medicina geral",
   "Medicina Dentária":"medicina dentária",
@@ -538,7 +472,6 @@ const COURSE_TO_AREA = {
 };
 
 let selectedUni = null;
-let selectedCourse = null;
 
 // BUILD UNIVERSITY GRID
 const uniGrid = document.getElementById("uniGrid");
@@ -557,87 +490,39 @@ UNIVERSITIES.forEach((uni, i) => {
 function selectUni(uni){
   selectedUni = uni;
   document.getElementById("badgeUni").innerText = uni.id + " — " + uni.name;
-  document.getElementById("badgeUni2").innerText = uni.id;
 
-  // Build course list
+  // Build course list — cada curso leva directo ao login
   const courseList = document.getElementById("courseList");
   courseList.innerHTML = "";
   COURSES[uni.id].forEach(course => {
-    const card = document.createElement("div");
-    card.className = "course-card";
-    card.innerHTML = `<span>${course}</span><span class="course-arrow">›</span>`;
-    card.onclick = () => selectCourse(course);
-    courseList.appendChild(card);
+    const area = COURSE_TO_AREA[course] || "medicina geral";
+    const link = document.createElement("a");
+    link.className = "course-card";
+    link.href = `login.html?uni=${encodeURIComponent(uni.id)}&curso=${encodeURIComponent(course)}&area=${encodeURIComponent(area)}`;
+    link.innerHTML = `<span>${course}</span><span class="course-arrow">›</span>`;
+    courseList.appendChild(link);
   });
 
   setStep(2);
-}
-
-function selectCourse(course){
-  selectedCourse = course;
-  document.getElementById("badgeCurso").innerText = course;
-
-  // Build area cards filtered by course
-  const area = COURSE_TO_AREA[course] || "medicina geral";
-  buildAreaCards(area);
-  setStep(3);
-}
-
-function buildAreaCards(defaultArea){
-  const container = document.getElementById("areaCards");
-  container.innerHTML = "";
-
-  const allAreas = [
-    { area:"medicina geral",    icon:"🩺", label:"Medicina Geral" },
-    { area:"enfermagem",        icon:"💉", label:"Enfermagem" },
-    { area:"farmacia",          icon:"💊", label:"Farmácia" },
-    { area:"fisioterapia",      icon:"🦴", label:"Fisioterapia" },
-    { area:"analises clinicas", icon:"🔬", label:"Análises Clínicas" },
-    { area:"nutrição e dietética",icon:"🥗",label:"Nutrição e Dietética" },
-    { area:"cardiopneumologia", icon:"🫀", label:"Cardiopneumologia" },
-    { area:"medicina dentária", icon:"🦷", label:"Medicina Dentária" }
-  ];
-
-  // Show only the relevant area for the selected course
-  const relevant = allAreas.filter(a => a.area === defaultArea);
-  const toShow = relevant.length > 0 ? relevant : allAreas;
-
-  toShow.forEach(a => {
-    const link = document.createElement("a");
-    link.className = "card";
-    link.href = `login.html?uni=${encodeURIComponent(selectedUni.id)}&curso=${encodeURIComponent(selectedCourse)}&area=${encodeURIComponent(a.area)}`;
-    link.innerHTML = `<span class="card-icon">${a.icon}</span>${a.label}`;
-    container.appendChild(link);
-  });
 }
 
 function goToUni(){
   selectedUni = null;
-  selectedCourse = null;
   setStep(1);
 }
 
-function goToCurso(){
-  selectedCourse = null;
-  setStep(2);
-}
-
 function setStep(n){
-  // Views
   document.getElementById("viewUni").classList.toggle("active", n===1);
   document.getElementById("viewCurso").classList.toggle("active", n===2);
-  document.getElementById("viewArea").classList.toggle("active", n===3);
-  // Steps
-  [1,2,3].forEach(i => {
+
+  [1,2].forEach(i => {
     const el = document.getElementById("step"+i);
     el.classList.remove("active","done");
     if(i < n) el.classList.add("done");
     else if(i === n) el.classList.add("active");
   });
-  // Lines
-  [1,2].forEach(i => {
-    document.getElementById("line"+i).classList.toggle("done", i < n);
-  });
+
+  document.getElementById("line1").classList.toggle("done", n > 1);
   window.scrollTo({top:0,behavior:"smooth"});
 }
 </script>
