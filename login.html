@@ -267,6 +267,13 @@ const btnForgot   = document.getElementById("btnForgot");
 
 // Pegar parâmetros da URL
 const params = new URLSearchParams(window.location.search);
+
+// Verificar se foi redirecionado por expiração
+if(params.get("expirado")){
+  const msgEl2 = document.getElementById("msg");
+  msgEl2.className = "msg error";
+  msgEl2.innerText = "⚠️ O teu acesso expirou após 365 dias. Contacta o administrador para renovar.";
+}
 const uniParam    = params.get("uni")   || "";
 const cursoParam  = params.get("curso") || "";
 const areaParam   = params.get("area")  || "";
