@@ -84,12 +84,12 @@ button:hover{transform:translateY(-1px);}
       <option value="resolucao">✅ Resolução de Provas</option>
     </select>
 
-    <!-- Sub 1: disciplina (video_aulas) ou universidade (materiais/provas/resolucao) -->
+    <!-- Sub1: Universidade (video_aulas, materiais, provas, resolucao) -->
     <select id="sub1" onchange="atualizarSub2()">
       <option value="">— Seleciona secção primeiro —</option>
     </select>
 
-    <!-- Sub 2: disciplina (só para materiais) -->
+    <!-- Sub2: Disciplina (video_aulas e materiais) -->
     <select id="sub2" style="display:none;">
       <option value="">— Seleciona universidade primeiro —</option>
     </select>
@@ -156,8 +156,6 @@ const db  = getFirestore(app);
 const SENHA = "DeltaAdmin2025$#";
 
 const UNIVERSIDADES = ["UAN","UMN","UON","UKB","URNM","UJES","ISTM","UPRA","UNIPIAGET","UNIKIV","UCC"];
-
-const DISCIPLINAS_VIDEO = ["Biologia","Química","Física","Língua Portuguesa","Matemática"];
 
 const DISCIPLINAS_UNI = {
   UAN:       ["Biologia","Química","Língua Portuguesa","Matemática"],
@@ -226,41 +224,37 @@ window.atualizarCampos = function(){
     sub1.innerHTML = `<option value="">— Seleciona secção primeiro —</option>`; return;
   }
 
-  if(seccao === "video_aulas"){
-    sub1.innerHTML = `<option value="">Seleciona disciplina</option>`;
-    DISCIPLINAS_VIDEO.forEach(d => sub1.innerHTML += `<option value="${d}">${d}</option>`);
-    tipo.value = "bunny"; atualizarTipo();
-
-  } else if(seccao === "materiais"){
-    // Passo 1: Universidade; Passo 2: Disciplina da universidade
+  if(seccao === "video_aulas" || seccao === "materiais"){
+    // Passo 1: Universidade; Passo 2: Disciplina
     sub1.innerHTML = `<option value="">Seleciona universidade</option>`;
     UNIVERSIDADES.forEach(u => sub1.innerHTML += `<option value="${u}">${u} — ${NOMES_UNI[u]||u}</option>`);
     sub2.style.display = "block";
-    tipo.value = "pdf"; atualizarTipo();
-    help.innerText = "💡 Google Drive: faz upload → Partilhar → Qualquer pessoa com o link → troca /view por /preview";
+    tipo.value = seccao === "video_aulas" ? "bunny" : "pdf";
+    atualizarTipo();
+    if(seccao === "materiais") help.innerText = "💡 Google Drive: faz upload → Partilhar → troca /view por /preview";
 
   } else if(seccao === "provas" || seccao === "resolucao"){
     sub1.innerHTML = `<option value="">Seleciona universidade</option>`;
     UNIVERSIDADES.forEach(u => sub1.innerHTML += `<option value="${u}">${u} — ${NOMES_UNI[u]||u}</option>`);
     tipo.value = seccao === "resolucao" ? "bunny" : "pdf";
     atualizarTipo();
-    if(seccao === "provas") help.innerText = "💡 Google Drive: faz upload → Partilhar → Qualquer pessoa com o link → troca /view por /preview";
+    if(seccao === "provas") help.innerText = "💡 Google Drive: faz upload → Partilhar → troca /view por /preview";
 
   } else if(seccao === "cronograma"){
     sub1.innerHTML = `<option value="">— Sem subcategoria —</option>`;
     tipo.value = "pdf"; atualizarTipo();
-    help.innerText = "💡 Google Drive: faz upload → Partilhar → Qualquer pessoa com o link → troca /view por /preview";
+    help.innerText = "💡 Google Drive: faz upload → Partilhar → troca /view por /preview";
   }
 }
 
 window.atualizarSub2 = function(){
   const seccao = document.getElementById("seccao").value;
-  if(seccao !== "materiais") return;
+  if(seccao !== "video_aulas" && seccao !== "materiais") return;
   const uni  = document.getElementById("sub1").value;
   const sub2 = document.getElementById("sub2");
   sub2.innerHTML = `<option value="">Seleciona disciplina</option>`;
   if(!uni) return;
-  const disciplinas = DISCIPLINAS_UNI[uni] || DISCIPLINAS_VIDEO;
+  const disciplinas = DISCIPLINAS_UNI[uni] || [];
   disciplinas.forEach(d => sub2.innerHTML += `<option value="${d}">${d}</option>`);
 }
 
@@ -275,7 +269,7 @@ window.atualizarTipo = function(){
     urlInput.placeholder = "https://iframe.mediadelivery.net/embed/XXXXX/VIDEO-ID";
   } else if(tipo === "video"){
     bunnyInfo.style.display = "none";
-    urlHelp.innerText = "💡 YouTube: copia o link do vídeo ou da playlist";
+    urlHelp.innerText = "💡 YouTube: copia o link do vídeo ou playlist";
     urlInput.placeholder = "https://youtu.be/...";
   } else if(tipo === "pdf"){
     bunnyInfo.style.display = "none";
@@ -316,10 +310,10 @@ window.adicionarAula = async function(){
     msg.className = "msg error"; msg.innerText = "⚠️ Link inválido para Bunny Stream."; return;
   }
 
-  // materiais: sub = "UAN|Biologia"
-  // outros: sub = valor direto
+  // video_aulas e materiais: sub = "UAN|Biologia"
+  // provas e resolucao: sub = "UAN"
   let sub = null;
-  if(seccao === "materiais"){
+  if(seccao === "video_aulas" || seccao === "materiais"){
     if(!sub1 || !sub2){ msg.className = "msg error"; msg.innerText = "Seleciona a universidade e a disciplina."; return; }
     sub = `${sub1}|${sub2}`;
   } else {
