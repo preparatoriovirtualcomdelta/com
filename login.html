@@ -68,7 +68,6 @@ margin-bottom:20px;
 color:var(--text);
 }
 
-/* BADGES — só uni e curso */
 .badges{
 display:flex;
 flex-wrap:wrap;
@@ -235,8 +234,17 @@ font-size:13px;display:none;
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+  deleteUser                          // ← NOVO: para apagar a conta Auth
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import {
+  getFirestore,
+  doc, getDoc, setDoc, deleteDoc     // ← NOVO: deleteDoc para apagar Firestore se expirado
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBBADytEHr9NzwFdGmd-zq26t88Vnl65js",
@@ -247,9 +255,9 @@ const firebaseConfig = {
   appId: "1:211289899773:web:dfc22d377c7172f936b494"
 };
 
-const app = initializeApp(firebaseConfig);
+const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
+const db   = getFirestore(app);
 
 const msgEl       = document.getElementById("msg");
 const loading     = document.getElementById("loading");
@@ -266,7 +274,7 @@ const areaParam  = params.get("area")  || "";
 // Verificar se foi redirecionado por expiração
 if(params.get("expirado")){
   msgEl.className = "msg error";
-  msgEl.innerText = "⚠️ O teu acesso expirou após 365 dias. Contacta o administrador para renovar.";
+  msgEl.innerText = "⚠️ O teu acesso expirou. Podes criar uma nova conta com o mesmo email.";
 }
 
 // Preencher campo oculto de área (usado internamente)
@@ -284,35 +292,32 @@ function showMsg(texto, tipo){
 
 function showLoading(){
   loading.style.display = "block";
-  btnLogin.disabled = true;
+  btnLogin.disabled    = true;
   btnRegister.disabled = true;
-  btnForgot.disabled = true;
+  btnForgot.disabled   = true;
 }
 
 function hideLoading(){
   loading.style.display = "none";
-  btnLogin.disabled = false;
+  btnLogin.disabled    = false;
   btnRegister.disabled = false;
-  btnForgot.disabled = false;
+  btnForgot.disabled   = false;
 }
 
 function validar(email, senha, area){
   if(!email || !senha){
-    showMsg("Preenche o email e a senha.", "error");
-    return false;
+    showMsg("Preenche o email e a senha.", "error"); return false;
   }
   if(!area){
-    showMsg("Volta atrás e escolhe o teu curso.", "error");
-    return false;
+    showMsg("Volta atrás e escolhe o teu curso.", "error"); return false;
   }
   if(senha.length < 6){
-    showMsg("A senha deve ter pelo menos 6 caracteres.", "error");
-    return false;
+    showMsg("A senha deve ter pelo menos 6 caracteres.", "error"); return false;
   }
   return true;
 }
 
-// LOGIN
+// ─── LOGIN ────────────────────────────────────────────────
 window.login = async function(){
   const email = document.getElementById("email").value.trim();
   const senha = document.getElementById("senha").value;
@@ -327,20 +332,43 @@ window.login = async function(){
     const ref  = doc(db, "users", cred.user.uid);
     const snap = await getDoc(ref);
 
+    // ── Documento não existe: admin removeu o utilizador ──
+    // O utilizador está autenticado neste momento, por isso
+    // podemos apagar a conta Auth directamente (deleteUser).
     if(!snap.exists()){
-      showMsg("Conta não encontrada no sistema. Cria uma conta primeiro.", "error");
+      try { await deleteUser(cred.user); } catch(e){ /* silencioso */ }
+      showMsg(
+        "✅ A tua conta foi removida pelo administrador. Podes criar uma nova conta com este email.",
+        "success"
+      );
       hideLoading();
       return;
     }
 
     const data = snap.data();
 
+    // ── Conta pendente ──
     if(data.approved !== true){
       showMsg("⏳ Conta pendente. Aguarda a aprovação do admin.", "info");
       hideLoading();
       return;
     }
 
+    // ── Verificar expiração ──
+    const expiryTs = data.expiryDate || (data.approvedAt ? data.approvedAt + 365*24*60*60*1000 : null);
+    if(expiryTs && Date.now() >= expiryTs){
+      // Apaga Firestore + Auth — utilizador pode criar nova conta
+      try { await deleteDoc(ref); } catch(e){}
+      try { await deleteUser(cred.user); } catch(e){}
+      showMsg(
+        "✅ O teu acesso expirou. A conta foi removida — podes criar uma nova conta com este email.",
+        "success"
+      );
+      hideLoading();
+      return;
+    }
+
+    // ── Login bem sucedido ──
     localStorage.setItem("user",  email);
     localStorage.setItem("uid",   cred.user.uid);
     localStorage.setItem("area",  data.area  || area);
@@ -355,7 +383,7 @@ window.login = async function(){
   }
 }
 
-// REGISTO
+// ─── REGISTO ─────────────────────────────────────────────
 window.register = async function(){
   const email = document.getElementById("email").value.trim();
   const senha = document.getElementById("senha").value;
@@ -391,7 +419,7 @@ window.register = async function(){
   }
 }
 
-// RECUPERAR SENHA
+// ─── RECUPERAR SENHA ──────────────────────────────────────
 window.recuperar = async function(){
   const email = document.getElementById("email").value.trim();
   msgEl.className = "msg";
