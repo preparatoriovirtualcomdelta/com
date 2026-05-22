@@ -168,13 +168,12 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   // ── Verificar expiração ──
-  // Usa expiryDate (definido pelo admin) ou fallback de 365 dias desde approvedAt
-  const expiryTs = data.expiryDate || (data.approvedAt ? data.approvedAt + 365*24*60*60*1000 : null);
+  // Usa expiryDate (definido pelo admin) ou fallback de 30 dias desde approvedAt
+  const expiryTs = data.expiryDate || (data.approvedAt ? data.approvedAt + 30*24*60*60*1000 : null);
 
   if(expiryTs && Date.now() >= expiryTs){
-    // Apaga Firestore + Auth — utilizador pode criar nova conta com o mesmo email
-    try { await deleteDoc(ref); }    catch(e){}
-    try { await deleteUser(user); }  catch(e){}
+    try { await deleteDoc(ref); }   catch(e){}
+    try { await deleteUser(user); } catch(e){}
     await signOut(auth);
     localStorage.clear();
     window.location.href = "login.html?expirado=1";
@@ -197,9 +196,9 @@ onAuthStateChanged(auth, async (user) => {
     const diasRestantes = Math.ceil((expiryTs - Date.now()) / (24*60*60*1000));
     const countdownEl   = document.getElementById("countdown");
     countdownEl.style.display = "inline-flex";
-    if(diasRestantes > 30){
+    if(diasRestantes > 7){
       countdownEl.className = "countdown ok";
-    } else if(diasRestantes > 7){
+    } else if(diasRestantes > 3){
       countdownEl.className = "countdown warn";
     } else {
       countdownEl.className = "countdown danger";
