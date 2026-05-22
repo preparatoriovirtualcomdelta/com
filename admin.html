@@ -9,72 +9,168 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{--bg:#060d1a;--surface:#0d1f35;--accent:#00ff88;--accent2:#3b82f6;--danger:#ef4444;--text:#e2e8f0;--muted:#64748b;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* ── ECRÃS DE LOGIN ── */
 .login-wrap{display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px;}
 .login-box{background:rgba(13,31,53,0.9);border:1px solid rgba(0,255,136,0.15);padding:48px 40px;border-radius:20px;width:100%;max-width:400px;text-align:center;}
 .login-box .logo{font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:4px;color:var(--muted);margin-bottom:6px;}
-.login-box h2{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;letter-spacing:2px;margin-bottom:28px;}
-#painel{display:none;padding:30px 20px;max-width:960px;margin:0 auto;}
-.painel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.06);}
-.painel-header h2{font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;letter-spacing:2px;color:var(--accent);}
-.logout-btn{background:transparent;border:1px solid rgba(239,68,68,0.4);color:var(--danger);padding:7px 16px;border-radius:8px;cursor:pointer;font-size:12px;letter-spacing:1px;transition:0.3s;}
-.logout-btn:hover{background:rgba(239,68,68,0.1);}
-.section{background:var(--surface);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:24px;margin-bottom:24px;}
-.section h3{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:20px;}
+.login-box h2{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;letter-spacing:2px;margin-bottom:6px;}
+.step-label{font-size:11px;letter-spacing:3px;color:var(--muted);margin-bottom:24px;}
+.step-dots{display:flex;justify-content:center;gap:8px;margin-bottom:28px;}
+.step-dot{width:28px;height:4px;border-radius:2px;background:rgba(255,255,255,0.1);transition:0.3s;}
+.step-dot.active{background:var(--accent);}
+.step-dot.done{background:rgba(0,255,136,0.4);}
+
+/* ── BLOQUEIO ── */
+.lockout-banner{background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.4);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#f87171;display:none;line-height:1.5;}
+.lockout-banner b{color:#ef4444;}
+.attempts-info{font-size:11px;color:var(--muted);margin-top:6px;}
+
+/* ── INPUTS / BOTÕES ── */
 input,select{width:100%;padding:12px 14px;background:rgba(6,13,26,0.8);border:1px solid rgba(255,255,255,0.08);border-radius:10px;color:var(--text);font-size:14px;font-family:'Inter',sans-serif;margin-bottom:12px;transition:0.3s;outline:none;}
 input:focus,select:focus{border-color:rgba(0,255,136,0.4);}
 select option{background:#0d1f35;}
 button{padding:11px 20px;border:none;border-radius:9px;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:14px;letter-spacing:1px;cursor:pointer;transition:0.3s;}
 button:hover{transform:translateY(-1px);}
+.btn-login{background:var(--accent);color:#060d1a;width:100%;margin-top:8px;transition:0.3s;}
+.btn-login:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
 .btn-green{background:var(--accent);color:#060d1a;width:100%;}
 .btn-approve{background:rgba(0,255,136,0.15);color:var(--accent);border:1px solid rgba(0,255,136,0.3);padding:6px 14px;font-size:12px;}
 .btn-approve:hover{background:rgba(0,255,136,0.25);}
+.btn-edit{background:rgba(59,130,246,0.15);color:#60a5fa;border:1px solid rgba(59,130,246,0.3);padding:6px 14px;font-size:12px;}
+.btn-edit:hover{background:rgba(59,130,246,0.25);}
 .btn-delete{background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3);padding:6px 14px;font-size:12px;}
 .btn-delete:hover{background:rgba(239,68,68,0.25);}
-.btn-login{background:var(--accent);color:#060d1a;width:100%;margin-top:8px;}
+.btn-cancel{background:transparent;border:1px solid rgba(255,255,255,0.1);color:var(--muted);}
+.btn-cancel:hover{background:rgba(255,255,255,0.05);transform:none;}
+.btn-save{background:var(--accent);color:#060d1a;}
+
+.error-login{color:#f87171;font-size:13px;margin-top:10px;min-height:20px;}
+.success-step{color:var(--accent);font-size:13px;margin-top:8px;}
+
+/* ── BADGE SEGURANÇA ── */
+.security-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:20px;}
+.security-badge span{color:var(--accent);}
+
+/* ── PAINEL ── */
+#painel{display:none;padding:30px 20px;max-width:960px;margin:0 auto;}
+.painel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.painel-header h2{font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;letter-spacing:2px;color:var(--accent);}
+.logout-btn{background:transparent;border:1px solid rgba(239,68,68,0.4);color:var(--danger);padding:7px 16px;border-radius:8px;cursor:pointer;font-size:12px;letter-spacing:1px;transition:0.3s;}
+.logout-btn:hover{background:rgba(239,68,68,0.1);}
+.session-info{font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:4px;}
+.session-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:5px;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+.section{background:var(--surface);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:24px;margin-bottom:24px;}
+.section h3{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:20px;}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 @media(max-width:600px){.grid2{grid-template-columns:1fr;}}
 .user-card,.aula-card{background:rgba(6,13,26,0.6);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
 .user-info p,.aula-info p{font-size:13px;margin-bottom:3px;}
 .user-info .email,.aula-info .titulo{color:var(--text);font-weight:500;}
-.user-info .area,.aula-info .meta{color:var(--muted);font-size:12px;}
+.user-info .meta,.aula-info .meta{color:var(--muted);font-size:12px;}
 .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;letter-spacing:1px;font-weight:600;}
 .badge.approved{background:rgba(0,255,136,0.15);color:var(--accent);}
 .badge.pending{background:rgba(251,191,36,0.15);color:#fbbf24;}
+.badge.expired{background:rgba(239,68,68,0.15);color:#f87171;}
 .user-actions{display:flex;gap:8px;flex-wrap:wrap;}
 .msg{padding:10px 14px;border-radius:8px;font-size:13px;margin-top:10px;display:none;}
 .msg.success{background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);color:var(--accent);display:block;}
 .msg.error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#f87171;display:block;}
 .help-text{font-size:12px;color:var(--muted);margin-bottom:12px;margin-top:-6px;line-height:1.5;}
-.error-login{color:#f87171;font-size:13px;margin-top:8px;}
 .bunny-info{background:rgba(0,255,136,0.05);border:1px solid rgba(0,255,136,0.2);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:12px;color:var(--muted);line-height:1.6;display:none;}
 .bunny-info b{color:var(--accent);}
 .tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
 .tab{padding:8px 16px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:var(--muted);font-size:13px;cursor:pointer;transition:0.3s;}
 .tab.active{background:rgba(0,255,136,0.15);border-color:rgba(0,255,136,0.3);color:var(--accent);}
+.expiry-warning{color:#fbbf24;font-size:11px;}
+.expiry-expired{color:#f87171;font-size:11px;}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);z-index:1000;display:none;justify-content:center;align-items:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:#0d1f35;border:1px solid rgba(0,255,136,0.2);border-radius:20px;padding:36px 32px;width:100%;max-width:460px;position:relative;}
+.modal h3{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;letter-spacing:2px;color:var(--accent);margin-bottom:6px;}
+.modal .modal-email{font-size:12px;color:var(--muted);letter-spacing:1px;margin-bottom:22px;}
+.modal label{display:block;font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:5px;}
+.modal input,.modal select{margin-bottom:16px;}
+.modal-btns{display:flex;gap:10px;margin-top:6px;}
+.modal-btns button{flex:1;}
+.modal-close{position:absolute;top:16px;right:16px;background:transparent;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:4px 8px;}
+.modal-close:hover{color:var(--text);transform:none;}
+.modal-msg{padding:10px 14px;border-radius:8px;font-size:13px;margin-top:12px;display:none;}
+.modal-msg.success{background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);color:var(--accent);display:block;}
+.modal-msg.error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#f87171;display:block;}
 </style>
 </head>
 <body>
 
-<div class="login-wrap" id="loginWrap">
+<!-- ════════════════════════════════════════════
+     CAMADA 1 — Senha secreta (hash)
+════════════════════════════════════════════ -->
+<div class="login-wrap" id="step1Wrap">
   <div class="login-box">
     <div class="logo">PREPARATÓRIO VIRTUAL COM DELT∆</div>
     <h2>ADMIN</h2>
-    <input type="password" id="senha" placeholder="Senha de administrador">
-    <button class="btn-login" onclick="entrar()">ENTRAR</button>
-    <p class="error-login" id="erroLogin"></p>
+    <div class="step-label">VERIFICAÇÃO DE ACESSO</div>
+    <div class="step-dots">
+      <div class="step-dot active" id="dot1"></div>
+      <div class="step-dot" id="dot2"></div>
+    </div>
+    <div class="security-badge">🔐 <span>Camada 1</span> — Senha secreta</div>
+
+    <div class="lockout-banner" id="lockoutBanner">
+      <b>🔒 Acesso bloqueado temporariamente</b><br>
+      Demasiadas tentativas falhadas. Aguarda <span id="lockoutTimer"></span>.
+    </div>
+
+    <input type="password" id="senhaAdmin" placeholder="Senha de administrador" onkeydown="if(event.key==='Enter')verificarCamada1()">
+    <button class="btn-login" id="btnStep1" onclick="verificarCamada1()">CONTINUAR →</button>
+    <p class="error-login" id="erroStep1"></p>
+    <p class="attempts-info" id="attemptsInfo"></p>
   </div>
 </div>
 
+<!-- ════════════════════════════════════════════
+     CAMADA 2 — Firebase Authentication
+════════════════════════════════════════════ -->
+<div class="login-wrap" id="step2Wrap" style="display:none;">
+  <div class="login-box">
+    <div class="logo">PREPARATÓRIO VIRTUAL COM DELT∆</div>
+    <h2>ADMIN</h2>
+    <div class="step-label">VERIFICAÇÃO DE IDENTIDADE</div>
+    <div class="step-dots">
+      <div class="step-dot done" id="dot1b"></div>
+      <div class="step-dot active" id="dot2b"></div>
+    </div>
+    <div class="security-badge">🔑 <span>Camada 2</span> — Firebase Auth</div>
+
+    <input type="email" id="firebaseEmail" placeholder="Email de administrador" value="preparatoriovirtualcomdelta1@gmail.com" onkeydown="if(event.key==='Enter')verificarCamada2()">
+    <input type="password" id="firebaseSenha" placeholder="Senha do Firebase" onkeydown="if(event.key==='Enter')verificarCamada2()">
+    <button class="btn-login" id="btnStep2" onclick="verificarCamada2()">ENTRAR NO PAINEL →</button>
+    <p class="error-login" id="erroStep2"></p>
+    <p style="font-size:11px;color:var(--muted);margin-top:12px;cursor:pointer;" onclick="voltarStep1()">← Voltar</p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAINEL ADMIN
+════════════════════════════════════════════ -->
 <div id="painel">
   <div class="painel-header">
-    <h2>PAINEL ADMIN</h2>
+    <div>
+      <h2>PAINEL ADMIN</h2>
+      <div class="session-info">
+        <span class="session-dot"></span>Sessão activa · expira em <span id="sessionTimer"></span>
+        &nbsp;·&nbsp; 🔐🔑 2 camadas verificadas
+      </div>
+    </div>
     <button class="logout-btn" onclick="sair()">SAIR</button>
   </div>
 
   <div class="section">
     <h3>Adicionar Conteúdo</h3>
-
-    <!-- Secção -->
     <select id="seccao" onchange="atualizarCampos()">
       <option value="">Seleciona a secção</option>
       <option value="video_aulas">🎥 Vídeo Aulas</option>
@@ -83,17 +179,12 @@ button:hover{transform:translateY(-1px);}
       <option value="provas">📝 Provas Passadas</option>
       <option value="resolucao">✅ Resolução de Provas</option>
     </select>
-
-    <!-- Sub1: Universidade (video_aulas, materiais, provas, resolucao) -->
     <select id="sub1" onchange="atualizarSub2()">
       <option value="">— Seleciona secção primeiro —</option>
     </select>
-
-    <!-- Sub2: Disciplina (video_aulas e materiais) -->
     <select id="sub2" style="display:none;">
       <option value="">— Seleciona universidade primeiro —</option>
     </select>
-
     <div class="grid2">
       <input id="titulo" placeholder="Título do conteúdo">
       <select id="tipo" onchange="atualizarTipo()">
@@ -103,7 +194,6 @@ button:hover{transform:translateY(-1px);}
         <option value="imagem">🖼 Imagem (link direto)</option>
       </select>
     </div>
-
     <div class="bunny-info" id="bunnyInfo">
       <b>🐰 Como obter o link do Bunny Stream:</b><br>
       1. Acede ao teu painel em <b>bunny.net → Stream</b><br>
@@ -111,7 +201,6 @@ button:hover{transform:translateY(-1px);}
       3. Clica em <b>"Embed"</b> e copia o link do <b>src</b> do iframe<br>
       Exemplo: <b>https://iframe.mediadelivery.net/embed/XXXXX/VIDEO-ID</b>
     </div>
-
     <input id="url" placeholder="Cole o link aqui">
     <div class="help-text" id="urlHelp"></div>
     <button class="btn-green" onclick="adicionarAula()">ADICIONAR CONTEÚDO</button>
@@ -119,17 +208,15 @@ button:hover{transform:translateY(-1px);}
   </div>
 
   <div class="tabs">
-    <button class="tab active" onclick="mostrarTab('aulas')">📁 Conteúdos Publicados</button>
-    <button class="tab" onclick="mostrarTab('users')">👥 Utilizadores</button>
+    <button class="tab active" onclick="mostrarTab('aulas',event)">📁 Conteúdos Publicados</button>
+    <button class="tab" onclick="mostrarTab('users',event)">👥 Utilizadores</button>
   </div>
-
   <div id="tabAulas">
     <div class="section">
       <h3>Conteúdos Publicados</h3>
       <div id="listaAulas"><p style="color:var(--muted);font-size:13px;">A carregar...</p></div>
     </div>
   </div>
-
   <div id="tabUsers" style="display:none;">
     <div class="section">
       <h3>Utilizadores</h3>
@@ -138,9 +225,35 @@ button:hover{transform:translateY(-1px);}
   </div>
 </div>
 
+<!-- MODAL EDITAR UTILIZADOR -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="fecharModal()">✕</button>
+    <h3>EDITAR UTILIZADOR</h3>
+    <p class="modal-email" id="modalEmail"></p>
+    <input type="hidden" id="modalUid">
+    <label>Universidade</label>
+    <select id="modalUni" onchange="atualizarCursosModal()">
+      <option value="">Seleciona universidade</option>
+    </select>
+    <label>Curso</label>
+    <select id="modalCurso"><option value="">Seleciona curso</option></select>
+    <label>Data de Expiração</label>
+    <input type="date" id="modalExpiry">
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="fecharModal()">CANCELAR</button>
+      <button class="btn-save" onclick="guardarEdicao()">GUARDAR</button>
+    </div>
+    <div class="modal-msg" id="modalMsg"></div>
+  </div>
+</div>
+
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs, doc, updateDoc, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { initializeApp }      from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
+                               from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, collection, getDocs, doc, updateDoc, addDoc, deleteDoc, getDoc }
+                               from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBBADytEHr9NzwFdGmd-zq26t88Vnl65js",
@@ -151,247 +264,505 @@ const firebaseConfig = {
   appId: "1:211289899773:web:dfc22d377c7172f936b494"
 };
 
-const app = initializeApp(firebaseConfig);
-const db  = getFirestore(app);
-const SENHA = "DeltaAdmin2025$#";
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
 
-const UNIVERSIDADES = ["UAN","UMN","UON","UKB","URNM","UJES","ISTM","UPRA","UNIPIAGET","UNIKIV","UCC"];
+// ═══════════════════════════════════════════════════════════
+// 🔐 CAMADA 1 — Senha secreta (SHA-256)
+// SHA-256 de "DeltaAdmin2025$#"
+// Para mudar: https://emn178.github.io/online-tools/sha256.html
+// ═══════════════════════════════════════════════════════════
+const SENHA_HASH   = "e12afa1c4ac73ca1954164f1e40498336c4cd8b2d761af0158bb8d239c1049f6";
+const MAX_TENT     = 5;
+const LOCKOUT_MS   = 5 * 60 * 1000;
+const DELAY_BASE   = 1000;
+const SESSION_DUR  = 60 * 60 * 1000; // 1h
+const SESSION_KEY  = "delta_admin_session";
+const LOCKOUT_KEY  = "delta_admin_lockout";
+const ATTEMPTS_KEY = "delta_admin_attempts";
+// Email autorizado — só este email pode entrar na camada 2
+const ADMIN_EMAIL  = "preparatoriovirtualcomdelta1@gmail.com";
 
-const DISCIPLINAS_UNI = {
-  UAN:       ["Biologia","Química","Língua Portuguesa","Matemática"],
-  UMN:       ["Biologia","Química","Língua Portuguesa","Matemática"],
-  UON:       ["Biologia","Química","Língua Portuguesa","Física"],
-  UKB:       ["Biologia","Química","Língua Portuguesa","Física"],
-  URNM:      ["Biologia","Química","Língua Portuguesa","Matemática","Física"],
-  UJES:      ["Biologia","Química","Língua Portuguesa","Física"],
-  ISTM:      ["Biologia","Química","Matemática","Física"],
-  UPRA:      ["Biologia","Química","Língua Portuguesa"],
-  UNIPIAGET: ["Biologia","Química","Língua Portuguesa","Matemática","Física"],
-  UNIKIV:    ["Biologia","Química","Matemática","Língua Portuguesa"],
-  UCC:       ["Biologia","Química","Língua Portuguesa","Matemática"],
-  OUTRA:     ["Biologia","Química","Matemática","Língua Portuguesa","Física"]
-};
+// ── Cripto ────────────────────────────────────────────────
+async function sha256(text) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,"0")).join("");
+}
+function gerarToken() {
+  const a = new Uint8Array(32); crypto.getRandomValues(a);
+  return Array.from(a).map(b => b.toString(16).padStart(2,"0")).join("");
+}
 
-const NOMES_SECCAO = {
-  video_aulas:"Vídeo Aulas", materiais:"Materiais de Apoio",
-  cronograma:"Cronograma", provas:"Provas Passadas", resolucao:"Resolução de Provas"
-};
+// ── Sessão ────────────────────────────────────────────────
+function sessaoValida() {
+  try {
+    const s = JSON.parse(sessionStorage.getItem(SESSION_KEY) || "null");
+    if (!s?.token || !s?.expiry) return false;
+    if (Date.now() > s.expiry) { sessionStorage.removeItem(SESSION_KEY); return false; }
+    return true;
+  } catch { return false; }
+}
+function criarSessao() {
+  const expiry = Date.now() + SESSION_DUR;
+  sessionStorage.setItem(SESSION_KEY, JSON.stringify({ token: gerarToken(), expiry }));
+  return expiry;
+}
 
+// ── Rate limit ────────────────────────────────────────────
+const getLockout  = () => { try { return JSON.parse(sessionStorage.getItem(LOCKOUT_KEY)||"null"); } catch { return null; } };
+const getAttempts = () => parseInt(sessionStorage.getItem(ATTEMPTS_KEY)||"0",10);
+const setAttempts = n  => sessionStorage.setItem(ATTEMPTS_KEY, String(n));
+const setLockout  = () => sessionStorage.setItem(LOCKOUT_KEY, JSON.stringify({ until: Date.now()+LOCKOUT_MS }));
+const clearLockout= () => { sessionStorage.removeItem(LOCKOUT_KEY); sessionStorage.removeItem(ATTEMPTS_KEY); };
+
+// ── Timer sessão ──────────────────────────────────────────
+let sessionInterval = null;
+function iniciarTimerSessao() {
+  const el = document.getElementById("sessionTimer");
+  function tick() {
+    const s = JSON.parse(sessionStorage.getItem(SESSION_KEY)||"null");
+    if (!s) { sair(); return; }
+    const r = s.expiry - Date.now();
+    if (r <= 0) { sair(); return; }
+    el.innerText = `${Math.floor(r/60000)}m ${String(Math.floor((r%60000)/1000)).padStart(2,"0")}s`;
+  }
+  tick();
+  sessionInterval = setInterval(tick, 1000);
+}
+
+// ── Timer bloqueio ────────────────────────────────────────
+let lockoutInterval = null;
+function mostrarBloqueio() {
+  const banner = document.getElementById("lockoutBanner");
+  const timerEl = document.getElementById("lockoutTimer");
+  const btn = document.getElementById("btnStep1");
+  const inp = document.getElementById("senhaAdmin");
+  banner.style.display = "block"; btn.disabled = true; inp.disabled = true;
+
+  function tick() {
+    const lk = getLockout();
+    if (!lk) { reset(); return; }
+    const r = lk.until - Date.now();
+    if (r <= 0) { clearLockout(); reset(); return; }
+    timerEl.innerText = `${Math.floor(r/60000)}m ${String(Math.floor((r%60000)/1000)).padStart(2,"0")}s`;
+  }
+  function reset() {
+    clearInterval(lockoutInterval);
+    banner.style.display = "none"; btn.disabled = false; inp.disabled = false;
+    document.getElementById("erroStep1").innerText = "";
+    document.getElementById("attemptsInfo").innerText = "";
+  }
+  tick(); lockoutInterval = setInterval(tick, 1000);
+}
+
+// ═══════════════════════════════════════════════════════════
+// 🚪 CAMADA 1 — verificação
+// ═══════════════════════════════════════════════════════════
+let emProgresso = false;
+
+window.verificarCamada1 = async function() {
+  if (emProgresso) return;
+  const lk = getLockout();
+  if (lk && Date.now() < lk.until) { mostrarBloqueio(); return; }
+  if (lk) clearLockout();
+
+  const senha  = document.getElementById("senhaAdmin").value;
+  const erroEl = document.getElementById("erroStep1");
+  const infoEl = document.getElementById("attemptsInfo");
+  const btn    = document.getElementById("btnStep1");
+
+  if (!senha) { erroEl.innerText = "Introduz a senha."; return; }
+
+  emProgresso = true; btn.disabled = true; btn.innerText = "A verificar..."; erroEl.innerText = "";
+
+  const tent = getAttempts();
+  if (tent > 0) await new Promise(r => setTimeout(r, Math.min(DELAY_BASE * Math.pow(2, tent-1), 10000)));
+
+  try {
+    const hash = await sha256(senha);
+    if (hash === SENHA_HASH) {
+      clearLockout();
+      // Guardar flag de camada 1 na sessão (temporário até camada 2 completar)
+      sessionStorage.setItem("delta_layer1_ok", "1");
+      document.getElementById("senhaAdmin").value = "";
+      // Avançar para camada 2
+      document.getElementById("step1Wrap").style.display = "none";
+      document.getElementById("step2Wrap").style.display = "flex";
+      document.getElementById("firebaseSenha").focus();
+    } else {
+      const novas = tent + 1;
+      setAttempts(novas);
+      const rest = MAX_TENT - novas;
+      if (novas >= MAX_TENT) {
+        setLockout();
+        erroEl.innerText = "Demasiadas tentativas. Bloqueado por 5 minutos.";
+        infoEl.innerText = "";
+        mostrarBloqueio();
+      } else {
+        erroEl.innerText = "Senha incorreta.";
+        infoEl.innerText = `${rest} tentativa${rest!==1?"s":""} restante${rest!==1?"s":""}  antes do bloqueio.`;
+      }
+      document.getElementById("senhaAdmin").value = "";
+    }
+  } catch(e) { erroEl.innerText = "Erro ao verificar. Tenta novamente."; }
+
+  btn.disabled = false; btn.innerText = "CONTINUAR →"; emProgresso = false;
+}
+
+// ═══════════════════════════════════════════════════════════
+// 🔑 CAMADA 2 — Firebase Authentication
+// ═══════════════════════════════════════════════════════════
+window.verificarCamada2 = async function() {
+  // Verificar que camada 1 foi concluída nesta sessão
+  if (!sessionStorage.getItem("delta_layer1_ok")) {
+    voltarStep1(); return;
+  }
+
+  const email  = document.getElementById("firebaseEmail").value.trim();
+  const senha  = document.getElementById("firebaseSenha").value;
+  const erroEl = document.getElementById("erroStep2");
+  const btn    = document.getElementById("btnStep2");
+
+  if (!email || !senha) { erroEl.innerText = "Preenche email e senha."; return; }
+
+  // Garantir que só o email admin pode entrar
+  if (email !== ADMIN_EMAIL) {
+    erroEl.innerText = "Email não autorizado."; return;
+  }
+
+  btn.disabled = true; btn.innerText = "A autenticar..."; erroEl.innerText = "";
+
+  try {
+    await signInWithEmailAndPassword(auth, email, senha);
+    // ✅ Ambas as camadas passaram
+    sessionStorage.removeItem("delta_layer1_ok");
+    criarSessao();
+    document.getElementById("firebaseSenha").value = "";
+    document.getElementById("step2Wrap").style.display = "none";
+    document.getElementById("painel").style.display = "block";
+    document.getElementById("bunnyInfo").style.display = "block";
+    iniciarTimerSessao();
+    carregarAulas();
+    carregarUsers();
+    verificarExpirados();
+  } catch(e) {
+    let msg = "Email ou senha incorretos.";
+    if (e.code === "auth/too-many-requests") msg = "Conta bloqueada temporariamente pelo Firebase. Tenta mais tarde.";
+    if (e.code === "auth/invalid-credential") msg = "Credenciais inválidas. Verifica email e senha.";
+    erroEl.innerText = msg;
+  }
+
+  btn.disabled = false; btn.innerText = "ENTRAR NO PAINEL →";
+}
+
+window.voltarStep1 = function() {
+  sessionStorage.removeItem("delta_layer1_ok");
+  document.getElementById("step2Wrap").style.display = "none";
+  document.getElementById("step1Wrap").style.display = "flex";
+  document.getElementById("erroStep2").innerText = "";
+  document.getElementById("firebaseSenha").value = "";
+}
+
+// ═══════════════════════════════════════════════════════════
+// 🚪 SAIR — limpa sessão Firebase + sessionStorage
+// ═══════════════════════════════════════════════════════════
+window.sair = async function() {
+  sessionStorage.removeItem(SESSION_KEY);
+  sessionStorage.removeItem("delta_layer1_ok");
+  if (sessionInterval) clearInterval(sessionInterval);
+  try { await signOut(auth); } catch(e) {}
+  document.getElementById("step1Wrap").style.display = "flex";
+  document.getElementById("step2Wrap").style.display = "none";
+  document.getElementById("painel").style.display = "none";
+  document.getElementById("senhaAdmin").value = "";
+  document.getElementById("erroStep1").innerText = "";
+  document.getElementById("attemptsInfo").innerText = "";
+}
+
+// ── Ao carregar: verificar sessão activa ──────────────────
+window.addEventListener("load", () => {
+  const lk = getLockout();
+  if (lk && Date.now() < lk.until) mostrarBloqueio();
+
+  // Só restaura sessão se Firebase também estiver autenticado
+  onAuthStateChanged(auth, user => {
+    if (user && user.email === ADMIN_EMAIL && sessaoValida()) {
+      document.getElementById("step1Wrap").style.display = "none";
+      document.getElementById("painel").style.display = "block";
+      document.getElementById("bunnyInfo").style.display = "block";
+      iniciarTimerSessao();
+      carregarAulas(); carregarUsers(); verificarExpirados();
+    }
+  });
+});
+
+// Sessão expira enquanto painel está aberto
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden && document.getElementById("painel").style.display !== "none") {
+    if (!sessaoValida()) sair();
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+// DADOS E CONSTANTES
+// ═══════════════════════════════════════════════════════════
+const DIAS_30 = 30*24*60*60*1000;
+const UNIVERSIDADES = ["UAN","UMN","UON","UKB","URNM","UJES","ISTM","UPRA","UNIPIAGET","UNIKIV","UCC","OUTRA"];
 const NOMES_UNI = {
   UAN:"Universidade Agostinho Neto", UMN:"Universidade Mandume Ya Ndemufayo",
   UON:"Universidade 11 de Novembro", UKB:"Universidade Katyavala Buila",
   URNM:"Universidade Rainha Njinga Mbande", UJES:"Universidade José Eduardo Dos Santos",
   ISTM:"Instituto Superior Técnico Militar", UPRA:"Universidade Privada de Angola",
   UNIPIAGET:"Universidade Jean Piaget", UNIKIV:"Universidade Kimpa Vita",
-  UCC:"Universidade Cuito Cuanavale"
+  UCC:"Universidade Cuito Cuanavale", OUTRA:"Outra Universidade"
+};
+const COURSES_BY_UNI = {
+  UAN:["Medicina Geral","Ciências de Enfermagem","Ciências Farmacêuticas","Análises Clínicas e Saúde Pública"],
+  UMN:["Medicina Geral","Enfermagem","Análises Clínicas e Laboratório"],
+  UON:["Medicina Geral","Enfermagem","Análises Clínicas"],
+  UKB:["Medicina Geral"],
+  URNM:["Medicina Geral","Ciências Farmacêuticas","Ciências de Enfermagem","Análises Clínicas e Toxicológicas"],
+  UJES:["Medicina Geral","Electromedicina","Laboratório Clínico","Enfermagem"],
+  ISTM:["Medicina Geral","Enfermagem"],
+  UPRA:["Medicina Geral","Enfermagem","Fisioterapia","Odontologia"],
+  UNIPIAGET:["Medicina Geral","Medicina Dentária","Enfermagem","Ciências Farmacêuticas","Fisioterapia","Análises Clínicas e Saúde Pública","Enfermagem e Obstetrícia","Radiologia e Imagiologia"],
+  UNIKIV:["Enfermagem","Análises Clínicas","Agronomia"],
+  UCC:["Enfermagem"],
+  OUTRA:["Medicina Geral","Medicina Dentária","Enfermagem","Análises Clínicas","Farmácia","Nutrição","Cardiopneumologia","Fisioterapia"]
+};
+const COURSE_TO_AREA = {
+  "Medicina Geral":"medicina geral","Medicina Dentária":"medicina dentária",
+  "Ciências de Enfermagem":"enfermagem","Enfermagem":"enfermagem","Enfermagem e Obstetrícia":"enfermagem",
+  "Ciências Farmacêuticas":"farmacia","Farmácia":"farmacia",
+  "Análises Clínicas e Saúde Pública":"analises clinicas","Análises Clínicas e Laboratório":"analises clinicas",
+  "Análises Clínicas":"analises clinicas","Análises Clínicas e Toxicológicas":"analises clinicas",
+  "Fisioterapia":"fisioterapia","Odontologia":"medicina dentária",
+  "Electromedicina":"analises clinicas","Laboratório Clínico":"analises clinicas",
+  "Radiologia e Imagiologia":"analises clinicas","Nutrição":"nutrição e dietética",
+  "Cardiopneumologia":"cardiopneumologia","Agronomia":"analises clinicas"
+};
+const DISCIPLINAS_UNI = {
+  UAN:["Biologia","Química","Língua Portuguesa","Matemática"],
+  UMN:["Biologia","Química","Língua Portuguesa","Matemática"],
+  UON:["Biologia","Química","Língua Portuguesa","Física"],
+  UKB:["Biologia","Química","Língua Portuguesa","Física"],
+  URNM:["Biologia","Química","Língua Portuguesa","Matemática","Física"],
+  UJES:["Biologia","Química","Língua Portuguesa","Física"],
+  ISTM:["Biologia","Química","Matemática","Física"],
+  UPRA:["Biologia","Química","Língua Portuguesa"],
+  UNIPIAGET:["Biologia","Química","Língua Portuguesa","Matemática","Física"],
+  UNIKIV:["Biologia","Química","Matemática","Língua Portuguesa"],
+  UCC:["Biologia","Química","Língua Portuguesa","Matemática"],
+  OUTRA:["Biologia","Química","Matemática","Língua Portuguesa","Física"]
+};
+const NOMES_SECCAO = {
+  video_aulas:"Vídeo Aulas", materiais:"Materiais de Apoio",
+  cronograma:"Cronograma", provas:"Provas Passadas", resolucao:"Resolução de Provas"
 };
 
-window.entrar = function(){
-  if(document.getElementById("senha").value !== SENHA){
-    document.getElementById("erroLogin").innerText = "Senha incorreta!"; return;
-  }
-  document.getElementById("loginWrap").style.display = "none";
-  document.getElementById("painel").style.display = "block";
-  carregarAulas(); carregarUsers();
-  document.getElementById("bunnyInfo").style.display = "block";
-}
-
-window.sair = function(){
-  document.getElementById("loginWrap").style.display = "flex";
-  document.getElementById("painel").style.display = "none";
-  document.getElementById("senha").value = "";
-}
-
-window.mostrarTab = function(tab){
+// ── PAINEL ────────────────────────────────────────────────
+window.mostrarTab = function(tab, event){
   document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
   event.target.classList.add("active");
-  document.getElementById("tabAulas").style.display = tab === "aulas" ? "block" : "none";
-  document.getElementById("tabUsers").style.display  = tab === "users" ? "block" : "none";
+  document.getElementById("tabAulas").style.display = tab==="aulas"?"block":"none";
+  document.getElementById("tabUsers").style.display  = tab==="users"?"block":"none";
 }
 
 window.atualizarCampos = function(){
-  const seccao = document.getElementById("seccao").value;
-  const sub1   = document.getElementById("sub1");
-  const sub2   = document.getElementById("sub2");
-  const tipo   = document.getElementById("tipo");
-  const help   = document.getElementById("urlHelp");
-
-  sub1.innerHTML = "";
-  sub2.innerHTML = `<option value="">— Seleciona universidade primeiro —</option>`;
-  sub2.style.display = "none";
-
-  if(!seccao){
-    sub1.innerHTML = `<option value="">— Seleciona secção primeiro —</option>`; return;
-  }
-
-  if(seccao === "video_aulas" || seccao === "materiais"){
-    // Passo 1: Universidade; Passo 2: Disciplina
-    sub1.innerHTML = `<option value="">Seleciona universidade</option>`;
-    UNIVERSIDADES.forEach(u => sub1.innerHTML += `<option value="${u}">${u} — ${NOMES_UNI[u]||u}</option>`);
-    sub2.style.display = "block";
-    tipo.value = seccao === "video_aulas" ? "bunny" : "pdf";
-    atualizarTipo();
-    if(seccao === "materiais") help.innerText = "💡 Google Drive: faz upload → Partilhar → troca /view por /preview";
-
-  } else if(seccao === "provas" || seccao === "resolucao"){
-    sub1.innerHTML = `<option value="">Seleciona universidade</option>`;
-    UNIVERSIDADES.forEach(u => sub1.innerHTML += `<option value="${u}">${u} — ${NOMES_UNI[u]||u}</option>`);
-    tipo.value = seccao === "resolucao" ? "bunny" : "pdf";
-    atualizarTipo();
-    if(seccao === "provas") help.innerText = "💡 Google Drive: faz upload → Partilhar → troca /view por /preview";
-
-  } else if(seccao === "cronograma"){
-    sub1.innerHTML = `<option value="">— Sem subcategoria —</option>`;
-    tipo.value = "pdf"; atualizarTipo();
-    help.innerText = "💡 Google Drive: faz upload → Partilhar → troca /view por /preview";
+  const seccao=document.getElementById("seccao").value;
+  const sub1=document.getElementById("sub1");
+  const sub2=document.getElementById("sub2");
+  const tipo=document.getElementById("tipo");
+  const help=document.getElementById("urlHelp");
+  sub1.innerHTML=""; sub2.innerHTML=`<option value="">— Seleciona universidade primeiro —</option>`; sub2.style.display="none";
+  if(!seccao){sub1.innerHTML=`<option value="">— Seleciona secção primeiro —</option>`;return;}
+  if(seccao==="video_aulas"||seccao==="materiais"){
+    sub1.innerHTML=`<option value="">Seleciona universidade</option>`;
+    UNIVERSIDADES.forEach(u=>sub1.innerHTML+=`<option value="${u}">${u} — ${NOMES_UNI[u]||u}</option>`);
+    sub2.style.display="block"; tipo.value=seccao==="video_aulas"?"bunny":"pdf"; atualizarTipo();
+    if(seccao==="materiais")help.innerText="💡 Google Drive: faz upload → Partilhar → troca /view por /preview";
+  }else if(seccao==="provas"||seccao==="resolucao"){
+    sub1.innerHTML=`<option value="">Seleciona universidade</option>`;
+    UNIVERSIDADES.forEach(u=>sub1.innerHTML+=`<option value="${u}">${u} — ${NOMES_UNI[u]||u}</option>`);
+    tipo.value=seccao==="resolucao"?"bunny":"pdf"; atualizarTipo();
+    if(seccao==="provas")help.innerText="💡 Google Drive: faz upload → Partilhar → troca /view por /preview";
+  }else if(seccao==="cronograma"){
+    sub1.innerHTML=`<option value="">— Sem subcategoria —</option>`;
+    tipo.value="pdf"; atualizarTipo();
+    help.innerText="💡 Google Drive: faz upload → Partilhar → troca /view por /preview";
   }
 }
 
 window.atualizarSub2 = function(){
-  const seccao = document.getElementById("seccao").value;
-  if(seccao !== "video_aulas" && seccao !== "materiais") return;
-  const uni  = document.getElementById("sub1").value;
-  const sub2 = document.getElementById("sub2");
-  sub2.innerHTML = `<option value="">Seleciona disciplina</option>`;
-  if(!uni) return;
-  const disciplinas = DISCIPLINAS_UNI[uni] || [];
-  disciplinas.forEach(d => sub2.innerHTML += `<option value="${d}">${d}</option>`);
+  const seccao=document.getElementById("seccao").value;
+  if(seccao!=="video_aulas"&&seccao!=="materiais")return;
+  const uni=document.getElementById("sub1").value;
+  const sub2=document.getElementById("sub2");
+  sub2.innerHTML=`<option value="">Seleciona disciplina</option>`;
+  if(!uni)return;
+  (DISCIPLINAS_UNI[uni]||[]).forEach(d=>sub2.innerHTML+=`<option value="${d}">${d}</option>`);
 }
 
 window.atualizarTipo = function(){
-  const tipo      = document.getElementById("tipo").value;
-  const bunnyInfo = document.getElementById("bunnyInfo");
-  const urlHelp   = document.getElementById("urlHelp");
-  const urlInput  = document.getElementById("url");
-  if(tipo === "bunny"){
-    bunnyInfo.style.display = "block";
-    urlHelp.innerText = "🐰 Cola aqui o link embed do Bunny Stream";
-    urlInput.placeholder = "https://iframe.mediadelivery.net/embed/XXXXX/VIDEO-ID";
-  } else if(tipo === "video"){
-    bunnyInfo.style.display = "none";
-    urlHelp.innerText = "💡 YouTube: copia o link do vídeo ou playlist";
-    urlInput.placeholder = "https://youtu.be/...";
-  } else if(tipo === "pdf"){
-    bunnyInfo.style.display = "none";
-    urlHelp.innerText = "💡 Google Drive: faz upload → Partilhar → troca /view por /preview";
-    urlInput.placeholder = "https://drive.google.com/file/d/.../preview";
-  } else {
-    bunnyInfo.style.display = "none";
-    urlHelp.innerText = ""; urlInput.placeholder = "Cole o link aqui";
-  }
+  const tipo=document.getElementById("tipo").value;
+  const bi=document.getElementById("bunnyInfo");
+  const uh=document.getElementById("urlHelp");
+  const ui=document.getElementById("url");
+  if(tipo==="bunny"){bi.style.display="block";uh.innerText="🐰 Cola aqui o link embed do Bunny Stream";ui.placeholder="https://iframe.mediadelivery.net/embed/XXXXX/VIDEO-ID";}
+  else if(tipo==="video"){bi.style.display="none";uh.innerText="💡 YouTube: copia o link do vídeo ou playlist";ui.placeholder="https://youtu.be/...";}
+  else if(tipo==="pdf"){bi.style.display="none";uh.innerText="💡 Google Drive: faz upload → Partilhar → troca /view por /preview";ui.placeholder="https://drive.google.com/file/d/.../preview";}
+  else{bi.style.display="none";uh.innerText="";ui.placeholder="Cole o link aqui";}
 }
 
-function formatarURL(url, tipo){
-  if(tipo === "bunny") return url;
-  if(tipo !== "video") return url;
-  if(url.includes("list=") && !url.includes("embed")){
-    const match = url.match(/list=([^&]+)/);
-    if(match) return `https://www.youtube-nocookie.com/embed/videoseries?list=${match[1]}`;
-  }
-  const match = url.match(/(?:youtu\.be\/|v=|embed\/)([a-zA-Z0-9_-]{11})/);
-  if(match) return `https://www.youtube-nocookie.com/embed/${match[1]}`;
+function formatarURL(url,tipo){
+  if(tipo==="bunny"||tipo!=="video")return url;
+  if(url.includes("list=")&&!url.includes("embed")){const m=url.match(/list=([^&]+)/);if(m)return`https://www.youtube-nocookie.com/embed/videoseries?list=${m[1]}`;}
+  const m=url.match(/(?:youtu\.be\/|v=|embed\/)([a-zA-Z0-9_-]{11})/);
+  if(m)return`https://www.youtube-nocookie.com/embed/${m[1]}`;
   return url;
 }
 
 window.adicionarAula = async function(){
-  const seccao = document.getElementById("seccao").value;
-  const sub1   = document.getElementById("sub1").value;
-  const sub2   = document.getElementById("sub2").value;
-  const titulo = document.getElementById("titulo").value.trim();
-  const tipo   = document.getElementById("tipo").value;
-  const urlRaw = document.getElementById("url").value.trim();
-  const msg    = document.getElementById("msgAula");
-  msg.className = "msg";
-
-  if(!seccao || !titulo || !urlRaw){
-    msg.className = "msg error"; msg.innerText = "Preenche todos os campos obrigatórios."; return;
-  }
-  if(tipo === "bunny" && !urlRaw.includes("mediadelivery.net")){
-    msg.className = "msg error"; msg.innerText = "⚠️ Link inválido para Bunny Stream."; return;
-  }
-
-  // video_aulas e materiais: sub = "UAN|Biologia"
-  // provas e resolucao: sub = "UAN"
-  let sub = null;
-  if(seccao === "video_aulas" || seccao === "materiais"){
-    if(!sub1 || !sub2){ msg.className = "msg error"; msg.innerText = "Seleciona a universidade e a disciplina."; return; }
-    sub = `${sub1}|${sub2}`;
-  } else {
-    sub = sub1 || null;
-  }
-
-  const url = formatarURL(urlRaw, tipo);
-  try {
-    await addDoc(collection(db,"aulas"),{ seccao, sub, titulo, tipo, url, createdAt: Date.now() });
-    msg.className = "msg success"; msg.innerText = "✅ Conteúdo adicionado com sucesso!";
-    document.getElementById("titulo").value = "";
-    document.getElementById("url").value = "";
+  const seccao=document.getElementById("seccao").value;
+  const sub1=document.getElementById("sub1").value;
+  const sub2=document.getElementById("sub2").value;
+  const titulo=document.getElementById("titulo").value.trim();
+  const tipo=document.getElementById("tipo").value;
+  const urlRaw=document.getElementById("url").value.trim();
+  const msg=document.getElementById("msgAula"); msg.className="msg";
+  if(!seccao||!titulo||!urlRaw){msg.className="msg error";msg.innerText="Preenche todos os campos obrigatórios.";return;}
+  if(tipo==="bunny"&&!urlRaw.includes("mediadelivery.net")){msg.className="msg error";msg.innerText="⚠️ Link inválido para Bunny Stream.";return;}
+  let sub=null;
+  if(seccao==="video_aulas"||seccao==="materiais"){if(!sub1||!sub2){msg.className="msg error";msg.innerText="Seleciona a universidade e a disciplina.";return;}sub=`${sub1}|${sub2}`;}else{sub=sub1||null;}
+  try{
+    await addDoc(collection(db,"aulas"),{seccao,sub,titulo,tipo,url:formatarURL(urlRaw,tipo),createdAt:Date.now()});
+    msg.className="msg success";msg.innerText="✅ Conteúdo adicionado com sucesso!";
+    document.getElementById("titulo").value="";document.getElementById("url").value="";
     carregarAulas();
-  } catch(e){
-    msg.className = "msg error"; msg.innerText = "Erro: " + e.message;
-  }
+  }catch(e){msg.className="msg error";msg.innerText="Erro: "+e.message;}
 }
 
 async function carregarAulas(){
-  const div  = document.getElementById("listaAulas");
-  const snap = await getDocs(collection(db,"aulas"));
-  if(snap.empty){ div.innerHTML = "<p style='color:var(--muted);font-size:13px;'>Nenhum conteúdo publicado ainda.</p>"; return; }
-  div.innerHTML = "";
-  const icones = {video:"🎥", bunny:"🐰", pdf:"📄", imagem:"🖼"};
-  snap.forEach(d => {
-    const data = d.data();
-    const sec  = NOMES_SECCAO[data.seccao] || data.seccao || "—";
-    let subLabel = "—";
-    if(data.sub){
-      if(data.sub.includes("|")){
-        const [u, disc] = data.sub.split("|");
-        subLabel = `${u} — ${disc}`;
-      } else {
-        subLabel = NOMES_UNI[data.sub] ? `${data.sub} — ${NOMES_UNI[data.sub]}` : data.sub;
-      }
-    }
-    const tipoLabel = data.tipo === "bunny" ? "Bunny Stream 🔒" : data.tipo;
-    div.innerHTML += `
-      <div class="aula-card">
-        <div class="aula-info">
-          <p class="titulo">${icones[data.tipo]||"📁"} ${data.titulo}</p>
-          <p class="meta">${sec} › ${subLabel} · ${tipoLabel}</p>
-        </div>
-        <button class="btn-delete" onclick="eliminarAula('${d.id}')">Eliminar</button>
-      </div>`;
+  const div=document.getElementById("listaAulas");
+  const snap=await getDocs(collection(db,"aulas"));
+  if(snap.empty){div.innerHTML="<p style='color:var(--muted);font-size:13px;'>Nenhum conteúdo publicado ainda.</p>";return;}
+  div.innerHTML="";
+  const ic={video:"🎥",bunny:"🐰",pdf:"📄",imagem:"🖼"};
+  snap.forEach(d=>{
+    const data=d.data();
+    const sec=NOMES_SECCAO[data.seccao]||data.seccao||"—";
+    let sub="—";
+    if(data.sub){if(data.sub.includes("|")){const[u,disc]=data.sub.split("|");sub=`${u} — ${disc}`;}else{sub=NOMES_UNI[data.sub]?`${data.sub} — ${NOMES_UNI[data.sub]}`:data.sub;}}
+    div.innerHTML+=`<div class="aula-card"><div class="aula-info"><p class="titulo">${ic[data.tipo]||"📁"} ${data.titulo}</p><p class="meta">${sec} › ${sub} · ${data.tipo==="bunny"?"Bunny Stream 🔒":data.tipo}</p></div><button class="btn-delete" onclick="eliminarAula('${d.id}')">Eliminar</button></div>`;
   });
 }
 
 window.eliminarAula = async function(id){
-  if(!confirm("Tens a certeza?")) return;
-  await deleteDoc(doc(db,"aulas",id)); carregarAulas();
+  if(!confirm("Tens a certeza?"))return;
+  await deleteDoc(doc(db,"aulas",id));carregarAulas();
+}
+
+async function eliminarUserCompleto(uid,docId){
+  await deleteDoc(doc(db,"users",docId));
+  try{await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:delete?key=AIzaSyBBADytEHr9NzwFdGmd-zq26t88Vnl65js`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({idToken:uid})});}catch(e){}
+  try{await addDoc(collection(db,"deleted_users_auth"),{uid,deletedAt:Date.now()});}catch(e){}
 }
 
 async function carregarUsers(){
-  const div  = document.getElementById("users");
-  const snap = await getDocs(collection(db,"users"));
-  if(snap.empty){ div.innerHTML = "<p style='color:var(--muted);font-size:13px;'>Nenhum utilizador registado ainda.</p>"; return; }
-  div.innerHTML = "";
-  snap.forEach(u => {
-    const d = u.data();
-    const uniLabel = d.uni ? `${d.uni}${NOMES_UNI[d.uni] ? ' — '+NOMES_UNI[d.uni] : ''}` : "—";
-    div.innerHTML += `
-      <div class="user-card">
-        <div class="user-info">
-          <p class="email">${d.email}</p>
-          <p class="area">${d.curso||d.area||"—"} · ${uniLabel}</p>
-          <span class="badge ${d.approved?'approved':'pending'}">${d.approved?"APROVADO":"PENDENTE"}</span>
-        </div>
-        <div class="user-actions">
-          ${!d.approved ? `<button class="btn-approve" onclick="aprovar('${u.id}')">✓ Aprovar</button>` : ""}
-          ${d.approved  ? `<button class="btn-delete"  onclick="revogar('${u.id}')">✗ Revogar</button>` : ""}
-        </div>
-      </div>`;
+  const div=document.getElementById("users");
+  const snap=await getDocs(collection(db,"users"));
+  if(snap.empty){div.innerHTML="<p style='color:var(--muted);font-size:13px;'>Nenhum utilizador registado ainda.</p>";return;}
+  div.innerHTML="";const agora=Date.now();
+  snap.forEach(u=>{
+    const d=u.data();
+    const uniLabel=d.uni?`${d.uni}${NOMES_UNI[d.uni]?' — '+NOMES_UNI[d.uni]:''}` :"—";
+    let expiryTs=d.expiryDate||(d.approvedAt?d.approvedAt+DIAS_30:null);
+    let expiryHtml="";
+    let statusBadge=d.approved?`<span class="badge approved">APROVADO</span>`:`<span class="badge pending">PENDENTE</span>`;
+    if(d.approved&&expiryTs){
+      const dias=Math.ceil((expiryTs-agora)/(1000*60*60*24));
+      const ds=new Date(expiryTs).toLocaleDateString('pt-PT');
+      if(expiryTs<agora){statusBadge=`<span class="badge expired">EXPIRADO</span>`;expiryHtml=`<span class="expiry-expired">⚠️ Expirou em ${ds}</span>`;}
+      else if(dias<=7){expiryHtml=`<span class="expiry-warning">⏳ Expira em ${dias} dia${dias!==1?'s':''} (${ds})</span>`;}
+      else{expiryHtml=`<span style="font-size:11px;color:var(--muted);">⏳ Expira: ${ds}</span>`;}
+    }
+    div.innerHTML+=`<div class="user-card" id="card-${u.id}"><div class="user-info"><p class="email">${d.email}</p><p class="meta">${d.curso||d.area||"—"} · ${uniLabel}</p><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:4px;">${statusBadge}${expiryHtml}</div></div><div class="user-actions">${!d.approved?`<button class="btn-approve" onclick="aprovar('${u.id}')">✓ Aprovar</button>`:""} ${d.approved?`<button class="btn-delete" onclick="revogar('${u.id}')">✗ Revogar</button>`:""}<button class="btn-edit" onclick="abrirModal('${u.id}')">✏️ Editar</button><button class="btn-delete" onclick="removerUser('${u.id}','${d.email}')">🗑 Remover</button></div></div>`;
   });
 }
 
-window.aprovar = async function(id){ await updateDoc(doc(db,"users",id),{approved:true}); carregarUsers(); }
-window.revogar = async function(id){ if(!confirm("Revogar acesso?")) return; await updateDoc(doc(db,"users",id),{approved:false}); carregarUsers(); }
+async function verificarExpirados(){
+  const snap=await getDocs(collection(db,"users"));const agora=Date.now();
+  for(const u of snap.docs){
+    const d=u.data();if(!d.approved)continue;
+    const exp=d.expiryDate||(d.approvedAt?d.approvedAt+DIAS_30:null);
+    if(exp&&agora>=exp){await deleteDoc(doc(db,"users",u.id));try{await addDoc(collection(db,"deleted_users_auth"),{uid:d.uid,email:d.email,deletedAt:agora});}catch(e){}}
+  }
+  carregarUsers();
+}
+
+window.aprovar = async function(id){
+  const approvedAt=Date.now();
+  await updateDoc(doc(db,"users",id),{approved:true,approvedAt,expiryDate:approvedAt+DIAS_30});
+  carregarUsers();
+}
+window.revogar = async function(id){
+  if(!confirm("Revogar acesso?"))return;
+  await updateDoc(doc(db,"users",id),{approved:false});carregarUsers();
+}
+window.removerUser = async function(docId,email){
+  if(!confirm(`Remover permanentemente ${email}?`))return;
+  const snap=await getDoc(doc(db,"users",docId));
+  const uid=snap.exists()?snap.data().uid:null;
+  await eliminarUserCompleto(uid||docId,docId);carregarUsers();
+}
+
+let editingDocId=null;
+const modalUniSel=document.getElementById("modalUni");
+UNIVERSIDADES.forEach(u=>{modalUniSel.innerHTML+=`<option value="${u}">${u} — ${NOMES_UNI[u]||u}</option>`;});
+
+window.atualizarCursosModal = function(){
+  const uni=document.getElementById("modalUni").value;
+  const sel=document.getElementById("modalCurso");
+  sel.innerHTML=`<option value="">Seleciona curso</option>`;
+  if(!uni)return;
+  (COURSES_BY_UNI[uni]||[]).forEach(c=>sel.innerHTML+=`<option value="${c}">${c}</option>`);
+}
+
+window.abrirModal = async function(docId){
+  editingDocId=docId;
+  const snap=await getDoc(doc(db,"users",docId));if(!snap.exists())return;
+  const d=snap.data();
+  document.getElementById("modalUid").value=d.uid||"";
+  document.getElementById("modalEmail").innerText=d.email||"";
+  document.getElementById("modalUni").value=d.uni||"";
+  atualizarCursosModal();
+  document.getElementById("modalCurso").value=d.curso||"";
+  const exp=d.expiryDate||(d.approvedAt?d.approvedAt+DIAS_30:null);
+  document.getElementById("modalExpiry").value=exp?new Date(exp).toISOString().split("T")[0]:"";
+  document.getElementById("modalMsg").className="modal-msg";
+  document.getElementById("modalOverlay").classList.add("open");
+}
+window.fecharModal = function(){document.getElementById("modalOverlay").classList.remove("open");editingDocId=null;}
+
+window.guardarEdicao = async function(){
+  const msgEl=document.getElementById("modalMsg");msgEl.className="modal-msg";
+  const uni=document.getElementById("modalUni").value;
+  const curso=document.getElementById("modalCurso").value;
+  const expiry=document.getElementById("modalExpiry").value;
+  if(!uni||!curso){msgEl.className="modal-msg error";msgEl.innerText="Seleciona universidade e curso.";return;}
+  const updates={uni,curso,area:COURSE_TO_AREA[curso]||"medicina geral"};
+  if(expiry)updates.expiryDate=new Date(expiry).getTime();
+  try{
+    await updateDoc(doc(db,"users",editingDocId),updates);
+    msgEl.className="modal-msg success";msgEl.innerText="✅ Dados actualizados com sucesso!";
+    setTimeout(()=>{fecharModal();carregarUsers();},1200);
+  }catch(e){msgEl.className="modal-msg error";msgEl.innerText="Erro: "+e.message;}
+}
+
+document.getElementById("modalOverlay").addEventListener("click",function(e){if(e.target===this)fecharModal();});
+window.verificarExpirados=verificarExpirados;
+window.carregarUsers=carregarUsers;
 </script>
 </body>
 </html>
