@@ -58,59 +58,19 @@ button:hover{transform:translateY(-1px);}
 .expiry-expired{color:#f87171;font-size:11px;}
 
 /* MODAL */
-.modal-overlay{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,0.7);
-  backdrop-filter:blur(6px);
-  z-index:1000;
-  display:none;
-  justify-content:center;
-  align-items:center;
-  padding:20px;
-}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);z-index:1000;display:none;justify-content:center;align-items:center;padding:20px;}
 .modal-overlay.open{display:flex;}
-.modal{
-  background:#0d1f35;
-  border:1px solid rgba(0,255,136,0.2);
-  border-radius:20px;
-  padding:36px 32px;
-  width:100%;
-  max-width:460px;
-  position:relative;
-}
-.modal h3{
-  font-family:'Rajdhani',sans-serif;
-  font-size:20px;
-  font-weight:700;
-  letter-spacing:2px;
-  color:var(--accent);
-  margin-bottom:6px;
-}
-.modal .modal-email{
-  font-size:12px;
-  color:var(--muted);
-  letter-spacing:1px;
-  margin-bottom:22px;
-}
-.modal label{
-  display:block;
-  font-size:11px;
-  letter-spacing:2px;
-  color:var(--muted);
-  text-transform:uppercase;
-  margin-bottom:5px;
-}
+.modal{background:#0d1f35;border:1px solid rgba(0,255,136,0.2);border-radius:20px;padding:36px 32px;width:100%;max-width:460px;position:relative;}
+.modal h3{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;letter-spacing:2px;color:var(--accent);margin-bottom:6px;}
+.modal .modal-email{font-size:12px;color:var(--muted);letter-spacing:1px;margin-bottom:22px;}
+.modal label{display:block;font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:5px;}
 .modal input,.modal select{margin-bottom:16px;}
 .modal-btns{display:flex;gap:10px;margin-top:6px;}
 .modal-btns button{flex:1;}
 .btn-cancel{background:transparent;border:1px solid rgba(255,255,255,0.1);color:var(--muted);}
 .btn-cancel:hover{background:rgba(255,255,255,0.05);transform:none;}
 .btn-save{background:var(--accent);color:#060d1a;}
-.modal-close{
-  position:absolute;top:16px;right:16px;
-  background:transparent;border:none;
-  color:var(--muted);font-size:20px;cursor:pointer;padding:4px 8px;
-}
+.modal-close{position:absolute;top:16px;right:16px;background:transparent;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:4px 8px;}
 .modal-close:hover{color:var(--text);transform:none;}
 .modal-msg{padding:10px 14px;border-radius:8px;font-size:13px;margin-top:12px;display:none;}
 .modal-msg.success{background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);color:var(--accent);display:block;}
@@ -201,22 +161,17 @@ button:hover{transform:translateY(-1px);}
     <button class="modal-close" onclick="fecharModal()">✕</button>
     <h3>EDITAR UTILIZADOR</h3>
     <p class="modal-email" id="modalEmail"></p>
-
     <input type="hidden" id="modalUid">
-
     <label>Universidade</label>
     <select id="modalUni" onchange="atualizarCursosModal()">
       <option value="">Seleciona universidade</option>
     </select>
-
     <label>Curso</label>
     <select id="modalCurso">
       <option value="">Seleciona curso</option>
     </select>
-
     <label>Data de Expiração</label>
     <input type="date" id="modalExpiry">
-
     <div class="modal-btns">
       <button class="btn-cancel" onclick="fecharModal()">CANCELAR</button>
       <button class="btn-save" onclick="guardarEdicao()">GUARDAR</button>
@@ -227,7 +182,7 @@ button:hover{transform:translateY(-1px);}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, deleteUser as deleteAuthUser } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, collection, getDocs, doc, updateDoc, addDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -239,12 +194,12 @@ const firebaseConfig = {
   appId: "1:211289899773:web:dfc22d377c7172f936b494"
 };
 
-const app  = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 const SENHA_ADMIN = "DeltaAdmin2025$#";
+const DIAS_30 = 30*24*60*60*1000; // ← 30 dias em milissegundos
 
-// ─── DADOS ───────────────────────────────────────────────
 const UNIVERSIDADES = ["UAN","UMN","UON","UKB","URNM","UJES","ISTM","UPRA","UNIPIAGET","UNIKIV","UCC","OUTRA"];
 
 const NOMES_UNI = {
@@ -303,7 +258,7 @@ const NOMES_SECCAO = {
   cronograma:"Cronograma", provas:"Provas Passadas", resolucao:"Resolução de Provas"
 };
 
-// ─── ADMIN LOGIN ──────────────────────────────────────────
+// ─── LOGIN ────────────────────────────────────────────────
 window.entrar = function(){
   if(document.getElementById("senha").value !== SENHA_ADMIN){
     document.getElementById("erroLogin").innerText = "Senha incorreta!"; return;
@@ -458,34 +413,16 @@ window.eliminarAula = async function(id){
   await deleteDoc(doc(db,"aulas",id)); carregarAulas();
 }
 
-// ─── UTILIZADORES ─────────────────────────────────────────
-
-// Apaga utilizador: primeiro faz sign-in como ele NÃO é possível do lado cliente sem a sua password.
-// A forma correcta sem Firebase Admin SDK é usar a Cloud Function ou deleteUser via o próprio utilizador.
-// Como estamos no lado cliente, usamos a Firebase REST API com o token do admin para apagar o Auth.
-// ALTERNATIVA PRÁTICA: apagamos o doc do Firestore (bloqueia o acesso) e marcamos como eliminado.
-// O utilizador fica sem acesso imediatamente. Na próxima vez que tentar login, o doc não existe → pode registar de novo.
-
+// ─── UTILIZADORES ────────────────────────────────────────
 async function eliminarUserCompleto(uid, docId){
-  // 1. Apaga o documento do Firestore
   await deleteDoc(doc(db,"users", docId));
-
-  // 2. Tenta apagar da Firebase Auth via REST (requer API key)
   try {
     await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:delete?key=AIzaSyBBADytEHr9NzwFdGmd-zq26t88Vnl65js`, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      // Nota: esta chamada só funciona se o utilizador estiver autenticado com o seu próprio token.
-      // Para apagar outro utilizador pelo admin, precisamos do Firebase Admin SDK (server-side).
-      // Por isso registamos também numa colecção "deleted_auth" para eventual limpeza futura.
+      method:"POST", headers:{"Content-Type":"application/json"},
       body: JSON.stringify({ idToken: uid })
     });
-  } catch(e){ /* silencioso — o Firestore já foi apagado, o acesso está bloqueado */ }
-
-  // 3. Regista na colecção de eliminados (para limpeza futura via Cloud Function se necessário)
-  try {
-    await addDoc(collection(db, "deleted_users_auth"), { uid, deletedAt: Date.now() });
-  } catch(e){ /* ignorar */ }
+  } catch(e){}
+  try { await addDoc(collection(db,"deleted_users_auth"),{ uid, deletedAt: Date.now() }); } catch(e){}
 }
 
 async function carregarUsers(){
@@ -499,8 +436,8 @@ async function carregarUsers(){
     const d = u.data();
     const uniLabel = d.uni ? `${d.uni}${NOMES_UNI[d.uni] ? ' — '+NOMES_UNI[d.uni] : ''}` : "—";
 
-    // Calcular expiração
-    let expiryTs = d.expiryDate || (d.approvedAt ? d.approvedAt + 365*24*60*60*1000 : null);
+    // ← Fallback de 30 dias
+    let expiryTs = d.expiryDate || (d.approvedAt ? d.approvedAt + DIAS_30 : null);
     let expiryHtml = "";
     let statusBadge = d.approved
       ? `<span class="badge approved">APROVADO</span>`
@@ -512,8 +449,8 @@ async function carregarUsers(){
       if(expiryTs < agora){
         statusBadge = `<span class="badge expired">EXPIRADO</span>`;
         expiryHtml = `<span class="expiry-expired">⚠️ Expirou em ${dataStr}</span>`;
-      } else if(diasRestantes <= 30){
-        expiryHtml = `<span class="expiry-warning">⏳ Expira em ${diasRestantes} dias (${dataStr})</span>`;
+      } else if(diasRestantes <= 7){
+        expiryHtml = `<span class="expiry-warning">⏳ Expira em ${diasRestantes} dia${diasRestantes!==1?'s':''} (${dataStr})</span>`;
       } else {
         expiryHtml = `<span style="font-size:11px;color:var(--muted);">⏳ Expira: ${dataStr}</span>`;
       }
@@ -546,21 +483,20 @@ async function verificarExpirados(){
   for(const u of snap.docs){
     const d = u.data();
     if(!d.approved) continue;
-    const expiryTs = d.expiryDate || (d.approvedAt ? d.approvedAt + 365*24*60*60*1000 : null);
+    // ← Fallback de 30 dias
+    const expiryTs = d.expiryDate || (d.approvedAt ? d.approvedAt + DIAS_30 : null);
     if(expiryTs && agora >= expiryTs){
-      // Apaga o documento — o utilizador pode criar nova conta com o mesmo email
       await deleteDoc(doc(db,"users", u.id));
-      // Regista para limpeza do Auth
       try { await addDoc(collection(db,"deleted_users_auth"),{ uid: d.uid, email: d.email, deletedAt: agora }); } catch(e){}
     }
   }
-  carregarUsers(); // Recarrega após limpeza
+  carregarUsers();
 }
 
 window.aprovar = async function(id){
-  // Expiração padrão: 365 dias a partir de agora
+  // ← Expiração padrão: 30 dias a partir de agora
   const approvedAt = Date.now();
-  const expiryDate = approvedAt + 365*24*60*60*1000;
+  const expiryDate = approvedAt + DIAS_30;
   await updateDoc(doc(db,"users",id),{ approved:true, approvedAt, expiryDate });
   carregarUsers();
 }
@@ -573,7 +509,6 @@ window.revogar = async function(id){
 
 window.removerUser = async function(docId, email){
   if(!confirm(`Remover permanentemente ${email}?\n\nO utilizador poderá criar uma nova conta com este email.`)) return;
-  // Obtém o uid antes de apagar
   const snap = await getDoc(doc(db,"users",docId));
   const uid  = snap.exists() ? snap.data().uid : null;
   await eliminarUserCompleto(uid || docId, docId);
@@ -583,7 +518,6 @@ window.removerUser = async function(docId, email){
 // ─── MODAL EDITAR ─────────────────────────────────────────
 let editingDocId = null;
 
-// Preencher dropdown de universidades no modal
 const modalUniSel = document.getElementById("modalUni");
 UNIVERSIDADES.forEach(u => {
   modalUniSel.innerHTML += `<option value="${u}">${u} — ${NOMES_UNI[u]||u}</option>`;
@@ -603,25 +537,19 @@ window.abrirModal = async function(docId){
   if(!snap.exists()) return;
   const d = snap.data();
 
-  document.getElementById("modalUid").value   = d.uid || "";
+  document.getElementById("modalUid").value = d.uid || "";
   document.getElementById("modalEmail").innerText = d.email || "";
 
-  // Uni
   const modalUni = document.getElementById("modalUni");
   modalUni.value = d.uni || "";
   atualizarCursosModal();
 
-  // Curso
-  const modalCurso = document.getElementById("modalCurso");
-  modalCurso.value = d.curso || "";
+  document.getElementById("modalCurso").value = d.curso || "";
 
-  // Expiração
-  const expiryTs = d.expiryDate || (d.approvedAt ? d.approvedAt + 365*24*60*60*1000 : null);
+  // ← Fallback de 30 dias no modal
+  const expiryTs = d.expiryDate || (d.approvedAt ? d.approvedAt + DIAS_30 : null);
   if(expiryTs){
-    const dt = new Date(expiryTs);
-    // formato YYYY-MM-DD para input[type=date]
-    const iso = dt.toISOString().split("T")[0];
-    document.getElementById("modalExpiry").value = iso;
+    document.getElementById("modalExpiry").value = new Date(expiryTs).toISOString().split("T")[0];
   } else {
     document.getElementById("modalExpiry").value = "";
   }
@@ -636,22 +564,15 @@ window.fecharModal = function(){
 }
 
 window.guardarEdicao = async function(){
-  const msgEl = document.getElementById("modalMsg");
+  const msgEl  = document.getElementById("modalMsg");
   msgEl.className = "modal-msg";
-
   const uni    = document.getElementById("modalUni").value;
   const curso  = document.getElementById("modalCurso").value;
   const expiry = document.getElementById("modalExpiry").value;
-
   if(!uni || !curso){ msgEl.className = "modal-msg error"; msgEl.innerText = "Seleciona universidade e curso."; return; }
-
   const area = COURSE_TO_AREA[curso] || "medicina geral";
   const updates = { uni, curso, area };
-
-  if(expiry){
-    updates.expiryDate = new Date(expiry).getTime();
-  }
-
+  if(expiry){ updates.expiryDate = new Date(expiry).getTime(); }
   try {
     await updateDoc(doc(db,"users", editingDocId), updates);
     msgEl.className = "modal-msg success";
@@ -663,12 +584,10 @@ window.guardarEdicao = async function(){
   }
 }
 
-// Fechar modal ao clicar fora
 document.getElementById("modalOverlay").addEventListener("click", function(e){
   if(e.target === this) fecharModal();
 });
 
-// Expor funções globais necessárias
 window.verificarExpirados = verificarExpirados;
 window.carregarUsers = carregarUsers;
 </script>
