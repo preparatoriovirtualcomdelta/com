@@ -7,278 +7,65 @@
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
+:root{--bg:#060d1a;--surface:#0d1f35;--accent:#00ff88;--accent2:#3b82f6;--text:#e2e8f0;--muted:#64748b;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100vh;padding:20px;gap:20px;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 50% at 30% 30%,rgba(0,255,136,0.07) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 70% 70%,rgba(59,130,246,0.07) 0%,transparent 60%);pointer-events:none;}
 
-:root{
---bg:#060d1a;
---surface:#0d1f35;
---accent:#00ff88;
---accent2:#3b82f6;
---text:#e2e8f0;
---muted:#64748b;
-}
-
-body{
-font-family:'Inter',sans-serif;
-background:var(--bg);
-color:var(--text);
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-min-height:100vh;
-padding:20px;
-gap:20px;
-}
-
-body::before{
-content:'';
-position:fixed;
-inset:0;
-background:
-  radial-gradient(ellipse 60% 50% at 30% 30%, rgba(0,255,136,0.07) 0%, transparent 60%),
-  radial-gradient(ellipse 50% 40% at 70% 70%, rgba(59,130,246,0.07) 0%, transparent 60%);
-pointer-events:none;
-}
-
-/* RESUMO DA COMPRA — só aparece para novos candidatos */
-.purchase-summary{
-position:relative;
-z-index:1;
-background:rgba(13,31,53,0.7);
-border:1px solid rgba(0,255,136,0.15);
-border-radius:16px;
-padding:20px 32px;
-width:100%;
-max-width:440px;
-backdrop-filter:blur(20px);
-display:none; /* controlado por JS */
-}
-
-.ps-title{
-font-family:'Rajdhani',sans-serif;
-font-size:11px;
-letter-spacing:3px;
-color:var(--muted);
-text-transform:uppercase;
-margin-bottom:12px;
-}
-
-.ps-row{
-display:flex;
-justify-content:space-between;
-align-items:center;
-font-size:13px;
-margin-bottom:8px;
-}
-
+.purchase-summary{position:relative;z-index:1;background:rgba(13,31,53,0.7);border:1px solid rgba(0,255,136,0.15);border-radius:16px;padding:20px 32px;width:100%;max-width:440px;backdrop-filter:blur(20px);display:none;}
+.ps-title{font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:12px;}
+.ps-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:8px;}
 .ps-label{color:var(--muted);}
 .ps-value{color:var(--text);font-weight:500;}
-.ps-price{
-font-family:'Rajdhani',sans-serif;
-font-size:24px;
-font-weight:700;
-color:var(--accent);
-}
-
-.ps-divider{
-width:100%;height:1px;
-background:rgba(255,255,255,0.06);
-margin:12px 0;
-}
-
-.ps-comprov-title{
-font-size:11px;
-letter-spacing:2px;
-color:var(--muted);
-text-transform:uppercase;
-font-family:'Rajdhani',sans-serif;
-margin-bottom:10px;
-}
-
-.ps-btns{
-display:flex;
-gap:8px;
-flex-wrap:wrap;
-}
-
-.btn{
-padding:9px 18px;
-border:none;
-border-radius:8px;
-font-size:12px;
-font-weight:500;
-cursor:pointer;
-letter-spacing:1px;
-transition:0.3s;
-text-decoration:none;
-display:inline-block;
-}
+.ps-price{font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:var(--accent);}
+.ps-divider{width:100%;height:1px;background:rgba(255,255,255,0.06);margin:12px 0;}
+.ps-comprov-title{font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;font-family:'Rajdhani',sans-serif;margin-bottom:10px;}
+.ps-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.btn{padding:9px 18px;border:none;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;letter-spacing:1px;transition:0.3s;text-decoration:none;display:inline-block;}
 .btn:hover{transform:translateY(-2px);}
 .whatsapp{background:#25D366;color:white;}
 .email-btn{background:var(--accent2);color:white;}
 
-/* CAIXA DE LOGIN */
-.box{
-position:relative;
-z-index:1;
-background:rgba(13,31,53,0.9);
-border:1px solid rgba(0,255,136,0.15);
-padding:48px 40px;
-border-radius:20px;
-width:100%;
-max-width:440px;
-backdrop-filter:blur(20px);
-}
-
-.logo{
-font-family:'Rajdhani',sans-serif;
-font-size:13px;
-letter-spacing:4px;
-color:var(--muted);
-text-transform:uppercase;
-margin-bottom:8px;
-}
-
-h2{
-font-family:'Rajdhani',sans-serif;
-font-size:32px;
-font-weight:700;
-letter-spacing:2px;
-margin-bottom:20px;
-color:var(--text);
-}
-
-.badges{
-display:flex;
-flex-wrap:wrap;
-gap:8px;
-margin-bottom:24px;
-}
-
-.badge{
-display:inline-block;
-font-size:11px;
-letter-spacing:2px;
-padding:4px 12px;
-border-radius:20px;
-text-transform:uppercase;
-font-family:'Rajdhani',sans-serif;
-font-weight:600;
-}
-
-.badge.uni{
-background:rgba(0,255,136,0.1);
-border:1px solid rgba(0,255,136,0.3);
-color:var(--accent);
-}
-
-.badge.curso{
-background:rgba(59,130,246,0.1);
-border:1px solid rgba(59,130,246,0.3);
-color:var(--accent2);
-}
-
-.back-link{
-display:inline-block;
-font-size:12px;
-letter-spacing:2px;
-color:var(--muted);
-text-decoration:none;
-margin-bottom:20px;
-font-family:'Rajdhani',sans-serif;
-transition:0.2s;
-}
+.box{position:relative;z-index:1;background:rgba(13,31,53,0.9);border:1px solid rgba(0,255,136,0.15);padding:48px 40px;border-radius:20px;width:100%;max-width:440px;backdrop-filter:blur(20px);}
+.logo{font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;}
+h2{font-family:'Rajdhani',sans-serif;font-size:32px;font-weight:700;letter-spacing:2px;margin-bottom:20px;color:var(--text);}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;}
+.badge{display:inline-block;font-size:11px;letter-spacing:2px;padding:4px 12px;border-radius:20px;text-transform:uppercase;font-family:'Rajdhani',sans-serif;font-weight:600;}
+.badge.uni{background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);color:var(--accent);}
+.badge.curso{background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);color:var(--accent2);}
+.back-link{display:inline-block;font-size:12px;letter-spacing:2px;color:var(--muted);text-decoration:none;margin-bottom:20px;font-family:'Rajdhani',sans-serif;transition:0.2s;}
 .back-link:hover{color:var(--accent);}
-
 .field{margin-bottom:16px;}
-
-label{
-display:block;
-font-size:11px;
-letter-spacing:2px;
-color:var(--muted);
-text-transform:uppercase;
-margin-bottom:6px;
-}
-
-input{
-width:100%;
-padding:13px 16px;
-background:rgba(6,13,26,0.8);
-border:1px solid rgba(255,255,255,0.08);
-border-radius:10px;
-color:var(--text);
-font-size:15px;
-font-family:'Inter',sans-serif;
-transition:0.3s;
-outline:none;
-}
-
-input:focus{
-border-color:rgba(0,255,136,0.4);
-background:rgba(6,13,26,0.95);
-}
-
+label{display:block;font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;}
+input{width:100%;padding:13px 16px;background:rgba(6,13,26,0.8);border:1px solid rgba(255,255,255,0.08);border-radius:10px;color:var(--text);font-size:15px;font-family:'Inter',sans-serif;transition:0.3s;outline:none;}
+input:focus{border-color:rgba(0,255,136,0.4);background:rgba(6,13,26,0.95);}
 .password-wrap{position:relative;}
-.eye{
-position:absolute;right:14px;top:50%;transform:translateY(-50%);
-cursor:pointer;font-size:18px;opacity:0.5;transition:0.2s;
-}
+.eye{position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:18px;opacity:0.5;transition:0.2s;}
 .eye:hover{opacity:1;}
-
-.btns{
-display:flex;flex-direction:column;gap:10px;margin-top:24px;
-}
-
-button{
-width:100%;
-padding:14px;
-border:none;
-border-radius:10px;
-font-size:15px;
-font-family:'Rajdhani',sans-serif;
-font-weight:600;
-letter-spacing:2px;
-cursor:pointer;
-transition:0.3s;
-}
-
+.btns{display:flex;flex-direction:column;gap:10px;margin-top:24px;}
+button{width:100%;padding:14px;border:none;border-radius:10px;font-size:15px;font-family:'Rajdhani',sans-serif;font-weight:600;letter-spacing:2px;cursor:pointer;transition:0.3s;}
 button:hover:not(:disabled){transform:translateY(-2px);}
 button:disabled{opacity:0.5;cursor:not-allowed;}
-
 .loginBtn{background:var(--accent);color:#060d1a;}
-
-.registerBtn{
-background:transparent;
-color:var(--accent2);
-border:1px solid var(--accent2);
-}
+.registerBtn{background:transparent;color:var(--accent2);border:1px solid var(--accent2);}
 .registerBtn:hover:not(:disabled){background:rgba(59,130,246,0.1);}
-
-.forgotBtn{
-background:transparent;color:var(--muted);border:none;
-font-size:13px;letter-spacing:1px;padding:8px;
-}
+.forgotBtn{background:transparent;color:var(--muted);border:none;font-size:13px;letter-spacing:1px;padding:8px;}
 .forgotBtn:hover:not(:disabled){color:var(--text);transform:none;}
-
-.msg{
-margin-top:16px;padding:12px 16px;border-radius:8px;
-font-size:13px;display:none;
-}
+.msg{margin-top:16px;padding:12px 16px;border-radius:8px;font-size:13px;display:none;}
 .msg.error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#f87171;display:block;}
 .msg.success{background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);color:var(--accent);display:block;}
 .msg.info{background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);color:#60a5fa;display:block;}
-
 .spinner-wrap{display:none;text-align:center;margin-top:16px;}
 .spinner{width:28px;height:28px;border:3px solid rgba(0,255,136,0.2);border-top:3px solid var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin:auto;}
 @keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+
+/* Esconder botão criar conta quando não vem do fluxo */
+.registerBtn.hidden{display:none;}
 
 @media(max-width:480px){.box{padding:36px 24px;}.purchase-summary{padding:16px 20px;}}
 </style>
 </head>
 <body>
 
-<!-- RESUMO DA COMPRA (só para novos candidatos) -->
 <div class="purchase-summary" id="purchaseSummary">
   <div class="ps-title">Resumo da Inscrição</div>
   <div class="ps-row">
@@ -309,12 +96,8 @@ font-size:13px;display:none;
   <div class="ps-divider"></div>
   <div class="ps-comprov-title">Enviar comprovativo após pagamento:</div>
   <div class="ps-btns">
-    <a id="waLink" href="#" target="_blank">
-      <button class="btn whatsapp">📱 WhatsApp</button>
-    </a>
-    <a id="emailLink" href="#">
-      <button class="btn email-btn">✉️ Email</button>
-    </a>
+    <a id="waLink" href="#" target="_blank"><button class="btn whatsapp">📱 WhatsApp</button></a>
+    <a id="emailLink" href="#"><button class="btn email-btn">✉️ Email</button></a>
   </div>
 </div>
 
@@ -338,15 +121,14 @@ font-size:13px;display:none;
     </div>
   </div>
 
-  <!-- Campos ocultos -->
   <input type="hidden" id="area">
   <input type="hidden" id="duracao">
   <input type="hidden" id="preco">
 
   <div class="btns">
-    <button class="loginBtn" id="btnLogin" onclick="login()">ENTRAR</button>
+    <button class="loginBtn"   id="btnLogin"    onclick="login()">ENTRAR</button>
     <button class="registerBtn" id="btnRegister" onclick="register()">CRIAR CONTA</button>
-    <button class="forgotBtn" id="btnForgot" onclick="recuperar()">Esqueci a senha</button>
+    <button class="forgotBtn"  id="btnForgot"   onclick="recuperar()">Esqueci a senha</button>
   </div>
 
   <div class="spinner-wrap" id="loading"><div class="spinner"></div></div>
@@ -386,92 +168,88 @@ const btnLogin    = document.getElementById("btnLogin");
 const btnRegister = document.getElementById("btnRegister");
 const btnForgot   = document.getElementById("btnForgot");
 
-// Parâmetros da URL
-const params     = new URLSearchParams(window.location.search);
-const tipoParam    = params.get("tipo")    || "universitario";
-const uniParam   = params.get("uni")    || "";
-const cursoParam = params.get("curso")  || "";
-const areaParam  = params.get("area")   || "";
+const params       = new URLSearchParams(window.location.search);
+const tipoParam    = params.get("tipo")    || "";
+const uniParam     = params.get("uni")     || "";
+const cursoParam   = params.get("curso")   || "";
+const areaParam    = params.get("area")    || "";
 const duracaoParam = params.get("duracao") || "";
 const precoParam   = params.get("preco")   || "";
 
-// Verificar se foi redirecionado por expiração
+// Vem do fluxo de inscrição se tiver duração + preço + curso
+const vemDoFluxo = !!(duracaoParam && precoParam && cursoParam);
+
+// Se NÃO vem do fluxo → esconder botão "Criar Conta"
+// (utilizador já registado que clicou em "Entrar" direto)
+if(!vemDoFluxo){
+  btnRegister.classList.add("hidden");
+}
+
 if(params.get("expirado")){
   msgEl.className = "msg error";
   msgEl.innerText = "⚠️ O teu acesso expirou. Podes criar uma nova conta com o mesmo email.";
 }
 
-// Preencher campos ocultos
 document.getElementById("area").value    = areaParam;
 document.getElementById("duracao").value = duracaoParam;
 document.getElementById("preco").value   = precoParam;
 
-// ── Mostrar badges de Universidade e Curso ──
 const badgesDiv = document.getElementById("badges");
 if(uniParam)   badgesDiv.innerHTML += `<span class="badge uni">${uniParam}</span>`;
 if(cursoParam) badgesDiv.innerHTML += `<span class="badge curso">${cursoParam}</span>`;
 
-// ── Mapa de duração para label legível ──
 const DUR_LABELS = {
-  "30":  "1 Mês (30 dias)",
-  "90":  "3 Meses (90 dias)",
-  "180": "6 Meses (180 dias)",
-  "365": "1 Ano (365 dias)"
+  "30":"1 Mês (30 dias)",
+  "90":"3 Meses (90 dias)",
+  "180":"6 Meses (180 dias)",
+  "365":"1 Ano (365 dias)"
 };
 
-// ── Mostrar resumo da compra APENAS se vem do fluxo de inscrição ──
-async function iniciar(){
-  const temFluxoCompra = duracaoParam && precoParam && cursoParam;
-
-  if(temFluxoCompra){
-    const summary = document.getElementById("purchaseSummary");
-
-    // Preencher resumo — esconder linha Universidade se não tiver
-    const psUniRow = document.getElementById("psUni").closest(".ps-row");
-    if(uniParam){
-      document.getElementById("psUni").innerText = uniParam;
-    } else {
-      if(psUniRow) psUniRow.style.display = "none";
-    }
-
-    document.getElementById("psCurso").innerText = cursoParam;
-    document.getElementById("psDur").innerText   = DUR_LABELS[duracaoParam] || duracaoParam + " dias";
-
-    const precoFormatado = parseInt(precoParam).toLocaleString("pt-AO") + " KZ";
-    document.getElementById("psPreco").innerText = precoFormatado;
-
-    // WhatsApp
-    const waUni = uniParam ? `Universidade: ${uniParam}\n` : "";
-    const wa = `Olá, envio o meu comprovativo de pagamento do Preparatório Virtual.\n\nCurso: ${cursoParam}\n${waUni}Duração: ${DUR_LABELS[duracaoParam]||duracaoParam+" dias"}\nValor: ${precoFormatado}`;
-    document.getElementById("waLink").href = `https://wa.me/244950509560?text=${encodeURIComponent(wa)}`;
-
-    // Email
-    const emailBody = `Olá,\n\nComprovativo de pagamento:\n\nCurso: ${cursoParam}\n${waUni}Duração: ${DUR_LABELS[duracaoParam]||duracaoParam+" dias"}\nValor: ${precoFormatado}\n\nObrigado.`;
-    document.getElementById("emailLink").href = `mailto:deltaigualb.bmenos4.a.c@gmail.com?subject=Comprovativo%20de%20Pagamento&body=${encodeURIComponent(emailBody)}`;
-
-    summary.style.display = "block";
+// Resumo da compra — só se vem do fluxo
+if(vemDoFluxo){
+  const summary = document.getElementById("purchaseSummary");
+  const psUniRow = document.getElementById("psUni").closest(".ps-row");
+  if(uniParam){
+    document.getElementById("psUni").innerText = uniParam;
+  } else {
+    if(psUniRow) psUniRow.style.display = "none";
   }
+  document.getElementById("psCurso").innerText = cursoParam;
+  document.getElementById("psDur").innerText   = DUR_LABELS[duracaoParam] || duracaoParam + " dias";
+  const precoFormatado = parseInt(precoParam).toLocaleString("pt-AO") + " KZ";
+  document.getElementById("psPreco").innerText = precoFormatado;
+
+  const waUni = uniParam ? `Universidade: ${uniParam}\n` : "";
+  const wa = `Olá, envio o meu comprovativo de pagamento do Preparatório Virtual.\n\nCurso: ${cursoParam}\n${waUni}Duração: ${DUR_LABELS[duracaoParam]||duracaoParam+" dias"}\nValor: ${precoFormatado}`;
+  document.getElementById("waLink").href    = `https://wa.me/244950509560?text=${encodeURIComponent(wa)}`;
+  const emailBody = `Olá,\n\nComprovativo de pagamento:\n\nCurso: ${cursoParam}\n${waUni}Duração: ${DUR_LABELS[duracaoParam]||duracaoParam+" dias"}\nValor: ${precoFormatado}\n\nObrigado.`;
+  document.getElementById("emailLink").href = `mailto:deltaigualb.bmenos4.a.c@gmail.com?subject=Comprovativo%20de%20Pagamento&body=${encodeURIComponent(emailBody)}`;
+  summary.style.display = "block";
 }
 
-iniciar();
-
-// ── HELPERS ──
+// ── HELPERS ──────────────────────────────────────────────
 function showMsg(texto, tipo){
   msgEl.className = "msg " + tipo;
   msgEl.innerText = texto;
 }
-
 function showLoading(){
   loading.style.display = "block";
   btnLogin.disabled = btnRegister.disabled = btnForgot.disabled = true;
 }
-
 function hideLoading(){
   loading.style.display = "none";
   btnLogin.disabled = btnRegister.disabled = btnForgot.disabled = false;
 }
 
-function validar(email, senha, area){
+// Validação do login — NÃO exige area (utilizador já registado não tem params)
+function validarLogin(email, senha){
+  if(!email || !senha){ showMsg("Preenche o email e a senha.", "error"); return false; }
+  if(senha.length < 6){ showMsg("A senha deve ter pelo menos 6 caracteres.", "error"); return false; }
+  return true;
+}
+
+// Validação do registo — exige area (vem sempre do fluxo)
+function validarRegisto(email, senha, area){
   if(!email || !senha){ showMsg("Preenche o email e a senha.", "error"); return false; }
   if(!area){            showMsg("Volta atrás e escolhe o teu curso.", "error"); return false; }
   if(senha.length < 6){ showMsg("A senha deve ter pelo menos 6 caracteres.", "error"); return false; }
@@ -482,10 +260,9 @@ function validar(email, senha, area){
 window.login = async function(){
   const email = document.getElementById("email").value.trim();
   const senha = document.getElementById("senha").value;
-  const area  = document.getElementById("area").value;
 
   msgEl.className = "msg";
-  if(!validar(email, senha, area)) return;
+  if(!validarLogin(email, senha)) return;
   showLoading();
 
   try {
@@ -495,7 +272,7 @@ window.login = async function(){
 
     if(!snap.exists()){
       try { await deleteUser(cred.user); } catch(e){}
-      showMsg("✅ A tua conta foi removida pelo administrador. Podes criar uma nova conta com este email.", "success");
+      showMsg("✅ A tua conta foi removida pelo administrador. Podes criar uma nova conta.", "success");
       hideLoading();
       return;
     }
@@ -503,7 +280,6 @@ window.login = async function(){
     const data = snap.data();
 
     if(data.approved !== true){
-      // Utilizador pendente — esconder resumo de compra (já registou, aguarda aprovação)
       document.getElementById("purchaseSummary").style.display = "none";
       showMsg("⏳ Conta pendente. Aguarda a aprovação do admin.", "info");
       hideLoading();
@@ -513,21 +289,20 @@ window.login = async function(){
     // Verificar expiração
     const expiryTs = data.expiryDate || (data.approvedAt ? data.approvedAt + 365*24*60*60*1000 : null);
     if(expiryTs && Date.now() >= expiryTs){
-      try { await deleteDoc(ref); }   catch(e){}
+      try { await deleteDoc(ref); }        catch(e){}
       try { await deleteUser(cred.user); } catch(e){}
-      showMsg("✅ O teu acesso expirou. A conta foi removida — podes criar uma nova conta com este email.", "success");
+      showMsg("✅ O teu acesso expirou. A conta foi removida — podes criar uma nova conta.", "success");
       hideLoading();
       return;
     }
 
-    // ✅ Utilizador aprovado — esconder resumo de compra
+    // ✅ Aprovado
     document.getElementById("purchaseSummary").style.display = "none";
-
     localStorage.setItem("user",  email);
     localStorage.setItem("uid",   cred.user.uid);
-    localStorage.setItem("area",  data.area  || area);
-    localStorage.setItem("uni",   uniParam   || data.uni   || "");
-    localStorage.setItem("curso", cursoParam || data.curso || "");
+    localStorage.setItem("area",  data.area  || areaParam);
+    localStorage.setItem("uni",   data.uni   || uniParam  || "");
+    localStorage.setItem("curso", data.curso || cursoParam || "");
 
     window.location.href = "aulas.html";
 
@@ -537,36 +312,33 @@ window.login = async function(){
   }
 }
 
-// ─── REGISTO ─────────────────────────────────────────────
+// ─── REGISTO ──────────────────────────────────────────────
 window.register = async function(){
-  const email    = document.getElementById("email").value.trim();
-  const senha    = document.getElementById("senha").value;
-  const area     = document.getElementById("area").value;
-  const duracao  = document.getElementById("duracao").value;
-  const preco    = document.getElementById("preco").value;
+  const email   = document.getElementById("email").value.trim();
+  const senha   = document.getElementById("senha").value;
+  const area    = document.getElementById("area").value;
+  const duracao = document.getElementById("duracao").value;
+  const preco   = document.getElementById("preco").value;
 
   msgEl.className = "msg";
-  if(!validar(email, senha, area)) return;
+  if(!validarRegisto(email, senha, area)) return;
   showLoading();
 
   try {
     const newUser = await createUserWithEmailAndPassword(auth, email, senha);
-
     await setDoc(doc(db, "users", newUser.user.uid), {
       uid:       newUser.user.uid,
-      email:     email,
-      tipo:      tipoParam,  // tipo de curso escolhido
-      area:      area,
+      email,
+      tipo:      tipoParam,
+      area,
       uni:       uniParam,
       curso:     cursoParam,
-      duracao:   duracao,
-      preco:     preco,
+      duracao,
+      preco,
       approved:  false,
       createdAt: Date.now()
     });
-
     showMsg("✅ Conta criada! Envia o comprovativo de pagamento e aguarda a aprovação do admin.", "success");
-
   } catch(e){
     if(e.code === "auth/email-already-in-use"){
       showMsg("Este email já está registado. Faz login.", "error");
@@ -599,6 +371,5 @@ window.toggleSenha = function(){
   s.type = s.type === "password" ? "text" : "password";
 }
 </script>
-
 </body>
 </html>
