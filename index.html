@@ -23,6 +23,31 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 
 .section-title{font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;text-align:center;margin-bottom:30px;}
 
+/* ── WELCOME SCREEN ── */
+#viewWelcome{position:relative;z-index:1;}
+.welcome-cards{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;padding:0 20px 80px;max-width:760px;margin:0 auto;}
+.welcome-card{flex:1;min-width:260px;max-width:340px;background:var(--surface);border-radius:18px;padding:36px 32px;cursor:pointer;transition:0.35s;position:relative;overflow:hidden;text-align:center;border:1px solid rgba(255,255,255,0.06);}
+.welcome-card::before{content:'';position:absolute;inset:0;opacity:0;transition:0.35s;}
+.welcome-card.primary::before{background:linear-gradient(135deg,rgba(0,255,136,0.1),transparent);}
+.welcome-card.secondary::before{background:linear-gradient(135deg,rgba(59,130,246,0.1),transparent);}
+.welcome-card:hover{transform:translateY(-6px);box-shadow:0 20px 48px rgba(0,0,0,0.5);}
+.welcome-card.primary:hover{border-color:rgba(0,255,136,0.45);}
+.welcome-card.secondary:hover{border-color:rgba(59,130,246,0.45);}
+.welcome-card:hover::before{opacity:1;}
+.wc-icon{font-size:40px;margin-bottom:16px;display:block;}
+.wc-title{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;letter-spacing:3px;margin-bottom:8px;}
+.welcome-card.primary .wc-title{color:var(--accent);}
+.welcome-card.secondary .wc-title{color:var(--accent2);}
+.wc-desc{font-size:13px;color:var(--muted);line-height:1.6;letter-spacing:0.5px;}
+.wc-btn{display:inline-block;margin-top:24px;padding:12px 28px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;letter-spacing:2px;transition:0.3s;}
+.welcome-card.primary .wc-btn{background:var(--accent);color:#060d1a;}
+.welcome-card.primary .wc-btn:hover{box-shadow:0 8px 24px rgba(0,255,136,0.3);}
+.welcome-card.secondary .wc-btn{background:var(--accent2);color:#fff;}
+.welcome-card.secondary .wc-btn:hover{box-shadow:0 8px 24px rgba(59,130,246,0.3);}
+.wc-divider{width:40px;height:2px;margin:0 auto 20px;border-radius:2px;}
+.welcome-card.primary .wc-divider{background:var(--accent);opacity:0.4;}
+.welcome-card.secondary .wc-divider{background:var(--accent2);opacity:0.4;}
+
 /* STEP INDICATOR */
 .step-indicator{display:flex;justify-content:center;align-items:center;gap:0;margin-bottom:36px;position:relative;z-index:1;}
 .step{display:flex;flex-direction:column;align-items:center;gap:6px;}
@@ -108,7 +133,10 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .sel-badge.uni{background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);color:var(--accent);}
 .sel-badge.curso{background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);color:var(--accent2);}
 
-@media(max-width:768px){.menu{padding:16px 20px;}.header{padding:60px 20px 40px;}.step-line{width:28px;}.tipo-grid{grid-template-columns:1fr;}.duration-grid{grid-template-columns:1fr 1fr;}}
+/* Step indicator hidden on welcome */
+#stepIndicator.hidden{display:none;}
+
+@media(max-width:768px){.menu{padding:16px 20px;}.header{padding:60px 20px 40px;}.step-line{width:28px;}.tipo-grid{grid-template-columns:1fr;}.duration-grid{grid-template-columns:1fr 1fr;}.welcome-cards{flex-direction:column;align-items:center;}}
 @media(max-width:480px){.duration-grid{grid-template-columns:1fr;}}
 </style>
 </head>
@@ -124,16 +152,40 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <div class="subtitle">Medicina &amp; Ciências da Saúde</div>
 </div>
 
-<!-- STEP INDICATOR — dinâmico: 2 ou 4 passos conforme curso -->
-<div class="step-indicator" id="stepIndicator"></div>
+<!-- STEP INDICATOR -->
+<div class="step-indicator hidden" id="stepIndicator"></div>
 
-<!-- VIEW 0: TIPO DE CURSO -->
-<div class="view active" id="viewTipo">
+<!-- VIEW WELCOME: escolha inicial -->
+<div class="view active" id="viewWelcome">
+  <div class="section-title">Como deseja continuar?</div>
+  <div class="welcome-cards">
+    <div class="welcome-card primary" onclick="goToFluxo()">
+      <span class="wc-icon">🎓</span>
+      <div class="wc-divider"></div>
+      <div class="wc-title">CRIAR CONTA</div>
+      <p class="wc-desc">Novo por aqui? Selecione o seu curso, universidade e duração para se registar.</p>
+      <div class="wc-btn">COMEÇAR →</div>
+    </div>
+    <div class="welcome-card secondary" onclick="goToLogin()">
+      <span class="wc-icon">🔑</span>
+      <div class="wc-divider"></div>
+      <div class="wc-title">ENTRAR</div>
+      <p class="wc-desc">Já tem conta? Entre directamente sem precisar preencher os dados novamente.</p>
+      <div class="wc-btn">ENTRAR →</div>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW TIPO: escolha do tipo de curso -->
+<div class="view" id="viewTipo">
+  <div style="max-width:960px;margin:0 auto;padding:0 20px;">
+    <button class="back-btn" onclick="goToWelcome()">← VOLTAR</button>
+  </div>
   <div class="section-title">Escolha o Tipo de Curso</div>
   <div class="tipo-grid" id="tipoGrid"></div>
 </div>
 
-<!-- VIEW 1: UNIVERSIDADE (só para curso preparatório universitário) -->
+<!-- VIEW UNI -->
 <div class="view" id="viewUni">
   <div style="max-width:900px;margin:0 auto;padding:0 20px;">
     <button class="back-btn" onclick="goToTipo()">← VOLTAR</button>
@@ -145,7 +197,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <div class="uni-grid" id="uniGrid"></div>
 </div>
 
-<!-- VIEW 2: CURSO ESPECÍFICO (só para universitário) -->
+<!-- VIEW CURSO -->
 <div class="view" id="viewCurso">
   <div style="max-width:560px;margin:0 auto;padding:0 20px;">
     <button class="back-btn" onclick="goToUni()">← VOLTAR</button>
@@ -158,7 +210,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <div class="course-list" id="courseList"></div>
 </div>
 
-<!-- VIEW 3: DURAÇÃO -->
+<!-- VIEW DURAÇÃO -->
 <div class="view" id="viewDuracao">
   <div style="max-width:760px;margin:0 auto;padding:0 20px;">
     <button class="back-btn" id="backFromDuracao" onclick="goBackFromDuracao()">← VOLTAR</button>
@@ -185,7 +237,6 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 </div>
 
 <script>
-// ── TIPOS DE CURSO ────────────────────────────────────────
 const TIPOS = [
   { id:"universitario", icon:"🎓", name:"Curso Preparatório Universitário",          tag:"Medicina & Ciências da Saúde", hasUni:true  },
   { id:"ensino_medio",  icon:"📚", name:"Curso Preparatório Ensino Médio",            tag:"Preparação para o Ensino Médio",   hasUni:false },
@@ -196,7 +247,6 @@ const TIPOS = [
   { id:"minsa",         icon:"🏥", name:"Preparatório MINSA — Técnico de Enfermagem", tag:"Concurso MINSA",                   hasUni:false }
 ];
 
-// ── UNIVERSIDADES ─────────────────────────────────────────
 const UNIVERSITIES = [
   { id:"UAN",       name:"Universidade Agostinho Neto" },
   { id:"UMN",       name:"Universidade Mandume Ya Ndemufayo" },
@@ -245,13 +295,12 @@ const DURATIONS = [
   { id:"365", label:"1 ANO",   days:"365 dias", price:"60.000 KZ", priceNum:60000, icon:"🏆" }
 ];
 
-// ── ESTADO ────────────────────────────────────────────────
 let selTipo  = null;
 let selUni   = null;
 let selCurso = null;
 let selDur   = null;
 
-// ── BUILD STEP INDICATOR ──────────────────────────────────
+// ── STEP INDICATOR ────────────────────────────────────────
 function buildSteps(hasUni){
   const ind = document.getElementById("stepIndicator");
   ind.innerHTML = "";
@@ -265,7 +314,6 @@ function buildSteps(hasUni){
 }
 
 function setStep(viewId){
-  // Map viewId → step number
   const hasUni = selTipo && selTipo.hasUni;
   const map = hasUni
     ? { viewTipo:1, viewUni:2, viewCurso:3, viewDuracao:4 }
@@ -273,26 +321,32 @@ function setStep(viewId){
   const n = map[viewId] || 1;
   const total = hasUni ? 4 : 2;
 
-  // Show/hide views
-  ["viewTipo","viewUni","viewCurso","viewDuracao"].forEach(id => {
+  const allViews = ["viewWelcome","viewTipo","viewUni","viewCurso","viewDuracao"];
+  allViews.forEach(id => {
     const el = document.getElementById(id);
     if(el) el.classList.toggle("active", id === viewId);
   });
 
-  // Update steps
-  for(let i = 1; i <= total; i++){
-    const el = document.getElementById("step"+i);
-    if(!el) continue;
-    el.classList.remove("active","done");
-    if(i < n)      el.classList.add("done");
-    else if(i===n) el.classList.add("active");
-    const line = document.getElementById("line"+i);
-    if(line) line.classList.toggle("done", i < n);
+  // Esconder steps no welcome
+  const ind = document.getElementById("stepIndicator");
+  if(viewId === "viewWelcome"){
+    ind.classList.add("hidden");
+  } else {
+    ind.classList.remove("hidden");
+    for(let i = 1; i <= total; i++){
+      const el = document.getElementById("step"+i);
+      if(!el) continue;
+      el.classList.remove("active","done");
+      if(i < n)      el.classList.add("done");
+      else if(i===n) el.classList.add("active");
+      const line = document.getElementById("line"+i);
+      if(line) line.classList.toggle("done", i < n);
+    }
   }
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
-// ── BUILD TIPO GRID ───────────────────────────────────────
+// ── BUILD GRIDS ───────────────────────────────────────────
 const tipoGrid = document.getElementById("tipoGrid");
 TIPOS.forEach((t,i) => {
   const card = document.createElement("div");
@@ -308,7 +362,6 @@ TIPOS.forEach((t,i) => {
   tipoGrid.appendChild(card);
 });
 
-// ── BUILD UNI GRID ────────────────────────────────────────
 const uniGrid = document.getElementById("uniGrid");
 UNIVERSITIES.forEach((uni,i) => {
   const card = document.createElement("div");
@@ -318,7 +371,6 @@ UNIVERSITIES.forEach((uni,i) => {
   uniGrid.appendChild(card);
 });
 
-// ── BUILD DURATION GRID ───────────────────────────────────
 const durationGrid = document.getElementById("durationGrid");
 DURATIONS.forEach(dur => {
   const card = document.createElement("div");
@@ -335,6 +387,24 @@ DURATIONS.forEach(dur => {
   durationGrid.appendChild(card);
 });
 
+// ── NAVEGAÇÃO WELCOME ─────────────────────────────────────
+function goToWelcome(){
+  selTipo = selUni = selCurso = selDur = null;
+  document.getElementById("ibanBox").style.display = "none";
+  document.querySelectorAll(".duration-card").forEach(c => c.classList.remove("selected"));
+  buildSteps(false);
+  setStep("viewWelcome");
+}
+
+function goToFluxo(){
+  buildSteps(false);
+  setStep("viewTipo");
+}
+
+function goToLogin(){
+  window.location.href = "login.html";
+}
+
 // ── SELECÇÕES ─────────────────────────────────────────────
 function selectTipo(t){
   selTipo  = t;
@@ -343,15 +413,12 @@ function selectTipo(t){
   selDur   = null;
   document.getElementById("ibanBox").style.display = "none";
   document.querySelectorAll(".duration-card").forEach(c => c.classList.remove("selected"));
-
   buildSteps(t.hasUni);
 
   if(t.hasUni){
-    // Tem universidade → vai para ecrã de uni
     document.getElementById("badgeTipo1").innerText = t.name;
     setStep("viewUni");
   } else {
-    // Vai directo para duração
     const info = document.getElementById("selectedInfoDur");
     info.innerHTML = `<span class="sel-badge tipo">${t.name}</span>`;
     setStep("viewDuracao");
@@ -373,7 +440,6 @@ function selectUni(uni){
     card.onclick = () => selectCurso(course);
     courseList.appendChild(card);
   });
-
   setStep("viewCurso");
 }
 
@@ -388,7 +454,6 @@ function selectCurso(course){
     <span class="sel-badge tipo">${selTipo.name}</span>
     <span class="sel-badge uni">${selUni.id}</span>
     <span class="sel-badge curso">${course}</span>`;
-
   setStep("viewDuracao");
 }
 
@@ -400,7 +465,6 @@ function selectDuration(dur){
   document.getElementById("ibanPrice").innerText = dur.price;
   document.getElementById("ibanDur").innerText   = dur.label + " · " + dur.days;
 
-  // Montar params para login
   const area   = selCurso ? (COURSE_TO_AREA[selCurso] || "geral") : selTipo.id;
   const uni    = selUni   ? selUni.id   : "";
   const curso  = selCurso ? selCurso    : selTipo.name;
@@ -415,7 +479,6 @@ function selectDuration(dur){
   });
   document.getElementById("proceedBtn").href = `login.html?${params.toString()}`;
 
-  // WhatsApp
   const wa = `Olá, quero enviar o meu comprovativo de pagamento.\n\n` +
     `Curso: ${selTipo.name}\n` +
     (selUni   ? `Universidade: ${selUni.id} — ${selUni.name}\n` : "") +
@@ -423,7 +486,6 @@ function selectDuration(dur){
     `Duração: ${dur.label} (${dur.days})\nValor: ${dur.price}`;
   document.getElementById("whatsappLink").href = `https://wa.me/244950509560?text=${encodeURIComponent(wa)}`;
 
-  // Email
   const emailBody = `Olá,\n\nComprovativo de pagamento:\n\nCurso: ${selTipo.name}\n` +
     (selUni   ? `Universidade: ${selUni.id} — ${selUni.name}\n` : "") +
     (selCurso ? `Área: ${selCurso}\n` : "") +
@@ -434,10 +496,9 @@ function selectDuration(dur){
   setTimeout(() => document.getElementById("ibanBox").scrollIntoView({behavior:"smooth",block:"nearest"}), 100);
 }
 
-// ── NAVEGAÇÃO BACK ────────────────────────────────────────
+// ── BACK ──────────────────────────────────────────────────
 function goToTipo(){
-  selTipo = selUni = selCurso = selDur = null;
-  buildSteps(false);
+  selUni = selCurso = null;
   setStep("viewTipo");
 }
 
@@ -453,13 +514,13 @@ function goBackFromDuracao(){
   if(selTipo && selTipo.hasUni){
     setStep("viewCurso");
   } else {
-    goToTipo();
+    setStep("viewTipo");
   }
 }
 
 // Init
 buildSteps(false);
-setStep("viewTipo");
+setStep("viewWelcome");
 </script>
 </body>
 </html>
