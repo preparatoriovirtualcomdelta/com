@@ -74,8 +74,6 @@ button:hover{transform:translateY(-1px);}
 .tab.active{background:rgba(0,255,136,0.15);border-color:rgba(0,255,136,0.3);color:var(--accent);}
 .expiry-warning{color:#fbbf24;font-size:11px;}
 .expiry-expired{color:#f87171;font-size:11px;}
-
-/* CHAT */
 #chatConversaWrap{display:none;}
 .conversa-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.06);}
 #conversaMsgs{display:flex;flex-direction:column;gap:14px;min-height:300px;max-height:500px;overflow-y:auto;padding:12px 4px;margin-bottom:18px;scroll-behavior:smooth;}
@@ -109,8 +107,6 @@ button:hover{transform:translateY(-1px);}
 .media-preview audio{height:32px;flex:1;}
 .btn-remove-preview{background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#f87171;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:0;white-space:nowrap;}
 .btn-remove-preview:hover{transform:none;background:rgba(239,68,68,0.25);}
-
-/* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);z-index:1000;display:none;justify-content:center;align-items:center;padding:20px;}
 .modal-overlay.open{display:flex;}
 .modal{background:#0d1f35;border:1px solid rgba(0,255,136,0.2);border-radius:20px;padding:36px 32px;width:100%;max-width:480px;position:relative;max-height:90vh;overflow-y:auto;}
@@ -132,7 +128,6 @@ button:hover{transform:translateY(-1px);}
 </head>
 <body>
 
-<!-- CAMADA 1 -->
 <div class="login-wrap" id="step1Wrap">
   <div class="login-box">
     <div class="logo">PREPARATÓRIO VIRTUAL COM DELT∆</div>
@@ -148,7 +143,6 @@ button:hover{transform:translateY(-1px);}
   </div>
 </div>
 
-<!-- CAMADA 2 -->
 <div class="login-wrap" id="step2Wrap" style="display:none;">
   <div class="login-box">
     <div class="logo">PREPARATÓRIO VIRTUAL COM DELT∆</div>
@@ -164,7 +158,6 @@ button:hover{transform:translateY(-1px);}
   </div>
 </div>
 
-<!-- PAINEL -->
 <div id="painel">
   <div class="painel-header">
     <div>
@@ -214,11 +207,9 @@ button:hover{transform:translateY(-1px);}
   <div id="tabAulas">
     <div class="section"><h3>Conteúdos Publicados</h3><div id="listaAulas"><p style="color:var(--muted);font-size:13px;">A carregar...</p></div></div>
   </div>
-
   <div id="tabUsers" style="display:none;">
     <div class="section"><h3>Utilizadores</h3><div id="users"><p style="color:var(--muted);font-size:13px;">A carregar...</p></div></div>
   </div>
-
   <div id="tabChat" style="display:none;">
     <div class="section">
       <h3>Mensagens dos Alunos</h3>
@@ -255,7 +246,7 @@ button:hover{transform:translateY(-1px);}
   </div>
 </div>
 
-<!-- MODAL EDITAR UTILIZADOR — REDESENHADO -->
+<!-- MODAL EDITAR -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <button class="modal-close" onclick="fecharModal()">✕</button>
@@ -263,7 +254,6 @@ button:hover{transform:translateY(-1px);}
     <p class="modal-email" id="modalEmail"></p>
     <input type="hidden" id="modalUid">
 
-    <!-- 1. Tipo de curso -->
     <label>Tipo de Curso</label>
     <select id="modalTipo" onchange="atualizarModalTipo()">
       <option value="">Seleciona o tipo de curso</option>
@@ -276,7 +266,6 @@ button:hover{transform:translateY(-1px);}
       <option value="minsa">🏥 Preparatório MINSA</option>
     </select>
 
-    <!-- 2. Universidade (só para universitário) -->
     <div id="modalUniWrap">
       <label>Universidade</label>
       <select id="modalUni" onchange="atualizarModalCursos()">
@@ -284,7 +273,6 @@ button:hover{transform:translateY(-1px);}
       </select>
     </div>
 
-    <!-- 3. Curso -->
     <div id="modalCursoWrap">
       <label>Curso</label>
       <select id="modalCurso">
@@ -292,7 +280,6 @@ button:hover{transform:translateY(-1px);}
       </select>
     </div>
 
-    <!-- 4. Data de expiração -->
     <label>Data de Expiração</label>
     <input type="date" id="modalExpiry">
 
@@ -309,25 +296,13 @@ button:hover{transform:translateY(-1px);}
 </div>
 
 <script type="module">
-import { initializeApp }      from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
-                               from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, collection, getDocs, doc, updateDoc, addDoc, deleteDoc, getDoc, onSnapshot, orderBy, query, serverTimestamp, setDoc }
-                               from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, collection, getDocs, doc, updateDoc, addDoc, deleteDoc, getDoc, onSnapshot, orderBy, query, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey:"AIzaSyBBADytEHr9NzwFdGmd-zq26t88Vnl65js",
-  authDomain:"preparatoriovirtualcomde-38c0a.firebaseapp.com",
-  projectId:"preparatoriovirtualcomde-38c0a",
-  storageBucket:"preparatoriovirtualcomde-38c0a.firebasestorage.app",
-  messagingSenderId:"211289899773",
-  appId:"1:211289899773:web:dfc22d377c7172f936b494"
-};
-const app=initializeApp(firebaseConfig);
-const auth=getAuth(app);
-const db=getFirestore(app);
+const firebaseConfig={apiKey:"AIzaSyBBADytEHr9NzwFdGmd-zq26t88Vnl65js",authDomain:"preparatoriovirtualcomde-38c0a.firebaseapp.com",projectId:"preparatoriovirtualcomde-38c0a",storageBucket:"preparatoriovirtualcomde-38c0a.firebasestorage.app",messagingSenderId:"211289899773",appId:"1:211289899773:web:dfc22d377c7172f936b494"};
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
 
-// ── CONSTANTES ────────────────────────────────────────────
 const SENHA_HASH="e12afa1c4ac73ca1954164f1e40498336c4cd8b2d761af0158bb8d239c1049f6";
 const MAX_TENT=5,LOCKOUT_MS=5*60*1000,DELAY_BASE=1000,SESSION_DUR=60*60*1000;
 const SESSION_KEY="delta_admin_session",LOCKOUT_KEY="delta_admin_lockout",ATTEMPTS_KEY="delta_admin_attempts";
@@ -335,57 +310,70 @@ const ADMIN_EMAIL="preparatoriovirtualcomdelta1@gmail.com";
 const DUR_MS={"30":30*24*60*60*1000,"90":90*24*60*60*1000,"180":180*24*60*60*1000,"365":365*24*60*60*1000};
 const DUR_LABELS={"30":"1 Mês (30 dias)","90":"3 Meses (90 dias)","180":"6 Meses (180 dias)","365":"1 Ano (365 dias)"};
 const DIAS_DEFAULT=30*24*60*60*1000;
-
 const UNIVERSIDADES=["UAN","UMN","UON","UKB","URNM","UJES","ISTM","UPRA","UNIPIAGET","UNIKIV","UCC","OUTRA"];
 const NOMES_UNI={UAN:"Universidade Agostinho Neto",UMN:"Universidade Mandume Ya Ndemufayo",UON:"Universidade 11 de Novembro",UKB:"Universidade Katyavala Buila",URNM:"Universidade Rainha Njinga Mbande",UJES:"Universidade José Eduardo Dos Santos",ISTM:"Instituto Superior Técnico Militar",UPRA:"Universidade Privada de Angola",UNIPIAGET:"Universidade Jean Piaget",UNIKIV:"Universidade Kimpa Vita",UCC:"Universidade Cuito Cuanavale",OUTRA:"Outra Universidade"};
 const COURSES_BY_UNI={UAN:["Medicina Geral","Ciências de Enfermagem","Ciências Farmacêuticas","Análises Clínicas e Saúde Pública"],UMN:["Medicina Geral","Enfermagem","Análises Clínicas e Laboratório"],UON:["Medicina Geral","Enfermagem","Análises Clínicas"],UKB:["Medicina Geral"],URNM:["Medicina Geral","Ciências Farmacêuticas","Ciências de Enfermagem","Análises Clínicas e Toxicológicas"],UJES:["Medicina Geral","Electromedicina","Laboratório Clínico","Enfermagem"],ISTM:["Medicina Geral","Enfermagem"],UPRA:["Medicina Geral","Enfermagem","Fisioterapia","Odontologia"],UNIPIAGET:["Medicina Geral","Medicina Dentária","Enfermagem","Ciências Farmacêuticas","Fisioterapia","Análises Clínicas e Saúde Pública","Enfermagem e Obstetrícia","Radiologia e Imagiologia"],UNIKIV:["Enfermagem","Análises Clínicas","Agronomia"],UCC:["Enfermagem"],OUTRA:["Medicina Geral","Medicina Dentária","Enfermagem","Análises Clínicas","Farmácia","Nutrição","Cardiopneumologia","Fisioterapia"]};
 
-// Cursos para tipos sem universidade
+// ── CURSOS POR TIPO — inclui nomes completos E variantes para cobrir todos os casos
 const COURSES_BY_TIPO={
-  ensino_medio:["Matemática","Biologia","Química","Física","Língua Portuguesa"],
-  mat_basica:["Matemática Básica"],
-  fis_basica:["Física Básica"],
-  medicamentos:["Cálculos de Medicamentos e Gotejamento"],
-  primeiros:["Primeiros Socorros"],
-  minsa:["Preparatório MINSA — Técnico de Enfermagem"]
+  ensino_medio:[
+    "Curso Preparatório Ensino Médio",
+    "Preparatório Ensino Médio",
+    "Matemática","Biologia","Química","Física","Língua Portuguesa"
+  ],
+  mat_basica:[
+    "Curso de Matemática Básica",
+    "Matemática Básica",
+    "Matemática"
+  ],
+  fis_basica:[
+    "Curso de Física Básica",
+    "Física Básica",
+    "Física"
+  ],
+  medicamentos:[
+    "Cálculos de Medicamentos e Gotejamento",
+    "Medicamentos e Gotejamento"
+  ],
+  primeiros:[
+    "Curso de Primeiros Socorros",
+    "Primeiros Socorros"
+  ],
+  minsa:[
+    "Preparatório MINSA — Técnico de Enfermagem",
+    "Técnico de Enfermagem",
+    "MINSA"
+  ]
 };
 
-const COURSE_TO_AREA={"Medicina Geral":"medicina geral","Medicina Dentária":"medicina dentária","Ciências de Enfermagem":"enfermagem","Enfermagem":"enfermagem","Enfermagem e Obstetrícia":"enfermagem","Ciências Farmacêuticas":"farmacia","Farmácia":"farmacia","Análises Clínicas e Saúde Pública":"analises clinicas","Análises Clínicas e Laboratório":"analises clinicas","Análises Clínicas":"analises clinicas","Análises Clínicas e Toxicológicas":"analises clinicas","Fisioterapia":"fisioterapia","Odontologia":"medicina dentária","Electromedicina":"analises clinicas","Laboratório Clínico":"analises clinicas","Radiologia e Imagiologia":"analises clinicas","Nutrição":"nutrição e dietética","Cardiopneumologia":"cardiopneumologia","Agronomia":"analises clinicas","Matemática":"matematica","Biologia":"biologia","Química":"quimica","Física":"fisica","Língua Portuguesa":"lingua portuguesa","Matemática Básica":"mat_basica","Física Básica":"fis_basica","Cálculos de Medicamentos e Gotejamento":"medicamentos","Primeiros Socorros":"primeiros","Preparatório MINSA — Técnico de Enfermagem":"minsa"};
+const COURSE_TO_AREA={"Medicina Geral":"medicina geral","Medicina Dentária":"medicina dentária","Ciências de Enfermagem":"enfermagem","Enfermagem":"enfermagem","Enfermagem e Obstetrícia":"enfermagem","Ciências Farmacêuticas":"farmacia","Farmácia":"farmacia","Análises Clínicas e Saúde Pública":"analises clinicas","Análises Clínicas e Laboratório":"analises clinicas","Análises Clínicas":"analises clinicas","Análises Clínicas e Toxicológicas":"analises clinicas","Fisioterapia":"fisioterapia","Odontologia":"medicina dentária","Electromedicina":"analises clinicas","Laboratório Clínico":"analises clinicas","Radiologia e Imagiologia":"analises clinicas","Nutrição":"nutrição e dietética","Cardiopneumologia":"cardiopneumologia","Agronomia":"analises clinicas","Matemática":"ensino_medio","Biologia":"ensino_medio","Química":"ensino_medio","Física":"fis_basica","Língua Portuguesa":"ensino_medio","Matemática Básica":"mat_basica","Curso de Matemática Básica":"mat_basica","Física Básica":"fis_basica","Curso de Física Básica":"fis_basica","Cálculos de Medicamentos e Gotejamento":"medicamentos","Primeiros Socorros":"primeiros","Curso de Primeiros Socorros":"primeiros","Preparatório MINSA — Técnico de Enfermagem":"minsa","Técnico de Enfermagem":"minsa","Curso Preparatório Ensino Médio":"ensino_medio"};
 
 const DISCIPLINAS_UNI={UAN:["Biologia","Química","Língua Portuguesa","Matemática"],UMN:["Biologia","Química","Língua Portuguesa","Matemática"],UON:["Biologia","Química","Língua Portuguesa","Física"],UKB:["Biologia","Química","Língua Portuguesa","Física"],URNM:["Biologia","Química","Língua Portuguesa","Matemática","Física"],UJES:["Biologia","Química","Língua Portuguesa","Física"],ISTM:["Biologia","Química","Matemática","Física"],UPRA:["Biologia","Química","Língua Portuguesa"],UNIPIAGET:["Biologia","Química","Língua Portuguesa","Matemática","Física"],UNIKIV:["Biologia","Química","Matemática","Língua Portuguesa"],UCC:["Biologia","Química","Língua Portuguesa","Matemática"],OUTRA:["Biologia","Química","Matemática","Língua Portuguesa","Física"]};
 const NOMES_SECCAO={video_aulas:"Vídeo Aulas",materiais:"Materiais de Apoio",cronograma:"Cronograma",provas:"Provas Passadas",resolucao:"Resolução de Provas"};
 
-// ── CHAT VARS ─────────────────────────────────────────────
 let chatAtualUid=null,unsubConversa=null,mediaParaEnviar=null,mediaRecorder=null,audioChunks=[],gravando=false;
 
-// ── MODAL EDITAR — LÓGICA ─────────────────────────────────
-// Preencher universidades no modal
+// ── MODAL EDITAR ──────────────────────────────────────────
 const modalUniSel=document.getElementById("modalUni");
 UNIVERSIDADES.forEach(u=>{modalUniSel.innerHTML+=`<option value="${u}">${u} — ${NOMES_UNI[u]||u}</option>`;});
 
-window.atualizarModalTipo = function(){
+window.atualizarModalTipo=function(){
   const tipo=document.getElementById("modalTipo").value;
   const uniWrap=document.getElementById("modalUniWrap");
   const cursoSel=document.getElementById("modalCurso");
   const uniSel=document.getElementById("modalUni");
-
   cursoSel.innerHTML=`<option value="">Seleciona o curso</option>`;
   uniSel.value="";
-
   if(tipo==="universitario"){
-    // Mostrar universidade, cursos dependem da uni
     uniWrap.style.display="block";
   } else {
-    // Esconder universidade, mostrar cursos do tipo
     uniWrap.style.display="none";
     const cursos=COURSES_BY_TIPO[tipo]||[];
     cursos.forEach(c=>cursoSel.innerHTML+=`<option value="${c}">${c}</option>`);
-    // Se só há um curso, seleccionar automaticamente
-    if(cursos.length===1) cursoSel.value=cursos[0];
   }
 }
 
-window.atualizarModalCursos = function(){
+window.atualizarModalCursos=function(){
   const uni=document.getElementById("modalUni").value;
   const sel=document.getElementById("modalCurso");
   sel.innerHTML=`<option value="">Seleciona o curso</option>`;
@@ -393,7 +381,7 @@ window.atualizarModalCursos = function(){
   (COURSES_BY_UNI[uni]||[]).forEach(c=>sel.innerHTML+=`<option value="${c}">${c}</option>`);
 }
 
-window.abrirModal = async function(docId){
+window.abrirModal=async function(docId){
   editingDocId=docId;
   const snap=await getDoc(doc(db,"users",docId));if(!snap.exists())return;
   const d=snap.data();
@@ -401,23 +389,29 @@ window.abrirModal = async function(docId){
   document.getElementById("modalEmail").innerText=d.email||"";
   document.getElementById("modalMsg").className="modal-msg";
 
-  // Definir tipo
   const tipo=d.tipo||"universitario";
   document.getElementById("modalTipo").value=tipo;
   atualizarModalTipo();
 
   if(tipo==="universitario"){
-    // Definir universidade e depois cursos
     document.getElementById("modalUni").value=d.uni||"";
     atualizarModalCursos();
     document.getElementById("modalCurso").value=d.curso||"";
   } else {
-    // Para outros tipos, definir o curso directamente
+    // Preencher cursos do tipo e tentar encontrar o curso guardado
     const cursos=COURSES_BY_TIPO[tipo]||[];
     const cursoSel=document.getElementById("modalCurso");
     cursoSel.innerHTML=`<option value="">Seleciona o curso</option>`;
     cursos.forEach(c=>cursoSel.innerHTML+=`<option value="${c}">${c}</option>`);
-    cursoSel.value=d.curso||"";
+
+    // Tentar definir o valor guardado; se não encontrar, seleccionar o primeiro
+    const cursoGuardado=d.curso||"";
+    if(cursoGuardado && cursos.includes(cursoGuardado)){
+      cursoSel.value=cursoGuardado;
+    } else if(cursos.length>0){
+      // Seleccionar o primeiro por defeito e mostrar ao admin
+      cursoSel.value=cursos[0];
+    }
   }
 
   const exp=d.expiryDate||(d.approvedAt?d.approvedAt+(DUR_MS[d.duracao]||DIAS_DEFAULT):null);
@@ -427,25 +421,17 @@ window.abrirModal = async function(docId){
 
 window.fecharModal=function(){document.getElementById("modalOverlay").classList.remove("open");editingDocId=null;}
 
-window.guardarEdicao = async function(){
+window.guardarEdicao=async function(){
   const msgEl=document.getElementById("modalMsg");msgEl.className="modal-msg";
   const tipo=document.getElementById("modalTipo").value;
   const uni=document.getElementById("modalUni").value;
   const curso=document.getElementById("modalCurso").value;
   const expiry=document.getElementById("modalExpiry").value;
-
   if(!tipo){msgEl.className="modal-msg error";msgEl.innerText="Seleciona o tipo de curso.";return;}
   if(tipo==="universitario"&&!uni){msgEl.className="modal-msg error";msgEl.innerText="Seleciona a universidade.";return;}
   if(!curso){msgEl.className="modal-msg error";msgEl.innerText="Seleciona o curso.";return;}
-
-  const updates={
-    tipo,
-    uni: tipo==="universitario"?uni:"",
-    curso,
-    area: COURSE_TO_AREA[curso]||tipo
-  };
+  const updates={tipo,uni:tipo==="universitario"?uni:"",curso,area:COURSE_TO_AREA[curso]||tipo};
   if(expiry)updates.expiryDate=new Date(expiry).getTime();
-
   try{
     await updateDoc(doc(db,"users",editingDocId),updates);
     msgEl.className="modal-msg success";msgEl.innerText="✅ Dados actualizados com sucesso!";
@@ -461,13 +447,10 @@ window.selecionarAudio=function(event){const file=event.target.files[0];if(!file
 window.toggleGravarAudio=async function(){const btn=document.getElementById("btnGravarAudio");if(!gravando){try{const stream=await navigator.mediaDevices.getUserMedia({audio:true});audioChunks=[];mediaRecorder=new MediaRecorder(stream);mediaRecorder.ondataavailable=e=>audioChunks.push(e.data);mediaRecorder.onstop=()=>{const blob=new Blob(audioChunks,{type:'audio/webm'});if(blob.size>500*1024){alert("⚠️ Gravação muito longa.");return;}const reader=new FileReader();reader.onload=e=>{mediaParaEnviar={tipo:'audio',base64:e.target.result,nome:'gravacao.webm'};mostrarPreview('audio',e.target.result,'Gravação de voz');};reader.readAsDataURL(blob);stream.getTracks().forEach(t=>t.stop());};mediaRecorder.start();gravando=true;btn.classList.add('recording');btn.innerHTML='⏹️ Parar';}catch(e){alert("Não foi possível aceder ao microfone.");}}else{mediaRecorder.stop();gravando=false;btn.classList.remove('recording');btn.innerHTML='🎙️ Áudio';}}
 function mostrarPreview(tipo,base64,nome){const prev=document.getElementById("mediaPreview");const img=document.getElementById("previewImg");const aud=document.getElementById("previewAudio");const lbl=document.getElementById("previewLabel");const ico=document.getElementById("previewIcon");img.style.display="none";aud.style.display="none";if(tipo==='imagem'){ico.innerText="🖼️";lbl.innerText=nome;img.src=base64;img.style.display="block";}else{ico.innerText="🎵";lbl.innerText=nome;aud.src=base64;aud.style.display="block";}prev.classList.add("show");}
 window.removerMidia=function(){mediaParaEnviar=null;document.getElementById("mediaPreview").classList.remove("show");document.getElementById("previewImg").src="";document.getElementById("previewAudio").src="";}
-
 function escaparHtml(str){return(str||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 function renderAdminMsg(data){const isProf=data.sender==="prof";const cls=isProf?"prof":"aluno";const ts=data.ts?new Date(data.ts.toDate()).toLocaleTimeString("pt-PT",{hour:"2-digit",minute:"2-digit"}):"";const sender=isProf?"👨‍🏫 Tu (Professor)":`🎓 ${data.email||"Aluno"}`;let conteudo="";if(data.tipo==="imagem"&&data.base64){conteudo=`<img src="${data.base64}" alt="imagem" onclick="abrirImgModal('${data.base64.replace(/'/g,"\\'")}')">`;if(data.texto)conteudo+=`<div style="margin-top:6px;">${escaparHtml(data.texto)}</div>`;}else if(data.tipo==="audio"&&data.base64){conteudo=`<audio controls src="${data.base64}"></audio>`;if(data.texto)conteudo+=`<div style="margin-top:6px;">${escaparHtml(data.texto)}</div>`;}else{conteudo=escaparHtml(data.texto||"").replace(/\n/g,"<br>");}return`<div class="msg-bubble-wrap ${cls}"><div class="msg-sender">${sender}</div><div class="msg-bubble ${cls}">${conteudo}</div><div class="msg-time">${ts}</div></div>`;}
 window.abrirImgModal=function(src){document.getElementById("imgModalSrc").src=src;document.getElementById("imgModal").classList.add("open");}
-
 async function carregarChats(){const div=document.getElementById("chatLista");div.innerHTML="<p style='color:var(--muted);font-size:13px;'>A carregar...</p>";const snap=await getDocs(collection(db,"chat"));if(snap.empty){div.innerHTML="<p style='color:var(--muted);font-size:13px;'>Nenhuma mensagem ainda.</p>";return;}const docs=snap.docs.map(d=>({id:d.id,...d.data()}));docs.sort((a,b)=>(b.ultimaTs?.toMillis?.()||0)-(a.ultimaTs?.toMillis?.()||0));let totalNaoLido=0;div.innerHTML="";docs.forEach(d=>{if(d.naoLidoAdmin)totalNaoLido++;const ts=d.ultimaTs?new Date(d.ultimaTs.toDate()).toLocaleDateString("pt-PT",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}):"—";const uid=d.uid||d.id;div.innerHTML+=`<div class="user-card" style="cursor:pointer;" data-uid="${uid}" data-email="${(d.email||"").replace(/"/g,"&quot;")}" data-curso="${(d.curso||"").replace(/"/g,"&quot;")}" data-tipo="${(d.tipo||"").replace(/"/g,"&quot;")}"><div class="user-info"><p class="email">${d.email||d.id} ${d.naoLidoAdmin?'<span style="color:#ef4444;font-size:11px;font-weight:700;">● Nova</span>':''}</p><p class="meta">${d.tipo||""} · ${d.curso||""}</p><p class="meta" style="margin-top:3px;">${d.ultimaMsg||""} · ${ts}</p></div><button class="btn-approve" style="pointer-events:none;">Abrir →</button></div>`;});div.querySelectorAll(".user-card").forEach(card=>{card.addEventListener("click",()=>{abrirConversa(card.dataset.uid,card.dataset.email,card.dataset.curso,card.dataset.tipo);});});const badge=document.getElementById("chatBadgeTab");if(totalNaoLido>0){badge.style.display="inline";badge.innerText=totalNaoLido;}else{badge.style.display="none";}}
-
 window.abrirConversa=async function(uid,email,curso,tipo){chatAtualUid=uid;document.getElementById("chatLista").style.display="none";document.getElementById("chatConversaWrap").style.display="block";document.getElementById("conversaEmail").innerText=email;document.getElementById("conversaInfo").innerText=`${tipo} · ${curso}`;await setDoc(doc(db,"chat",uid),{naoLidoAdmin:false},{merge:true}).catch(()=>{});if(unsubConversa)unsubConversa();const q=query(collection(db,"chat",uid,"mensagens"),orderBy("ts","asc"));unsubConversa=onSnapshot(q,snap=>{const div=document.getElementById("conversaMsgs");if(snap.empty){div.innerHTML="<p style='color:var(--muted);font-size:13px;text-align:center;padding:20px;'>Sem mensagens ainda.</p>";return;}div.innerHTML=snap.docs.map(d=>renderAdminMsg(d.data())).join("");div.scrollTop=div.scrollHeight;});}
 window.fecharConversa=function(){if(unsubConversa){unsubConversa();unsubConversa=null;}chatAtualUid=null;removerMidia();document.getElementById("adminInput").value="";document.getElementById("chatLista").style.display="block";document.getElementById("chatConversaWrap").style.display="none";carregarChats();}
 window.enviarRespostaAdmin=async function(){if(!chatAtualUid)return;const texto=document.getElementById("adminInput").value.trim();const temMedia=!!mediaParaEnviar;if(!texto&&!temMedia)return;document.getElementById("adminInput").value="";const dadosMsg={sender:"prof",ts:serverTimestamp(),lidoAdmin:true,lidoAluno:false};const dadosChat={ultimaTs:serverTimestamp(),naoLidoAluno:true};if(temMedia){dadosMsg.tipo=mediaParaEnviar.tipo;dadosMsg.base64=mediaParaEnviar.base64;dadosMsg.texto=texto||"";dadosChat.ultimaMsg=mediaParaEnviar.tipo==='imagem'?"📷 Imagem":"🎵 Áudio";removerMidia();}else{dadosMsg.tipo="texto";dadosMsg.texto=texto;dadosChat.ultimaMsg=texto.length>50?texto.slice(0,50)+"…":texto;}await setDoc(doc(db,"chat",chatAtualUid),dadosChat,{merge:true});await addDoc(collection(db,"chat",chatAtualUid,"mensagens"),dadosMsg);}
@@ -494,11 +477,7 @@ window.voltarStep1=function(){sessionStorage.removeItem("delta_layer1_ok");docum
 window.sair=async function(){sessionStorage.removeItem(SESSION_KEY);sessionStorage.removeItem("delta_layer1_ok");if(sessionInterval)clearInterval(sessionInterval);try{await signOut(auth);}catch(e){}document.getElementById("step1Wrap").style.display="flex";document.getElementById("step2Wrap").style.display="none";document.getElementById("painel").style.display="none";document.getElementById("senhaAdmin").value="";document.getElementById("erroStep1").innerText="";document.getElementById("attemptsInfo").innerText="";}
 window.addEventListener("load",()=>{const lk=getLockout();if(lk&&Date.now()<lk.until)mostrarBloqueio();onAuthStateChanged(auth,user=>{if(user&&user.email===ADMIN_EMAIL&&sessaoValida()){document.getElementById("step1Wrap").style.display="none";document.getElementById("painel").style.display="block";document.getElementById("bunnyInfo").style.display="block";iniciarTimerSessao();carregarAulas();carregarUsers();verificarExpirados();iniciarBadgeChat();}});});
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&document.getElementById("painel").style.display!=="none"){if(!sessaoValida())sair();}});
-
-// ── TABS ──────────────────────────────────────────────────
 window.mostrarTab=function(tab,event){document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));event.target.classList.add("active");document.getElementById("tabAulas").style.display=tab==="aulas"?"block":"none";document.getElementById("tabUsers").style.display=tab==="users"?"block":"none";document.getElementById("tabChat").style.display=tab==="chat"?"block":"none";if(tab==="chat")carregarChats();}
-
-// ── SECÇÕES ───────────────────────────────────────────────
 const SECCOES_POR_TIPO={universitario:[{v:"video_aulas",l:"🎥 Vídeo Aulas",hasDis:true,hasUni:true},{v:"materiais",l:"📚 Materiais de Apoio",hasDis:true,hasUni:true},{v:"cronograma",l:"📅 Cronograma",hasDis:false,hasUni:false},{v:"provas",l:"📝 Provas Passadas",hasDis:false,hasUni:true},{v:"resolucao",l:"✅ Resolução de Provas",hasDis:false,hasUni:true}],ensino_medio:[{v:"video_aulas",l:"🎥 Vídeo Aulas",hasDis:true,hasUni:false},{v:"materiais",l:"📚 Materiais de Apoio",hasDis:true,hasUni:false}],mat_basica:[{v:"video_aulas",l:"🎥 Vídeo Aulas",hasDis:false,hasUni:false},{v:"materiais",l:"📚 Materiais de Apoio",hasDis:false,hasUni:false}],fis_basica:[{v:"video_aulas",l:"🎥 Vídeo Aulas",hasDis:false,hasUni:false},{v:"materiais",l:"📚 Materiais de Apoio",hasDis:false,hasUni:false}],medicamentos:[{v:"video_aulas",l:"🎥 Vídeo Aulas",hasDis:false,hasUni:false},{v:"materiais",l:"📚 Materiais de Apoio",hasDis:false,hasUni:false}],primeiros:[{v:"video_aulas",l:"🎥 Vídeo Aulas",hasDis:false,hasUni:false},{v:"materiais",l:"📚 Materiais de Apoio",hasDis:false,hasUni:false}],minsa:[{v:"video_aulas",l:"🎥 Vídeo Aulas",hasDis:false,hasUni:false},{v:"materiais",l:"📚 Materiais de Apoio",hasDis:false,hasUni:false},{v:"provas_dorsais",l:"📝 Provas Dorsais",hasDis:false,hasUni:false},{v:"resolucao_dorsais",l:"✅ Resolução de Provas Dorsais",hasDis:false,hasUni:false}]};
 const DISC_POR_TIPO={ensino_medio:["Matemática","Biologia","Química","Física","Língua Portuguesa"]};
 window.atualizarCampos=function(){const tipoCurso=document.getElementById("tipoCurso").value;const seccaoEl=document.getElementById("seccao");const sub1=document.getElementById("sub1");const sub2=document.getElementById("sub2");seccaoEl.innerHTML=`<option value="">— Seleciona a secção —</option>`;sub1.innerHTML=`<option value="">— Seleciona secção primeiro —</option>`;sub2.innerHTML=`<option value="">— Seleciona primeiro —</option>`;sub2.style.display="none";if(!tipoCurso)return;const seccoes=SECCOES_POR_TIPO[tipoCurso]||[];seccoes.forEach(s=>seccaoEl.innerHTML+=`<option value="${s.v}">${s.l}</option>`);}
