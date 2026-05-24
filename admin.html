@@ -314,36 +314,14 @@ const UNIVERSIDADES=["UAN","UMN","UON","UKB","URNM","UJES","ISTM","UPRA","UNIPIA
 const NOMES_UNI={UAN:"Universidade Agostinho Neto",UMN:"Universidade Mandume Ya Ndemufayo",UON:"Universidade 11 de Novembro",UKB:"Universidade Katyavala Buila",URNM:"Universidade Rainha Njinga Mbande",UJES:"Universidade José Eduardo Dos Santos",ISTM:"Instituto Superior Técnico Militar",UPRA:"Universidade Privada de Angola",UNIPIAGET:"Universidade Jean Piaget",UNIKIV:"Universidade Kimpa Vita",UCC:"Universidade Cuito Cuanavale",OUTRA:"Outra Universidade"};
 const COURSES_BY_UNI={UAN:["Medicina Geral","Ciências de Enfermagem","Ciências Farmacêuticas","Análises Clínicas e Saúde Pública"],UMN:["Medicina Geral","Enfermagem","Análises Clínicas e Laboratório"],UON:["Medicina Geral","Enfermagem","Análises Clínicas"],UKB:["Medicina Geral"],URNM:["Medicina Geral","Ciências Farmacêuticas","Ciências de Enfermagem","Análises Clínicas e Toxicológicas"],UJES:["Medicina Geral","Electromedicina","Laboratório Clínico","Enfermagem"],ISTM:["Medicina Geral","Enfermagem"],UPRA:["Medicina Geral","Enfermagem","Fisioterapia","Odontologia"],UNIPIAGET:["Medicina Geral","Medicina Dentária","Enfermagem","Ciências Farmacêuticas","Fisioterapia","Análises Clínicas e Saúde Pública","Enfermagem e Obstetrícia","Radiologia e Imagiologia"],UNIKIV:["Enfermagem","Análises Clínicas","Agronomia"],UCC:["Enfermagem"],OUTRA:["Medicina Geral","Medicina Dentária","Enfermagem","Análises Clínicas","Farmácia","Nutrição","Cardiopneumologia","Fisioterapia"]};
 
-// ── CURSOS POR TIPO — inclui nomes completos E variantes para cobrir todos os casos
+// ── CURSOS POR TIPO
 const COURSES_BY_TIPO={
-  ensino_medio:[
-    "Curso Preparatório Ensino Médio",
-    "Preparatório Ensino Médio",
-    "Matemática","Biologia","Química","Física","Língua Portuguesa"
-  ],
-  mat_basica:[
-    "Curso de Matemática Básica",
-    "Matemática Básica",
-    "Matemática"
-  ],
-  fis_basica:[
-    "Curso de Física Básica",
-    "Física Básica",
-    "Física"
-  ],
-  medicamentos:[
-    "Cálculos de Medicamentos e Gotejamento",
-    "Medicamentos e Gotejamento"
-  ],
-  primeiros:[
-    "Curso de Primeiros Socorros",
-    "Primeiros Socorros"
-  ],
-  minsa:[
-    "Preparatório MINSA — Técnico de Enfermagem",
-    "Técnico de Enfermagem",
-    "MINSA"
-  ]
+  ensino_medio:["Curso Preparatório Ensino Médio"],
+  mat_basica:["Curso de Matemática Básica"],
+  fis_basica:["Curso de Física Básica"],
+  medicamentos:["Cálculos de Medicamentos e Gotejamento"],
+  primeiros:["Curso de Primeiros Socorros"],
+  minsa:["Preparatório MINSA — Técnico de Enfermagem"]
 };
 
 const COURSE_TO_AREA={"Medicina Geral":"medicina geral","Medicina Dentária":"medicina dentária","Ciências de Enfermagem":"enfermagem","Enfermagem":"enfermagem","Enfermagem e Obstetrícia":"enfermagem","Ciências Farmacêuticas":"farmacia","Farmácia":"farmacia","Análises Clínicas e Saúde Pública":"analises clinicas","Análises Clínicas e Laboratório":"analises clinicas","Análises Clínicas":"analises clinicas","Análises Clínicas e Toxicológicas":"analises clinicas","Fisioterapia":"fisioterapia","Odontologia":"medicina dentária","Electromedicina":"analises clinicas","Laboratório Clínico":"analises clinicas","Radiologia e Imagiologia":"analises clinicas","Nutrição":"nutrição e dietética","Cardiopneumologia":"cardiopneumologia","Agronomia":"analises clinicas","Matemática":"ensino_medio","Biologia":"ensino_medio","Química":"ensino_medio","Física":"fis_basica","Língua Portuguesa":"ensino_medio","Matemática Básica":"mat_basica","Curso de Matemática Básica":"mat_basica","Física Básica":"fis_basica","Curso de Física Básica":"fis_basica","Cálculos de Medicamentos e Gotejamento":"medicamentos","Primeiros Socorros":"primeiros","Curso de Primeiros Socorros":"primeiros","Preparatório MINSA — Técnico de Enfermagem":"minsa","Técnico de Enfermagem":"minsa","Curso Preparatório Ensino Médio":"ensino_medio"};
