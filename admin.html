@@ -598,12 +598,65 @@ window.adicionarAula=async function(){const tipoCurso=document.getElementById("t
 async function carregarAulas(){const div=document.getElementById("listaAulas");const snap=await getDocs(collection(db,"aulas"));if(snap.empty){div.innerHTML="<p style='color:var(--muted);font-size:13px;'>Nenhum conteúdo publicado ainda.</p>";return;}div.innerHTML="";const ic={video:"🎥",bunny:"🐰",pdf:"📄",imagem:"🖼"};const TIPO_LABELS={universitario:"Univ.",ensino_medio:"Ens.Médio",mat_basica:"Mat.Básica",fis_basica:"Fís.Básica",medicamentos:"Medicamentos",primeiros:"Primeiros Socorros",minsa:"MINSA"};snap.forEach(d=>{const data=d.data();const sec=NOMES_SECCAO[data.seccao]||data.seccao||"—";const tipoLabel=TIPO_LABELS[data.tipo_curso]||data.tipo_curso||"—";let sub="—";if(data.sub){const partes=data.sub.split("|");sub=partes.length>1?partes.slice(1).join(" › "):partes[0];}div.innerHTML+=`<div class="aula-card"><div class="aula-info"><p class="titulo">${ic[data.tipo]||"📁"} ${data.titulo}</p><p class="meta">[${tipoLabel}] ${sec} › ${sub} · ${data.tipo==="bunny"?"Bunny 🔒":data.tipo}</p></div><button class="btn-delete" onclick="eliminarAula('${d.id}')">Eliminar</button></div>`;});}
 window.eliminarAula=async function(id){if(!confirm("Tens a certeza?"))return;await deleteDoc(doc(db,"aulas",id));carregarAulas();}
 async function eliminarUserCompleto(uid,docId){await deleteDoc(doc(db,"users",docId));try{await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:delete?key=AIzaSyBBADytEHr9NzwFdGmd-zq26t88Vnl65js`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({idToken:uid})});}catch(e){}try{await addDoc(collection(db,"deleted_users_auth"),{uid,deletedAt:Date.now()});}catch(e){}}
-async function carregarUsers(){const div=document.getElementById("users");const snap=await getDocs(collection(db,"users"));if(snap.empty){div.innerHTML="<p style='color:var(--muted);font-size:13px;'>Nenhum utilizador registado ainda.</p>";return;}div.innerHTML="";const agora=Date.now();snap.forEach(u=>{const d=u.data();const uniLabel=d.uni?`${d.uni}${NOMES_UNI[d.uni]?' — '+NOMES_UNI[d.uni]:''}` :"—";const duracaoLabel=d.duracao?(DUR_LABELS[d.duracao]||d.duracao+" dias"):null;const precoLabel=d.preco?parseInt(d.preco).toLocaleString("pt-AO")+" KZ":null;let expiryTs=d.expiryDate||(d.approvedAt?d.approvedAt+(DUR_MS[d.duracao]||DIAS_DEFAULT):null);let expiryHtml="";let statusBadge=d.approved?`<span class="badge approved">APROVADO</span>`:`<span class="badge pending">PENDENTE</span>`;if(d.approved&&expiryTs){const dias=Math.ceil((expiryTs-agora)/(1000*60*60*24));const ds=new Date(expiryTs).toLocaleDateString('pt-PT');if(expiryTs<agora){statusBadge=`<span class="badge expired">EXPIRADO</span>`;expiryHtml=`<span class="expiry-expired">⚠️ Expirou em ${ds}</span>`;}else if(dias<=7){expiryHtml=`<span class="expiry-warning">⏳ Expira em ${dias} dia${dias!==1?'s':''} (${ds})</span>`;}else{expiryHtml=`<span style="font-size:11px;color:var(--muted);">⏳ Expira: ${ds}</span>`;}}const durTagHtml=duracaoLabel?`<span class="dur-tag">📅 ${duracaoLabel}</span>`:"";const precoTagHtml=precoLabel?`<span class="preco-tag">💰 ${precoLabel}</span>`:"";div.innerHTML+=`<div class="user-card" id="card-${u.id}"><div class="user-info"><p class="email">${d.email}</p><p class="meta">${d.curso||d.area||"—"} · ${uniLabel}</p><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:6px;">${statusBadge}${expiryHtml}</div>${(durTagHtml||precoTagHtml)?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">${durTagHtml}${precoTagHtml}</div>`:""}</div><div class="user-actions" style="display:flex;gap:6px;flex-wrap:wrap;">${!d.approved?`<button class="btn-approve" onclick="aprovar('${u.id}')">✓ Aprovar</button>`:""} ${d.approved?`<button class="btn-delete" onclick="revogar('${u.id}')">✗ Revogar</button>`:""}<button class="btn-edit" onclick="abrirModal('${u.id}')">✏️ Editar</button><button class="btn-delete" onclick="removerUser('${u.id}','${d.email}')">🗑 Remover</button></div></div>`;});}
+async function carregarUsers(){const div=document.getElementById("users");const snap=await getDocs(collection(db,"users"));if(snap.empty){div.innerHTML="<p style='color:var(--muted);font-size:13px;'>Nenhum utilizador registado ainda.</p>";return;}div.innerHTML="";const agora=Date.now();snap.forEach(u=>{const d=u.data();const uniLabel=d.uni?`${d.uni}${NOMES_UNI[d.uni]?' — '+NOMES_UNI[d.uni]:''}` :"—";const duracaoLabel=d.duracao?(DUR_LABELS[d.duracao]||d.duracao+" dias"):null;const precoLabel=d.preco?parseInt(d.preco).toLocaleString("pt-AO")+" KZ":null;let expiryTs=d.expiryDate||(d.approvedAt?d.approvedAt+(DUR_MS[d.duracao]||DIAS_DEFAULT):null);let expiryHtml="";let statusBadge=d.approved?`<span class="badge approved">APROVADO</span>`:`<span class="badge pending">PENDENTE</span>`;if(d.approved&&expiryTs){const dias=Math.ceil((expiryTs-agora)/(1000*60*60*24));const ds=new Date(expiryTs).toLocaleDateString('pt-PT');if(expiryTs<agora){statusBadge=`<span class="badge expired">EXPIRADO</span>`;expiryHtml=`<span class="expiry-expired">⚠️ Expirou em ${ds}</span>`;}else if(dias<=7){expiryHtml=`<span class="expiry-warning">⏳ Expira em ${dias} dia${dias!==1?'s':''} (${ds})</span>`;}else{expiryHtml=`<span style="font-size:11px;color:var(--muted);">⏳ Expira: ${ds}</span>`;}}const durTagHtml=duracaoLabel?`<span class="dur-tag">📅 ${duracaoLabel}</span>`:"";const precoTagHtml=precoLabel?`<span class="preco-tag">💰 ${precoLabel}</span>`:"";div.innerHTML+=`<div class="user-card" id="card-${u.id}"><div class="user-info"><p class="email">${d.email}</p><p class="meta">${d.curso||d.area||"—"} · ${uniLabel}</p><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:6px;">${statusBadge}${expiryHtml}</div>${(durTagHtml||precoTagHtml)?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">${durTagHtml}${precoTagHtml}</div>`:""}</div><div class="user-actions" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">${d.temComprovativo?`<button class="btn-edit" onclick="verComprovativo('${u.id}')">🧾 Comprovativo</button>`:''} ${!d.approved?`<button class="btn-approve" onclick="aprovar('${u.id}')">✓ Aprovar</button>`:""} ${d.approved?`<button class="btn-delete" onclick="revogar('${u.id}')">✗ Revogar</button>`:""}<button class="btn-edit" onclick="abrirModal('${u.id}')">✏️ Editar</button><button class="btn-delete" onclick="removerUser('${u.id}','${d.email}')">🗑 Remover</button></div></div>`;});}
 async function verificarExpirados(){const snap=await getDocs(collection(db,"users"));const agora=Date.now();for(const u of snap.docs){const d=u.data();if(!d.approved)continue;const exp=d.expiryDate||(d.approvedAt?d.approvedAt+(DUR_MS[d.duracao]||DIAS_DEFAULT):null);if(exp&&agora>=exp){await deleteDoc(doc(db,"users",u.id));try{await addDoc(collection(db,"deleted_users_auth"),{uid:d.uid,email:d.email,deletedAt:agora});}catch(e){}}}carregarUsers();}
 window.aprovar=async function(id){const snap=await getDoc(doc(db,"users",id));if(!snap.exists())return;const d=snap.data();const approvedAt=Date.now();const duracaoMs=DUR_MS[d.duracao]||DIAS_DEFAULT;const expiryDate=approvedAt+duracaoMs;await updateDoc(doc(db,"users",id),{approved:true,approvedAt,expiryDate});carregarUsers();}
 window.revogar=async function(id){if(!confirm("Revogar acesso?"))return;await updateDoc(doc(db,"users",id),{approved:false});carregarUsers();}
 window.removerUser=async function(docId,email){if(!confirm(`Remover permanentemente ${email}?`))return;const snap=await getDoc(doc(db,"users",docId));const uid=snap.exists()?snap.data().uid:null;await eliminarUserCompleto(uid||docId,docId);carregarUsers();}
 let editingDocId=null;
+window.verComprovativo=async function(docId){
+  const snap=await getDoc(doc(db,"comprovativosDocs",docId));
+  if(!snap.exists()||!snap.data().base64){alert("Sem comprovativo.");return;}
+  const d=snap.data();
+  const isPdf=d.tipo==="application/pdf";
+
+  const existing=document.getElementById("comprovModal");
+  if(existing)existing.remove();
+
+  const ext=isPdf?"pdf":(d.tipo==="image/png"?"png":"jpg");
+  const nomeDownload=d.nome||`comprovativo_${docId}.${ext}`;
+
+  // Guardar base64 num elemento hidden para o download aceder
+  let hiddenStore=document.getElementById("comprovB64Store");
+  if(!hiddenStore){hiddenStore=document.createElement("div");hiddenStore.id="comprovB64Store";hiddenStore.style.display="none";document.body.appendChild(hiddenStore);}
+  hiddenStore.setAttribute("data-b64", d.base64);
+  hiddenStore.setAttribute("data-nome", nomeDownload);
+  hiddenStore.setAttribute("data-tipo", d.tipo||"image/jpeg");
+
+  const overlay=document.createElement("div");
+  overlay.id="comprovModal";
+  overlay.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:3000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px;overflow-y:auto;";
+  overlay.innerHTML=`
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;width:100%;max-width:700px;">
+      <button onclick="downloadComprovativo()" style="background:linear-gradient(135deg,#00d4ff,#0099cc);color:#020818;border:none;border-radius:10px;padding:12px 24px;font-family:'Orbitron',monospace;font-weight:700;font-size:13px;letter-spacing:1px;cursor:pointer;flex:1;">⬇️ DESCARREGAR</button>
+      <button onclick="document.getElementById('comprovModal').remove()" style="background:rgba(255,255,255,0.05);color:#e2e8f0;border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 24px;font-family:'Orbitron',monospace;font-size:13px;cursor:pointer;flex:1;">✕ FECHAR</button>
+    </div>
+    ${isPdf
+      ? `<iframe src="${d.base64}" style="width:min(700px,95vw);height:75vh;border:none;border-radius:12px;background:#fff;"></iframe>`
+      : `<img src="${d.base64}" style="max-width:min(700px,95vw);max-height:75vh;border-radius:12px;object-fit:contain;" onclick="event.stopPropagation()">`
+    }
+  `;
+  overlay.addEventListener("click",e=>{if(e.target===overlay)overlay.remove();});
+  document.body.appendChild(overlay);
+}
+
+window.downloadComprovativo=async function(){
+  const store=document.getElementById("comprovB64Store");
+  if(!store)return;
+  const base64=store.getAttribute("data-b64");
+  const nome  =store.getAttribute("data-nome");
+  if(!base64)return;
+  const res  =await fetch(base64);
+  const blob =await res.blob();
+  const url  =URL.createObjectURL(blob);
+  const a    =document.createElement("a");
+  a.href     =url;
+  a.download =nome;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
 window.verificarExpirados=verificarExpirados;
 window.carregarUsers=carregarUsers;
 </script>
