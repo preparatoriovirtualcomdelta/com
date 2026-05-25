@@ -153,21 +153,13 @@ body{font-family:'Exo 2',sans-serif;background:var(--bg);color:var(--text);overf
 .upload-preview{margin-top:10px;display:none;}
 .upload-preview img{max-width:100%;max-height:180px;border-radius:8px;object-fit:contain;}
 .upload-preview .pdf-preview{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:10px 16px;display:flex;align-items:center;gap:10px;font-size:13px;color:#f87171;}
-.upload-file-info{display:none;margin-top:10px;background:rgba(0,255,170,0.08);border:1px solid rgba(0,255,170,0.25);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--accent3);display:none;align-items:center;gap:8px;justify-content:space-between;}
+.upload-file-info{margin-top:10px;background:rgba(0,255,170,0.08);border:1px solid rgba(0,255,170,0.25);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--accent3);display:none;align-items:center;gap:8px;justify-content:space-between;}
 .upload-file-info.show{display:flex;}
 .btn-remover-file{background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#f87171;border-radius:6px;padding:3px 10px;font-size:11px;cursor:pointer;font-family:'Exo 2',sans-serif;white-space:nowrap;}
 .btn-remover-file:hover{background:rgba(239,68,68,0.25);}
 #inputComprovativo{display:none;}
 
-/* Botão WhatsApp — só aparece depois do ficheiro anexado */
-.wa-btn-wrap{margin-top:6px;}
-.wa-btn{display:flex;align-items:center;justify-content:center;gap:10px;background:#25D366;color:white;padding:13px 24px;border-radius:10px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:15px;letter-spacing:2px;text-decoration:none;transition:0.3s;width:100%;border:none;cursor:pointer;}
-.wa-btn:hover{background:#1fba58;transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,211,102,0.3);}
-.wa-btn:disabled,.wa-btn.disabled{background:rgba(37,211,102,0.25);color:rgba(255,255,255,0.4);cursor:not-allowed;transform:none;box-shadow:none;}
-
-.wa-nota{font-size:11px;color:var(--muted);margin-top:8px;text-align:center;letter-spacing:0.5px;}
-
-/* Botão CRIAR CONTA — bloqueado até enviar comprovativo */
+/* Botão CRIAR CONTA — bloqueado até anexar comprovativo */
 .proceed-btn{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:#020818;padding:14px 32px;border-radius:10px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:16px;letter-spacing:2px;text-decoration:none;transition:0.3s;border:none;cursor:pointer;margin-top:16px;width:100%;justify-content:center;}
 .proceed-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,212,255,0.3);}
 .proceed-btn.locked{background:rgba(0,212,255,0.15);color:rgba(0,212,255,0.35);cursor:not-allowed;pointer-events:none;transform:none;box-shadow:none;}
@@ -349,19 +341,19 @@ body{font-family:'Exo 2',sans-serif;background:var(--bg);color:var(--text);overf
 
       <!-- SECÇÃO COMPROVATIVO -->
       <div class="comprov-section">
-        <div class="comprov-title">Enviar Comprovativo de Pagamento</div>
+        <div class="comprov-title">Comprovativo de Pagamento</div>
         <div class="comprov-instrucao">
           <b>Como proceder:</b><br>
-          1. Anexa o teu comprovativo (foto ou PDF)<br>
-          2. Clica em <b>Enviar pelo WhatsApp</b><br>
-          3. Após enviar, o botão <b>Criar Conta</b> ficará disponível
+          1. Faz o pagamento pelo IBAN acima<br>
+          2. Anexa o comprovativo (foto ou PDF)<br>
+          3. Clica em <b>Criar Conta</b> — o comprovativo será enviado automaticamente
         </div>
 
         <!-- Upload area -->
         <div class="upload-area" id="uploadArea" onclick="document.getElementById('inputComprovativo').click()">
           <span class="upload-icon" id="uploadIcon">📎</span>
           <div class="upload-text" id="uploadText">Toca para <b>anexar o comprovativo</b></div>
-          <div class="upload-formats">Formatos aceites: JPG, PNG, PDF</div>
+          <div class="upload-formats">Formatos aceites: JPG, PNG, PDF · Máx. 4MB</div>
           <input type="file" id="inputComprovativo" accept="image/*,.pdf" onchange="anexarComprovativo(event)">
         </div>
 
@@ -371,21 +363,13 @@ body{font-family:'Exo 2',sans-serif;background:var(--bg);color:var(--text);overf
           <button class="btn-remover-file" onclick="removerComprovativo()">✕ Remover</button>
         </div>
 
-        <!-- Botão WhatsApp -->
-        <div class="wa-btn-wrap">
-          <button class="wa-btn disabled" id="waBtnEnviar" onclick="enviarWhatsApp()" disabled>
-            📱 Enviar Comprovativo pelo WhatsApp
-          </button>
-          <div class="wa-nota" id="waNota">Anexa o comprovativo para activar este botão</div>
-        </div>
-
         <div class="iban-divider"></div>
 
-        <!-- Botão CRIAR CONTA — bloqueado até enviar -->
+        <!-- Botão CRIAR CONTA — bloqueado até anexar -->
         <a id="proceedBtn" href="#" class="proceed-btn locked" onclick="return verificarEnvio(event)">
           <span class="lock-icon">🔒</span> CRIAR CONTA &amp; CONTINUAR →
         </a>
-        <div class="proceed-nota" id="proceedNota">Envia o comprovativo pelo WhatsApp para desbloquear</div>
+        <div class="proceed-nota" id="proceedNota">Anexa o comprovativo para desbloquear</div>
       </div>
     </div>
   </div>
@@ -463,10 +447,9 @@ const DURATIONS = [
 
 let selTipo=null, selUni=null, selCurso=null, selDur=null;
 let comprovativoAnexado = false;
-let comprovativoEnviado = false;
 let comprovativoBase64  = null;
 let comprovativoNome    = "";
-let waTextGlobal        = "";
+let comprovativoTipo    = "";
 let proceedHref         = "#";
 
 // ── STEP INDICATOR ────────────────────────────────────────
@@ -601,17 +584,11 @@ function selectDuration(dur){
   document.getElementById("ibanPrice").innerText = dur.price;
   document.getElementById("ibanDur").innerText   = dur.label+" · "+dur.days;
 
-  const area   = selCurso ? (COURSE_TO_AREA[selCurso]||"geral") : selTipo.id;
-  const uni    = selUni   ? selUni.id : "";
-  const curso  = selCurso ? selCurso  : selTipo.name;
+  const area  = selCurso ? (COURSE_TO_AREA[selCurso]||"geral") : selTipo.id;
+  const uni   = selUni   ? selUni.id : "";
+  const curso = selCurso ? selCurso  : selTipo.name;
   const params = new URLSearchParams({tipo:selTipo.id,uni,curso,area,duracao:dur.id,preco:dur.priceNum});
-  proceedHref  = `login.html?${params.toString()}`;
-
-  // Texto WhatsApp
-  waTextGlobal = `Olá, quero enviar o meu comprovativo de pagamento.\n\nCurso: ${selTipo.name}\n`
-    + (selUni  ? `Universidade: ${selUni.id} — ${selUni.name}\n` : "")
-    + (selCurso? `Área: ${selCurso}\n` : "")
-    + `Duração: ${dur.label} (${dur.days})\nValor: ${dur.price}`;
+  proceedHref = `login.html?${params.toString()}`;
 
   document.getElementById("ibanBox").style.display = "block";
   setTimeout(()=>document.getElementById("ibanBox").scrollIntoView({behavior:"smooth",block:"nearest"}),100);
@@ -631,99 +608,59 @@ function goBackFromDuracao(){
 // ── COMPROVATIVO ──────────────────────────────────────────
 function resetComprovativo(){
   comprovativoAnexado = false;
-  comprovativoEnviado = false;
   comprovativoBase64  = null;
   comprovativoNome    = "";
+  comprovativoTipo    = "";
   document.getElementById("inputComprovativo").value = "";
   document.getElementById("uploadArea").classList.remove("has-file");
   document.getElementById("uploadIcon").innerText = "📎";
   document.getElementById("uploadText").innerHTML = 'Toca para <b>anexar o comprovativo</b>';
   document.getElementById("fileInfo").classList.remove("show");
-  // Bloquear botão WA
-  const waBtn = document.getElementById("waBtnEnviar");
-  waBtn.classList.add("disabled");
-  waBtn.disabled = true;
-  document.getElementById("waNota").innerText = "Anexa o comprovativo para activar este botão";
-  // Bloquear botão CRIAR CONTA
   const pb = document.getElementById("proceedBtn");
   pb.classList.add("locked");
   pb.innerHTML = '<span class="lock-icon">🔒</span> CRIAR CONTA &amp; CONTINUAR →';
   pb.href = "#";
   document.getElementById("proceedNota").className = "proceed-nota";
-  document.getElementById("proceedNota").innerText = "Envia o comprovativo pelo WhatsApp para desbloquear";
+  document.getElementById("proceedNota").innerText = "Anexa o comprovativo para desbloquear";
 }
 
 function anexarComprovativo(event){
   const file = event.target.files[0];
   if(!file) return;
-
   const isPdf   = file.type === "application/pdf";
   const isImage = file.type.startsWith("image/");
-  if(!isPdf && !isImage){
-    alert("⚠️ Formato não suportado. Usa JPG, PNG ou PDF.");
-    event.target.value = "";
-    return;
-  }
-  if(file.size > 5 * 1024 * 1024){
-    alert("⚠️ Ficheiro muito grande. Máximo 5MB.");
-    event.target.value = "";
-    return;
-  }
-
+  if(!isPdf && !isImage){ alert("⚠️ Formato não suportado. Usa JPG, PNG ou PDF."); event.target.value=""; return; }
+  if(file.size > 4 * 1024 * 1024){ alert("⚠️ Ficheiro muito grande. Máximo 4MB."); event.target.value=""; return; }
   const reader = new FileReader();
   reader.onload = e => {
-    comprovativoBase64 = e.target.result;
-    comprovativoNome   = file.name;
+    comprovativoBase64  = e.target.result;
+    comprovativoNome    = file.name;
+    comprovativoTipo    = file.type;
     comprovativoAnexado = true;
-
-    // Atualizar UI da área de upload
-    const area = document.getElementById("uploadArea");
-    area.classList.add("has-file");
+    document.getElementById("uploadArea").classList.add("has-file");
     document.getElementById("uploadIcon").innerText = isPdf ? "📄" : "🖼️";
     document.getElementById("uploadText").innerHTML = `<b style="color:var(--accent3)">${file.name}</b>`;
-
-    // Mostrar info do ficheiro
-    const fi = document.getElementById("fileInfo");
-    document.getElementById("fileInfoText").innerText = (isPdf ? "📄 " : "🖼️ ") + file.name;
-    fi.classList.add("show");
-
-    // Desbloquear botão WhatsApp
-    const waBtn = document.getElementById("waBtnEnviar");
-    waBtn.classList.remove("disabled");
-    waBtn.disabled = false;
-    document.getElementById("waNota").innerText = "Comprovativo pronto — clica para enviar pelo WhatsApp";
+    document.getElementById("fileInfoText").innerText = (isPdf?"📄 ":"🖼️ ")+file.name;
+    document.getElementById("fileInfo").classList.add("show");
+    // Desbloquear CRIAR CONTA
+    const pb = document.getElementById("proceedBtn");
+    pb.classList.remove("locked");
+    pb.href = proceedHref;
+    pb.innerHTML = '✅ CRIAR CONTA &amp; CONTINUAR →';
+    document.getElementById("proceedNota").className = "proceed-nota ok";
+    document.getElementById("proceedNota").innerText = "✓ Comprovativo pronto — podes criar a tua conta!";
   };
   reader.readAsDataURL(file);
 }
 
-function removerComprovativo(){
-  resetComprovativo();
-}
-
-function enviarWhatsApp(){
-  if(!comprovativoAnexado) return;
-
-  // Abre WhatsApp com o texto (o ficheiro o utilizador partilha manualmente no WhatsApp)
-  const waUrl = `https://wa.me/244950509560?text=${encodeURIComponent(waTextGlobal + "\n\n[Comprovativo em anexo]")}`;
-  window.open(waUrl, "_blank");
-
-  // Marcar como enviado e desbloquear botão CRIAR CONTA
-  comprovativoEnviado = true;
-  const pb = document.getElementById("proceedBtn");
-  pb.classList.remove("locked");
-  pb.href = proceedHref;
-  pb.innerHTML = '✅ CRIAR CONTA &amp; CONTINUAR →';
-  document.getElementById("proceedNota").className = "proceed-nota ok";
-  document.getElementById("proceedNota").innerText = "✓ Comprovativo enviado — podes criar a tua conta!";
-  document.getElementById("waNota").innerText = "✓ WhatsApp aberto com sucesso";
-}
+function removerComprovativo(){ resetComprovativo(); }
 
 function verificarEnvio(e){
-  if(!comprovativoEnviado){
-    e.preventDefault();
-    alert("⚠️ Envia primeiro o comprovativo pelo WhatsApp para poderes criar a conta.");
-    return false;
-  }
+  if(!comprovativoAnexado){ e.preventDefault(); alert("⚠️ Anexa o comprovativo antes de criar a conta."); return false; }
+  // Guardar no sessionStorage — o login.html lê e guarda no Firestore no momento do registo
+  sessionStorage.setItem("comprovativo_b64",  comprovativoBase64);
+  sessionStorage.setItem("comprovativo_nome", comprovativoNome);
+  sessionStorage.setItem("comprovativo_tipo", comprovativoTipo);
   return true;
 }
 
