@@ -66,24 +66,23 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .content-list{display:flex;flex-direction:column;gap:16px;}
 .content-card{background:rgba(6,15,34,0.9);border:1px solid rgba(0,212,255,0.08);border-radius:16px;padding:20px;transition:0.3s;}
 .content-card:hover{border-color:rgba(0,212,255,0.22);}
-
-/* c-header com botão download */
 .c-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
 .c-header-left{display:flex;align-items:center;gap:10px;}
 .c-icon{font-size:20px;}
 .c-title{font-family:'Orbitron',monospace;font-size:14px;font-weight:600;letter-spacing:1px;}
-
-/* Botão download */
 .btn-download{display:inline-flex;align-items:center;gap:6px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);color:var(--accent);border-radius:8px;padding:6px 14px;font-size:12px;font-family:'Orbitron',monospace;font-weight:700;letter-spacing:1px;cursor:pointer;transition:0.3s;white-space:nowrap;}
 .btn-download:hover{background:rgba(0,212,255,0.2);transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,212,255,0.2);}
 
-.video-wrap{position:relative;width:100%;padding-top:56.25%;border-radius:10px;overflow:hidden;background:#000;}
-.video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
-.bunny-wrap{position:relative;width:100%;padding-top:56.25%;border-radius:10px;overflow:hidden;background:#000;}
-.bunny-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
-.bunny-overlay{position:absolute;top:0;left:0;right:0;height:60px;z-index:2;pointer-events:none;}
-.pdf-wrap{width:100%;height:500px;border-radius:10px;overflow:hidden;border:1px solid rgba(0,212,255,0.08);}
-.pdf-wrap iframe{width:100%;height:100%;border:none;}
+/* ── PLAYER DE VÍDEO PERSONALIZADO ── */
+.video-player-wrap{position:relative;width:100%;background:#000;border-radius:10px;overflow:hidden;user-select:none;}
+.video-player-wrap iframe{width:100%;aspect-ratio:16/9;display:block;border:none;pointer-events:auto;}
+/* Barra de controlos */
+.vp-controls{display:flex;align-items:center;gap:8px;padding:10px 14px;background:rgba(2,8,24,0.92);border-top:1px solid rgba(0,212,255,0.1);}
+.vp-btn{background:transparent;border:none;color:var(--accent);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:6px;transition:0.2s;line-height:1;}
+.vp-btn:hover{background:rgba(0,212,255,0.12);}
+.vp-title{flex:1;font-family:'Orbitron',monospace;font-size:11px;letter-spacing:1px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.vp-fullscreen-btn{background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);color:var(--accent);font-size:13px;cursor:pointer;padding:5px 12px;border-radius:6px;transition:0.2s;font-family:'Orbitron',monospace;font-weight:700;letter-spacing:1px;white-space:nowrap;}
+.vp-fullscreen-btn:hover{background:rgba(0,212,255,0.2);}
 
 /* PDF base64 via PDF.js */
 .pdf-b64-wrap{width:100%;border-radius:10px;overflow:hidden;border:1px solid rgba(0,212,255,0.1);background:rgba(0,0,0,0.2);}
@@ -91,11 +90,15 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .pdf-loading{text-align:center;padding:30px;color:var(--muted);font-size:13px;font-family:'Orbitron',monospace;letter-spacing:1px;}
 .pdf-page-num{text-align:center;font-size:11px;color:var(--muted);padding:4px 0 8px;letter-spacing:1px;}
 
+/* PDF link Google Drive */
+.pdf-wrap{width:100%;height:500px;border-radius:10px;overflow:hidden;border:1px solid rgba(0,212,255,0.08);}
+.pdf-wrap iframe{width:100%;height:100%;border:none;}
+
 /* Imagem base64 */
 .img-b64-wrap{border-radius:10px;overflow:hidden;background:rgba(0,0,0,0.3);border:1px solid rgba(0,212,255,0.08);cursor:zoom-in;}
 .img-b64-wrap img{width:100%;display:block;border-radius:10px;max-height:500px;object-fit:contain;}
-
 .img-wrap img{width:100%;border-radius:10px;display:block;}
+
 .uni-notice{background:rgba(0,212,255,0.05);border:1px solid rgba(0,212,255,0.15);border-radius:10px;padding:10px 16px;font-size:12px;color:var(--muted);margin-bottom:20px;}
 .uni-notice b{color:var(--accent);}
 .empty{text-align:center;padding:60px 20px;color:var(--muted);}
@@ -255,93 +258,120 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   </div>
 </div>
 
-<!-- Lightbox imagem conteúdo -->
+<!-- Lightbox -->
 <div id="imgLightbox" onclick="this.classList.remove('open')">
   <button id="imgLightboxClose" onclick="document.getElementById('imgLightbox').classList.remove('open')">✕</button>
   <img id="imgLightboxSrc" src="" alt="">
 </div>
-
 <div id="imgModalChat" onclick="this.classList.remove('open')">
   <img id="imgModalChatSrc" src="" alt="">
 </div>
 
 <script>
 const starsEl=document.getElementById('stars');
-for(let i=0;i<120;i++){
-  const s=document.createElement('div');s.className='star';
-  const sz=Math.random()*2+0.5;
-  s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--o:${Math.random()*0.6+0.1};--d:${Math.random()*3+2}s;animation-delay:${Math.random()*4}s;`;
-  starsEl.appendChild(s);
-}
+for(let i=0;i<120;i++){const s=document.createElement('div');s.className='star';const sz=Math.random()*2+0.5;s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--o:${Math.random()*0.6+0.1};--d:${Math.random()*3+2}s;animation-delay:${Math.random()*4}s;`;starsEl.appendChild(s);}
 
-// PDF.js
+// ── PDF.js ──
 const PDFJS_CDN='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
 let pdfjsLib=null;
 async function carregarPdfJs(){
   if(pdfjsLib)return pdfjsLib;
   return new Promise((resolve,reject)=>{
     const s=document.createElement('script');s.src=PDFJS_CDN;
-    s.onload=()=>{
-      window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-      pdfjsLib=window.pdfjsLib;resolve(pdfjsLib);
-    };
+    s.onload=()=>{window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';pdfjsLib=window.pdfjsLib;resolve(pdfjsLib);};
     s.onerror=reject;document.head.appendChild(s);
   });
 }
 async function renderPdfB64(base64,wrap){
   try{
     const lib=await carregarPdfJs();
-    // Converter base64 para Uint8Array
     const b64=base64.split(',')[1]||base64;
-    const bin=atob(b64);
-    const arr=new Uint8Array(bin.length);
+    const bin=atob(b64);const arr=new Uint8Array(bin.length);
     for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
     const pdf=await lib.getDocument({data:arr}).promise;
     wrap.innerHTML='';
     for(let p=1;p<=pdf.numPages;p++){
       const page=await pdf.getPage(p);
       const viewport=page.getViewport({scale:1.5});
-      const canvas=document.createElement('canvas');
-      canvas.className='pdf-page-canvas';
+      const canvas=document.createElement('canvas');canvas.className='pdf-page-canvas';
       canvas.width=viewport.width;canvas.height=viewport.height;
-      const ctx=canvas.getContext('2d');
-      await page.render({canvasContext:ctx,viewport}).promise;
+      await page.render({canvasContext:canvas.getContext('2d'),viewport}).promise;
       wrap.appendChild(canvas);
-      if(pdf.numPages>1){
-        const lbl=document.createElement('div');
-        lbl.className='pdf-page-num';lbl.innerText=`Página ${p} de ${pdf.numPages}`;
-        wrap.appendChild(lbl);
-      }
+      if(pdf.numPages>1){const lbl=document.createElement('div');lbl.className='pdf-page-num';lbl.innerText=`Página ${p} de ${pdf.numPages}`;wrap.appendChild(lbl);}
     }
-  }catch(e){
-    wrap.innerHTML=`<div class="pdf-loading">⚠️ Erro ao carregar PDF. Usa o botão Download.</div>`;
-  }
+  }catch(e){wrap.innerHTML=`<div class="pdf-loading">⚠️ Erro ao carregar PDF. Usa o botão Download.</div>`;}
 }
 
 // Download base64
 window.downloadBase64=function(base64,nome){
   fetch(base64).then(r=>r.blob()).then(blob=>{
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');a.href=url;a.download=nome;
-    document.body.appendChild(a);a.click();
-    document.body.removeChild(a);URL.revokeObjectURL(url);
+    const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=nome;
+    document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
   });
 };
 
 // Lightbox
-window.abrirImgLightbox=function(src){
-  document.getElementById('imgLightboxSrc').src=src;
-  document.getElementById('imgLightbox').classList.add('open');
-};
+window.abrirImgLightbox=function(src){document.getElementById('imgLightboxSrc').src=src;document.getElementById('imgLightbox').classList.add('open');};
+
+// ── PLAYER DE VÍDEO PERSONALIZADO ──
+// Cria um player embutido com botão de ecrã inteiro, sem link visível
+function criarPlayerVideo(url, tipo, titulo){
+  const wrap = document.createElement('div');
+  wrap.className = 'video-player-wrap';
+
+  const iframe = document.createElement('iframe');
+  iframe.style.cssText='width:100%;aspect-ratio:16/9;display:block;border:none;';
+  iframe.allowFullscreen = true;
+  iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+  iframe.loading = 'lazy';
+
+  if(tipo==='bunny'){
+    iframe.src = url.split('?')[0]+'?autoplay=false&preload=false&muted=false';
+  } else if(tipo==='video'){
+    // YouTube — adicionar parâmetros para esconder controlos externos
+    iframe.src = url.includes('?') ? url+'&rel=0&modestbranding=1' : url+'?rel=0&modestbranding=1';
+  } else if(tipo==='gdrive_video'){
+    iframe.src = url;
+  }
+
+  wrap.appendChild(iframe);
+
+  // Barra de controlos personalizada
+  const controls = document.createElement('div');
+  controls.className = 'vp-controls';
+
+  const titleEl = document.createElement('div');
+  titleEl.className = 'vp-title';
+  titleEl.innerText = titulo;
+
+  const fsBtn = document.createElement('button');
+  fsBtn.className = 'vp-fullscreen-btn';
+  fsBtn.innerHTML = '⛶ Ecrã inteiro';
+  fsBtn.onclick = () => {
+    if(iframe.requestFullscreen) iframe.requestFullscreen();
+    else if(iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
+    else if(iframe.mozRequestFullScreen) iframe.mozRequestFullScreen();
+    else {
+      // Fallback — expandir o wrap
+      wrap.style.position='fixed';wrap.style.inset='0';wrap.style.zIndex='9999';wrap.style.borderRadius='0';
+      iframe.style.height='100vh';
+      fsBtn.innerHTML='✕ Fechar';
+      fsBtn.onclick=()=>{wrap.style.position='';wrap.style.inset='';wrap.style.zIndex='';wrap.style.borderRadius='10px';iframe.style.height='';fsBtn.innerHTML='⛶ Ecrã inteiro';fsBtn.onclick=null;};
+    }
+  };
+
+  controls.appendChild(titleEl);
+  controls.appendChild(fsBtn);
+  wrap.appendChild(controls);
+
+  return wrap;
+}
 </script>
 
 <script type="module">
 import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut, deleteUser }
-                            from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, collection, getDocs, doc, getDoc, deleteDoc,
-         addDoc, setDoc, onSnapshot, orderBy, query, serverTimestamp }
-                            from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, collection, getDocs, doc, getDoc, deleteDoc, addDoc, setDoc, onSnapshot, orderBy, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig={apiKey:"AIzaSyBBADytEHr9NzwFdGmd-zq26t88Vnl65js",authDomain:"preparatoriovirtualcomde-38c0a.firebaseapp.com",projectId:"preparatoriovirtualcomde-38c0a",storageBucket:"preparatoriovirtualcomde-38c0a.firebasestorage.app",messagingSenderId:"211289899773",appId:"1:211289899773:web:dfc22d377c7172f936b494"};
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
@@ -349,7 +379,6 @@ const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
 const DUR_LABELS={"30":"📅 1 Mês","90":"📅 3 Meses","180":"📅 6 Meses","365":"📅 1 Ano"};
 const DUR_MS={"30":30,"90":90,"180":180,"365":365};
 const TIPOS_IDS=["universitario","ensino_medio","mat_basica","fis_basica","medicamentos","primeiros","minsa"];
-
 const ESTRUTURA={
   universitario:{seccoes:[{id:"video_aulas",icon:"🎥",title:"VÍDEO AULAS",desc:"Aulas em vídeo por disciplina",hasDisciplinas:true,hasUni:true},{id:"materiais",icon:"📚",title:"MATERIAIS DE APOIO",desc:"PDFs e materiais por disciplina",hasDisciplinas:true,hasUni:true},{id:"cronograma",icon:"📅",title:"CRONOGRAMA DE ESTUDO",desc:"Planificação das tuas aulas",hasDisciplinas:false,hasUni:false},{id:"provas",icon:"📝",title:"PROVAS PASSADAS",desc:"Provas anteriores da tua univ.",hasDisciplinas:false,hasUni:true},{id:"resolucao",icon:"✅",title:"RESOLUÇÃO DE PROVAS",desc:"Vídeos de resolução",hasDisciplinas:false,hasUni:true}],disciplinas:{UAN:["Biologia","Química","Língua Portuguesa","Matemática"],UMN:["Biologia","Química","Língua Portuguesa","Matemática"],UON:["Biologia","Química","Língua Portuguesa","Física"],UKB:["Biologia","Química","Língua Portuguesa","Física"],URNM:["Biologia","Química","Língua Portuguesa","Matemática","Física"],UJES:["Biologia","Química","Língua Portuguesa","Física"],ISTM:["Biologia","Química","Matemática","Física"],UPRA:["Biologia","Química","Língua Portuguesa"],UNIPIAGET:["Biologia","Química","Língua Portuguesa","Matemática","Física"],UNIKIV:["Biologia","Química","Matemática","Língua Portuguesa"],UCC:["Biologia","Química","Língua Portuguesa","Matemática"],OUTRA:["Biologia","Química","Matemática","Língua Portuguesa","Física"],_default:["Biologia","Química","Física","Língua Portuguesa","Matemática"]}},
   ensino_medio:{seccoes:[{id:"video_aulas",icon:"🎥",title:"VÍDEO AULAS",desc:"Aulas em vídeo por disciplina",hasDisciplinas:true,hasUni:false},{id:"materiais",icon:"📚",title:"MATERIAIS DE APOIO",desc:"PDFs e materiais por disciplina",hasDisciplinas:true,hasUni:false}],disciplinas:{_default:["Matemática","Biologia","Química","Física","Língua Portuguesa"]}},
@@ -359,8 +388,8 @@ const ESTRUTURA={
   primeiros:{seccoes:[{id:"video_aulas",icon:"🎥",title:"VÍDEO AULAS",desc:"Aulas em vídeo",hasDisciplinas:false,hasUni:false},{id:"materiais",icon:"📚",title:"MATERIAIS DE APOIO",desc:"PDFs e fichas",hasDisciplinas:false,hasUni:false}],disciplinas:{_default:[]}},
   minsa:{seccoes:[{id:"video_aulas",icon:"🎥",title:"VÍDEO AULAS",desc:"Aulas em vídeo",hasDisciplinas:false,hasUni:false},{id:"materiais",icon:"📚",title:"MATERIAIS DE APOIO",desc:"PDFs e fichas",hasDisciplinas:false,hasUni:false},{id:"provas_dorsais",icon:"📝",title:"PROVAS DORSAIS",desc:"Provas anteriores MINSA",hasDisciplinas:false,hasUni:false},{id:"resolucao_dorsais",icon:"✅",title:"RESOLUÇÃO DE PROVAS DORSAIS",desc:"Vídeos de resolução MINSA",hasDisciplinas:false,hasUni:false}],disciplinas:{_default:[]}}
 };
-
 const ICONES_DISC={"Biologia":"🧬","Química":"⚗️","Física":"⚡","Língua Portuguesa":"📖","Matemática":"📐"};
+
 let estado={seccao:null,sub:null};
 let userTipo="",userUni="",userCurso="",userEmail_="";
 let estrutura=null;
@@ -428,82 +457,72 @@ async function mostrarConteudo(s,sub,fromUni){
   const div=document.getElementById("conteudo");
   div.innerHTML=`<div class="spinner-wrap"><div class="spinner"></div></div>`;
 
-  // Carregar conteúdos por link E materiais base64 em paralelo
-  const [snapAulas,snapMat]=await Promise.all([
-    getDocs(collection(db,"aulas")),
-    getDocs(collection(db,"materiais_b64"))
-  ]);
-
+  const [snapAulas,snapMat]=await Promise.all([getDocs(collection(db,"aulas")),getDocs(collection(db,"materiais_b64"))]);
   const items=[];
-  snapAulas.forEach(d=>{
-    const data=d.data();
-    if(data.seccao!==s.id)return;
-    if((data.tipo_curso||"universitario")!==userTipo)return;
-    if(sub&&data.sub!==sub)return;
-    items.push({...data,_fonte:'link'});
-  });
-  snapMat.forEach(d=>{
-    const data=d.data();
-    if(data.seccao!==s.id)return;
-    if((data.tipo_curso||"universitario")!==userTipo)return;
-    if(sub&&data.sub!==sub)return;
-    items.push({...data,_fonte:'b64'});
-  });
+  snapAulas.forEach(d=>{const data=d.data();if(data.seccao!==s.id)return;if((data.tipo_curso||"universitario")!==userTipo)return;if(sub&&data.sub!==sub)return;items.push({...data,_fonte:'link'});});
+  snapMat.forEach(d=>{const data=d.data();if(data.seccao!==s.id)return;if((data.tipo_curso||"universitario")!==userTipo)return;if(sub&&data.sub!==sub)return;items.push({...data,_fonte:'b64'});});
 
-  items.sort((a,b)=>{
-    const nA=parseInt((a.titulo.match(/\d+/)||[0])[0]);
-    const nB=parseInt((b.titulo.match(/\d+/)||[0])[0]);
-    return nA!==nB?nA-nB:a.titulo.localeCompare(b.titulo);
-  });
+  items.sort((a,b)=>{const nA=parseInt((a.titulo.match(/\d+/)||[0])[0]);const nB=parseInt((b.titulo.match(/\d+/)||[0])[0]);return nA!==nB?nA-nB:a.titulo.localeCompare(b.titulo);});
 
   const noticeHTML=fromUni&&userUni?`<div class="uni-notice">🎓 Conteúdo da tua universidade: <b>${userUni}</b></div>`:"";
   if(items.length===0){div.innerHTML=`${noticeHTML}<div class="empty"><div class="e-icon">📭</div><p>Ainda não há conteúdo aqui.</p><p style="margin-top:6px;font-size:12px;">Volta mais tarde.</p></div>`;return;}
   div.innerHTML=`${noticeHTML}<div class="content-list"></div>`;
   const lista=div.querySelector(".content-list");
 
+  const TIPOS_VIDEO=['bunny','video','gdrive_video'];
+
   items.forEach(data=>{
     const card=document.createElement("div");card.className="content-card";
-    let icone="📁",conteudo="",downloadBtn="";
 
     if(data._fonte==='b64'){
+      // ── Material base64 ──
       const nome=data.nome||data.titulo+(data.tipo==='pdf_b64'?'.pdf':'.jpg');
-      const nomeEsc=nome.replace(/'/g,"\\'");
       if(data.tipo==="pdf_b64"){
-        icone="📄";
-        card.innerHTML=`<div class="c-header"><div class="c-header-left"><span class="c-icon">${icone}</span><span class="c-title">${data.titulo}</span></div></div><div class="pdf-b64-wrap" id="pdfwrap-${Math.random().toString(36).slice(2)}"><div class="pdf-loading">A carregar PDF...</div></div>`;
-        const dlBtn=document.createElement("button");
-        dlBtn.className="btn-download";dlBtn.innerText="⬇️ Download";
-        dlBtn.style.marginBottom="10px";
-        dlBtn.onclick=()=>downloadBase64(data.base64,nome);
+        card.innerHTML=`<div class="c-header"><div class="c-header-left"><span class="c-icon">📄</span><span class="c-title">${data.titulo}</span></div></div><div class="pdf-b64-wrap"><div class="pdf-loading">A carregar PDF...</div></div>`;
+        const dlBtn=document.createElement("button");dlBtn.className="btn-download";dlBtn.innerText="⬇️ Download";dlBtn.onclick=()=>downloadBase64(data.base64,nome);
         card.querySelector(".c-header").appendChild(dlBtn);
         lista.appendChild(card);
-        // Renderizar PDF com PDF.js após adicionar ao DOM
-        const wrap=card.querySelector(".pdf-b64-wrap");
-        renderPdfB64(data.base64,wrap);
+        renderPdfB64(data.base64,card.querySelector(".pdf-b64-wrap"));
         return;
       }else if(data.tipo==="imagem_b64"){
-        icone="🖼️";
-        conteudo=`<div class="img-b64-wrap" onclick="abrirImgLightbox(this.dataset.src)" ><img src="${data.base64}" alt="${data.titulo}"></div>`;
-        card.innerHTML=`<div class="c-header"><div class="c-header-left"><span class="c-icon">${icone}</span><span class="c-title">${data.titulo}</span></div></div>${conteudo}`;
-        const imgWrap=card.querySelector(".img-b64-wrap");
-        if(imgWrap)imgWrap.dataset.src=data.base64;
-        const dlBtn=document.createElement("button");
-        dlBtn.className="btn-download";dlBtn.innerText="⬇️ Download";
-        dlBtn.style.marginBottom="10px";
-        dlBtn.onclick=()=>downloadBase64(data.base64,nome);
-        const header=card.querySelector(".c-header");
-        header.appendChild(dlBtn);
+        card.innerHTML=`<div class="c-header"><div class="c-header-left"><span class="c-icon">🖼️</span><span class="c-title">${data.titulo}</span></div></div><div class="img-b64-wrap"><img src="${data.base64}" alt="${data.titulo}"></div>`;
+        const imgWrap=card.querySelector(".img-b64-wrap");imgWrap.onclick=()=>abrirImgLightbox(data.base64);
+        const dlBtn=document.createElement("button");dlBtn.className="btn-download";dlBtn.innerText="⬇️ Download";dlBtn.onclick=()=>downloadBase64(data.base64,nome);
+        card.querySelector(".c-header").appendChild(dlBtn);
         lista.appendChild(card);return;
       }
     } else {
-      // Conteúdo por link
-      if(data.tipo==="bunny"){icone="🎥";conteudo=`<div class="bunny-wrap"><iframe src="${data.url.split('?')[0]}?autoplay=false&preload=false&muted=false" loading="lazy" allowfullscreen allow="accelerometer;gyroscope;encrypted-media;picture-in-picture" style="border:0;position:absolute;top:0;height:100%;width:100%;"></iframe><div class="bunny-overlay"></div></div>`;}
-      else if(data.tipo==="video"){icone="🎥";conteudo=`<div class="video-wrap"><iframe src="${data.url}" allowfullscreen allow="autoplay;encrypted-media"></iframe></div>`;}
-      else if(data.tipo==="pdf"){icone="📄";conteudo=`<div class="pdf-wrap"><iframe src="${data.url}"></iframe></div>`;}
-      else if(data.tipo==="imagem"){icone="🖼️";conteudo=`<div class="img-wrap"><img src="${data.url}" alt="${data.titulo}"></div>`;}
+      // ── Conteúdo por link ──
+      const isVideo = TIPOS_VIDEO.includes(data.tipo);
+
+      if(isVideo){
+        // Vídeo — sem botão download, sem link visível
+        card.innerHTML=`<div class="c-header"><div class="c-header-left"><span class="c-icon">🎥</span><span class="c-title">${data.titulo}</span></div></div>`;
+        const player = criarPlayerVideo(data.url, data.tipo, data.titulo);
+        card.appendChild(player);
+      } else if(data.tipo==="pdf"){
+        // PDF Google Drive — com botão download
+        card.innerHTML=`<div class="c-header"><div class="c-header-left"><span class="c-icon">📄</span><span class="c-title">${data.titulo}</span></div></div><div class="pdf-wrap"><iframe src="${data.url}" allowfullscreen></iframe></div>`;
+        const dlBtn=document.createElement("button");dlBtn.className="btn-download";dlBtn.innerText="⬇️ Download";
+        dlBtn.onclick=()=>{
+          // Converter link preview para download
+          const m=data.url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+          if(m)window.open(`https://drive.google.com/uc?export=download&id=${m[1]}`,'_blank');
+          else window.open(data.url,'_blank');
+        };
+        card.querySelector(".c-header").appendChild(dlBtn);
+      } else if(data.tipo==="imagem"){
+        // Imagem link — com botão download
+        card.innerHTML=`<div class="c-header"><div class="c-header-left"><span class="c-icon">🖼️</span><span class="c-title">${data.titulo}</span></div></div><div class="img-wrap"><img src="${data.url}" alt="${data.titulo}" crossorigin="anonymous"></div>`;
+        const dlBtn=document.createElement("button");dlBtn.className="btn-download";dlBtn.innerText="⬇️ Download";
+        dlBtn.onclick=()=>{
+          const a=document.createElement('a');a.href=data.url;a.download=data.titulo||'imagem';a.target='_blank';
+          document.body.appendChild(a);a.click();document.body.removeChild(a);
+        };
+        card.querySelector(".c-header").appendChild(dlBtn);
+      }
     }
 
-    card.innerHTML=`<div class="c-header"><div class="c-header-left"><span class="c-icon">${icone}</span><span class="c-title">${data.titulo}</span></div></div>${conteudo}`;
     lista.appendChild(card);
   });
 }
