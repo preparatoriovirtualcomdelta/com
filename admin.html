@@ -672,9 +672,11 @@ window.aprovar=async function(id){
   const duracaoLabel=DUR_LABEL_EMAIL[d.duracao]||d.duracao+" dias";
   const dataExpiry=new Date(expiryDate).toLocaleDateString("pt-PT");
   try{
-    await fetch("https://api
+    await fetch("https://brevo-email.ernestojorgediatoma66.workers.dev/",{
+      method:"POST",
+      headers:{"content-type":"application/json"},
       body:JSON.stringify({
-        sender:{name:"Universo Quântico — 
+        sender:{name:"Universo Quântico — DIATOMA",email:"ernestojorgediatoma66@gmail.com"},
         to:[{email:d.email}],
         subject:"✅ A tua conta foi aprovada — Universo Quântico",
         htmlContent:`<div style="font-family:Arial,sans-serif;background:#020818;color:#e2e8f0;padding:40px 20px;max-width:560px;margin:0 auto;border-radius:16px;border:1px solid rgba(0,212,255,0.2);"><h1 style="font-family:monospace;color:#00d4ff;letter-spacing:3px;font-size:22px;margin-bottom:8px;">UNIVERSO QUÂNTICO</h1><p style="color:#64748b;font-size:12px;letter-spacing:2px;margin-bottom:28px;">Preparatório Virtual com DIATOMA</p><h2 style="color:#00ffaa;font-size:18px;margin-bottom:16px;">✅ Conta Aprovada!</h2><p style="font-size:15px;line-height:1.7;margin-bottom:20px;">Olá,<br><br>A tua conta no <b>Universo Quântico</b> foi <b style="color:#00ffaa;">aprovada</b> com sucesso! Já podes aceder às tuas aulas.</p><div style="background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.2);border-radius:10px;padding:16px 20px;margin-bottom:24px;">${d.uni?`<p style="margin:4px 0;font-size:14px;">🎓 Universidade: <b>${d.uni}</b></p>`:""} ${d.curso?`<p style="margin:4px 0;font-size:14px;">📚 Curso: <b>${d.curso}</b></p>`:""}<p style="margin:4px 0;font-size:14px;">📅 Duração: <b>${duracaoLabel}</b></p><p style="margin:4px 0;font-size:14px;">⏳ Válido até: <b style="color:#00d4ff;">${dataExpiry}</b></p></div><a href="https://preparatoriovirtualcomde-38c0a.web.app/login.html" style="display:inline-block;background:#00d4ff;color:#020818;padding:14px 32px;border-radius:10px;font-weight:700;font-size:15px;text-decoration:none;letter-spacing:1px;">ACEDER ÀS AULAS →</a><p style="margin-top:28px;font-size:12px;color:#64748b;">Se tiveres dúvidas, envia uma mensagem pelo chat dentro da plataforma.<br><br>Bons estudos! 🚀</p></div>`
